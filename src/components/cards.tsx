@@ -1,7 +1,7 @@
 import { CalendarDays, ChevronRight, Cloud, CloudRain, CloudSun, Droplets, Heart, MapPin, Sun, Thermometer, Wind } from 'lucide-react'
 import { Link } from 'react-router'
 import { damById } from '../data/dams'
-import { modalityName, regionName, speciesById } from '../data/catalog'
+import { damRegion, modalityName, speciesById } from '../data/catalog'
 import type { Dam, DemoEvent } from '../data/types'
 import { addDaysISO } from '../lib/dates'
 import { formatDate, monthShort, relativeDay } from '../lib/format'
@@ -64,7 +64,7 @@ export function DamCard({ dam, cond, layout = 'tall', catchCount }: { dam: Dam; 
               <h3 className="truncate text-[16px] font-extrabold text-ink">{dam.name}</h3>
               <p className="mt-0.5 flex items-center gap-1 truncate text-[12.5px] text-muted">
                 <MapPin className="h-3 w-3 shrink-0" aria-hidden />
-                {regionName(dam.region)} · {dam.river}
+                {damRegion(dam)} · {dam.river}
               </p>
             </div>
             <FavButton dam={dam} tone="light" />
@@ -96,7 +96,7 @@ export function DamCard({ dam, cond, layout = 'tall', catchCount }: { dam: Dam; 
         <div className="absolute inset-x-0 bottom-0 p-4 text-white">
           <h3 className="font-display text-[22px] font-semibold leading-tight">{dam.name}</h3>
           <p className="mt-0.5 text-[12.5px] text-white/75">
-            {regionName(dam.region)} · {dam.river}
+            {damRegion(dam)} · {dam.river}
           </p>
           {cond && (
             <p className="tnum mt-2 flex items-center gap-3 text-[12.5px] font-semibold text-white/90">

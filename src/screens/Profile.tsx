@@ -1,4 +1,4 @@
-import { Bookmark, ChevronRight, Crown, Heart, Info, Medal, Pencil, RotateCcw, Route, Smartphone, Check } from 'lucide-react'
+import { Bookmark, ChevronRight, Crown, Heart, Info, Medal, Pencil, RotateCcw, Route, Smartphone, Check, Radio, ShoppingBag } from 'lucide-react'
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router'
 import { Avatar } from '../components/bits'
@@ -18,7 +18,7 @@ import { useToast } from '../state/Toasts'
 const AVATAR_COLORS = ['#20BFA9', '#F2B544', '#7FB3D5', '#C9A27A', '#A3C585', '#E8A0A0']
 
 export default function Profile() {
-  const { state, updateProfile, setPref, resetDemo } = useApp()
+  const { state, updateProfile, setPref, resetDemo, setSubscription } = useApp()
   const toast = useToast()
   const navigate = useNavigate()
   const [editing, setEditing] = useState(false)
@@ -150,6 +150,42 @@ export default function Profile() {
         </section>
 
         <section>
+          <SectionHeader title="Subscrição e comunidade" to="/comunidade" linkLabel="Comunidade" />
+          <Card className="space-y-4 p-5">
+            <div className="flex items-center gap-3">
+              <span className={cx('grid h-11 w-11 place-items-center rounded-2xl', state.subscription.active ? 'bg-amber text-ink' : 'bg-mist text-muted')}>
+                <Crown className="h-5 w-5" aria-hidden />
+              </span>
+              <div className="min-w-0 flex-1">
+                <p className="text-[14.5px] font-extrabold text-ink">{brand.subscription.name}</p>
+                <p className="text-[12.5px] text-muted">
+                  {state.subscription.active ? `Ativa desde ${formatDate(state.subscription.since ?? state.anchor)} · simulação, sem pagamentos` : 'Inativa · dá acesso ao chat global'}
+                </p>
+              </div>
+              {state.subscription.active ? (
+                <Button size="sm" variant="outline" onClick={() => { setSubscription(false); toast('Subscrição de demonstração cancelada', { tone: 'info' }) }}>
+                  Cancelar
+                </Button>
+              ) : (
+                <Button size="sm" variant="dark" onClick={() => navigate('/comunidade/chat')}>
+                  Ver
+                </Button>
+              )}
+            </div>
+            <div className="grid grid-cols-2 gap-2.5 border-t border-line pt-4">
+              <Link to="/reports" className="press flex items-center gap-2.5 rounded-2xl bg-mist/70 p-3 hover:bg-mist">
+                <Radio className="h-[18px] w-[18px] text-teal-700" aria-hidden />
+                <span className="text-[13.5px] font-bold text-ink">{state.myReports.length} reports</span>
+              </Link>
+              <Link to="/mercado?meus=1" className="press flex items-center gap-2.5 rounded-2xl bg-mist/70 p-3 hover:bg-mist">
+                <ShoppingBag className="h-[18px] w-[18px] text-teal-700" aria-hidden />
+                <span className="text-[13.5px] font-bold text-ink">{state.myListings.length} anúncios</span>
+              </Link>
+            </div>
+          </Card>
+        </section>
+
+        <section>
           <SectionHeader title="Preferências" />
           <Card className="space-y-4 p-5">
             <div>
@@ -234,7 +270,7 @@ export default function Profile() {
         <div className="flex flex-wrap gap-2">
           {REGIONS.map((r) => (
             <Chip key={r.id} active={profile.region === r.id} onClick={() => updateProfile({ region: r.id })}>
-              {r.name}
+              {r.name}{r.country === 'ES' ? ' (ES)' : ''}
             </Chip>
           ))}
         </div>
@@ -244,7 +280,7 @@ export default function Profile() {
         open={confirmReset}
         onClose={() => setConfirmReset(false)}
         title="Repor demonstração?"
-        text="Apaga as capturas, fotografias, favoritos, jornadas, provas guardadas e preferências deste navegador e volta ao estado inicial."
+        text="Apaga as capturas, reports, anúncios, mensagens, fotografias, favoritos, jornadas, provas guardadas, subscrição e preferências deste navegador e volta ao estado inicial."
         confirmLabel="Repor"
         danger
         onConfirm={async () => {

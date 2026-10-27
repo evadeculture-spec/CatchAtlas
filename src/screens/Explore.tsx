@@ -3,11 +3,11 @@ import { useMemo } from 'react'
 import { Link, useSearchParams } from 'react-router'
 import { DamCard, FavButton, SkyIcon } from '../components/cards'
 import { DamArt } from '../components/DamArt'
-import { SchematicMap } from '../components/SchematicMap'
+import { SchematicMap, type MapView } from '../components/SchematicMap'
 import { ButtonLink, Chip, cx, EmptyState, Segmented, Tag } from '../components/ui'
-import { MODALITIES, regionName, SPECIES, speciesById } from '../data/catalog'
+import { damRegion, MODALITIES, SPECIES, speciesById } from '../data/catalog'
 import { DAMS, damById } from '../data/dams'
-import type { ModalityId, SpeciesId } from '../data/types'
+import type { CountryId, ModalityId, SpeciesId } from '../data/types'
 import { simulateConditions } from '../lib/weather'
 import { useApp } from '../state/AppState'
 
@@ -20,6 +20,7 @@ export default function Explore() {
   const species = (params.get('especie') as SpeciesId | null) ?? null
   const modality = (params.get('modalidade') as ModalityId | null) ?? null
   const favOnly = params.get('favoritas') === '1'
+  const country = (params.get('pais') as CountryId | null) ?? null
   const view = params.get('vista') === 'mapa' ? 'mapa' : 'lista'
   const selected = params.get('sel') ?? undefined
 
@@ -33,20 +34,22 @@ export default function Explore() {
   const results = useMemo(
     () =>
       DAMS.filter((d) => {
-        if (q && !norm(`${d.name} ${regionName(d.region)} ${d.place} ${d.river}`).includes(norm(q))) return false
+        if (q && !norm(`${d.name} ${damRegion(d)} ${d.place} ${d.river}`).includes(norm(q))) return false
         if (species && !d.species.includes(species)) return false
         if (modality && !d.modalities.includes(modality)) return false
         if (favOnly && !state.favorites.includes(d.id)) return false
+        if (country && d.country !== country) return false
         return true
       }),
-    [q, species, modality, favOnly, state.favorites],
+    [q, species, modality, favOnly, country, state.favorites],
   )
-  const activeFilters = [species, modality, favOnly ? '1' : null, q].filter(Boolean).length
+  const activeFilters = [species, modality, favOnly ? '1' : null, country, q].filter(Boolean).length
+  const mapView: MapView = (params.get('mapa') as MapView | null) ?? (country === 'ES' ? 'iberia' : 'pt')
   const sel = selected && results.some((r) => r.id === selected) ? damById[selected] : results[0]
   const count = (id: string) => allCatches.filter((c) => c.damId === id && c.visibility === 'publica').length
 
   const list = (
-    <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
+    <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-1 2xl:grid-cols-2">
       {results.map((d) => (
         <DamCard key={d.id} dam={d} layout="row" cond={simulateConditions(d, state.anchor)} catchCount={count(d.id)} />
       ))}
@@ -94,6 +97,13 @@ export default function Explore() {
             Favoritas
           </Chip>
           <span className="my-2 w-px shrink-0 bg-line" aria-hidden />
+          <Chip active={country === 'PT'} onClick={() => set('pais', country === 'PT' ? null : 'PT')}>
+            Portugal
+          </Chip>
+          <Chip active={country === 'ES'} onClick={() => set('pais', country === 'ES' ? null : 'ES')}>
+            Espanha
+          </Chip>
+          <span className="my-2 w-px shrink-0 bg-line" aria-hidden />
           {SPECIES.map((s) => (
             <Chip key={s.id} active={species === s.id} onClick={() => set('especie', species === s.id ? null : s.id)}>
               {s.name}
@@ -123,7 +133,7 @@ export default function Explore() {
         <EmptyState
           icon={Search}
           title="Nenhuma barragem encontrada"
-          text="Experimente outro nome ou retire alguns filtros. A demonstração inclui oito barragens."
+          text="Experimente outro nome ou retire alguns filtros. A demonstração inclui barragens de Portugal e Espanha."
           action={<ButtonLink to="/explorar" variant="dark" size="sm">Ver todas</ButtonLink>}
         />
       ) : (
@@ -136,7 +146,22 @@ export default function Explore() {
                 selected={sel?.id}
                 onSelect={(id) => set('sel', id)}
                 favorites={state.favorites}
-                className="h-[min(58dvh,500px)] lg:h-[540px]"
+                view={mapView}
+                className={mapView === 'pt' ? 'h-[min(58dvh,500px)] lg:h-[540px]' : 'aspect-[330/262] w-full'}
+                overlay={
+                  <div className="absolute bottom-3 right-3">
+                    <Segmented
+                      label="Zona do mapa"
+                      value={mapView}
+                      onChange={(v) => set('mapa', v)}
+                      options={[
+                        { id: 'pt', label: 'Portugal' },
+                        { id: 'iberia', label: 'Península' },
+                      ]}
+                      className="shadow-card"
+                    />
+                  </div>
+                }
               />
               {sel && <MapCard id={sel.id} />}
             </div>

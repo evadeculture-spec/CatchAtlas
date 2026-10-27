@@ -7,7 +7,7 @@ import { ConditionsGrid, EventCard, FavButton } from '../components/cards'
 import { DamArt } from '../components/DamArt'
 import { ButtonLink, Card, cx, EmptyState, PageHeader, Tag } from '../components/ui'
 import { DEMO_USER_ID } from '../data/anglers'
-import { modalityName, regionName, speciesById } from '../data/catalog'
+import { damRegion, modalityName, speciesById } from '../data/catalog'
 import { damById } from '../data/dams'
 import { EVENTS } from '../data/events'
 import { addDaysISO } from '../lib/dates'
@@ -66,7 +66,7 @@ export default function DamDetail() {
           <h1 className="font-display mt-3 text-[46px] font-semibold leading-none sm:text-[60px]">{dam.name}</h1>
           <p className="mt-2 flex items-center gap-1.5 text-[14px] font-semibold text-white/80">
             <MapPin className="h-4 w-4" aria-hidden />
-            {dam.place} · {regionName(dam.region)}
+            {dam.place} · {damRegion(dam)}
           </p>
           <div className="tnum mt-4 flex flex-wrap gap-x-5 gap-y-1 text-[13.5px] font-semibold text-white/90">
             <span className="flex items-center gap-1.5"><Waves className="h-4 w-4 text-teal" aria-hidden />{dam.river}</span>

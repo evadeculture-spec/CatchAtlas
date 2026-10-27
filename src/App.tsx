@@ -15,6 +15,14 @@ import PlanTrip from './screens/PlanTrip'
 import Profile from './screens/Profile'
 import Rankings from './screens/Rankings'
 import TripDetail from './screens/TripDetail'
+import Community from './screens/Community'
+import Reports from './screens/Reports'
+import ReportForm from './screens/ReportForm'
+import Market from './screens/Market'
+import ListingDetail from './screens/ListingDetail'
+import ListingForm from './screens/ListingForm'
+import Chat from './screens/Chat'
+import Giveaway from './screens/Giveaway'
 
 /** O onboarding aparece só na primeira visita ao Início; links diretos abrem sempre. */
 function HomeGate() {
@@ -40,6 +48,14 @@ const routes = [
       { path: 'provas', element: <Events /> },
       { path: 'provas/:id', element: <EventDetail /> },
       { path: 'perfil', element: <Profile /> },
+      { path: 'comunidade', element: <Community /> },
+      { path: 'comunidade/chat', element: <Chat /> },
+      { path: 'reports', element: <Reports /> },
+      { path: 'reports/novo', element: <ReportForm /> },
+      { path: 'mercado', element: <Market /> },
+      { path: 'mercado/novo', element: <ListingForm /> },
+      { path: 'mercado/:id', element: <ListingDetail /> },
+      { path: 'giveaway', element: <Giveaway /> },
       { path: '*', element: <NotFound /> },
     ],
   },

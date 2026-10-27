@@ -12,6 +12,7 @@ import { usePhotoUrl } from '../lib/usePhotoUrl'
 import { useApp } from '../state/AppState'
 import { useToast } from '../state/Toasts'
 import NotFound from './NotFound'
+import { currentPeriod } from './ReportForm'
 
 const selectStyle = {
   backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23566a73' stroke-width='2.5' stroke-linecap='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E")`,
@@ -25,7 +26,7 @@ type Errors = Partial<Record<'species' | 'dam' | 'weight' | 'length' | 'date' | 
 export default function CatchForm() {
   const { id } = useParams()
   const [params] = useSearchParams()
-  const { state, addCatch, updateCatch, bumpPhotos } = useApp()
+  const { state, addCatch, updateCatch, bumpPhotos, addReport } = useApp()
   const toast = useToast()
   const navigate = useNavigate()
   const existing = id ? state.myCatches.find((c) => c.id === id) : undefined
@@ -43,6 +44,7 @@ export default function CatchForm() {
   const [released, setReleased] = useState(existing?.released ?? true)
   const [visibility, setVisibility] = useState<'publica' | 'privada'>(existing?.visibility ?? 'publica')
   const [ranking, setRanking] = useState(existing?.ranking ?? true)
+  const [makeReport, setMakeReport] = useState(false)
   const [photo, setPhoto] = useState<{ file: File; url: string } | null>(null)
   const [removePhoto, setRemovePhoto] = useState(false)
   const [errors, setErrors] = useState<Errors>({})
@@ -128,6 +130,9 @@ export default function CatchForm() {
         photoWarning = err instanceof PhotoError ? err.message : 'A fotografia não foi guardada.'
       }
     } else if (removePhoto && existing) await deletePhoto(existing.id)
+    if (makeReport && !existing && visibility === 'publica') {
+      addReport({ damId, speciesId: species, activity: 'moderada', period: currentPeriod(), date, catches: 1, technique, lure: lure.trim(), note: notes.trim() })
+    }
     bumpPhotos()
     setSaving(false)
     if (photoWarning) toast('Captura guardada sem fotografia', { tone: 'warning', detail: photoWarning })
@@ -268,6 +273,17 @@ export default function CatchForm() {
                   description={visibility === 'privada' ? 'Disponível apenas para capturas públicas.' : 'Entra na classificação comunitária da espécie.'}
                 />
               </div>
+              {!existing && (
+                <div className="border-t border-line pt-4">
+                  <Toggle
+                    checked={visibility === 'publica' && makeReport}
+                    onChange={setMakeReport}
+                    disabled={visibility === 'privada'}
+                    label="Criar report no mapa de pings"
+                    description="Publica um ping com localização aproximada e conta para o giveaway."
+                  />
+                </div>
+              )}
             </div>
 
             <p className="flex gap-2 text-[12.5px] leading-relaxed text-muted">

@@ -4,7 +4,7 @@ import { SpeciesDot } from '../components/bits'
 import { DamArt } from '../components/DamArt'
 import { TripSummary } from '../components/TripSummary'
 import { Button, cx, inputCls, PageHeader, Tag } from '../components/ui'
-import { MODALITIES, regionName, SPECIES } from '../data/catalog'
+import { damRegion, MODALITIES, SPECIES } from '../data/catalog'
 import { DAMS, damById } from '../data/dams'
 import type { ModalityId, SpeciesId } from '../data/types'
 import { addDaysISO } from '../lib/dates'
@@ -77,20 +77,25 @@ export default function PlanTrip() {
         {step === 0 && (
           <section className="page-in mt-6">
             <h2 className="font-display text-[28px] font-semibold text-ink">Onde vais pescar?</h2>
-            <div className="mt-4 grid gap-2.5 sm:grid-cols-2">
-              {DAMS.map((d) => (
+            {(['PT', 'ES'] as const).map((country) => (
+            <div key={country}>
+            <p className="mt-5 text-[12px] font-bold uppercase tracking-[0.12em] text-muted">{country === 'PT' ? 'Portugal' : 'Espanha'}</p>
+            <div className="mt-2 grid gap-2.5 sm:grid-cols-2">
+              {DAMS.filter((d) => d.country === country).map((d) => (
                 <button key={d.id} onClick={() => update('barragem', d.id)} aria-pressed={damId === d.id} className={cx('press flex items-center gap-3 rounded-2xl border-2 bg-white p-2 text-left', damId === d.id ? 'border-ink' : 'border-transparent shadow-card')}>
                   <span className="h-14 w-16 shrink-0 overflow-hidden rounded-xl">
                     <DamArt art={d.art} detail="lite" />
                   </span>
                   <span className="min-w-0 flex-1">
                     <span className="block truncate font-extrabold text-ink">{d.name}</span>
-                    <span className="block truncate text-[12.5px] text-muted">{regionName(d.region)} · {d.river}</span>
+                    <span className="block truncate text-[12.5px] text-muted">{damRegion(d)} · {d.river}</span>
                   </span>
                   {state.favorites.includes(d.id) && <Tag tone="amber">Favorita</Tag>}
                 </button>
               ))}
             </div>
+            </div>
+            ))}
           </section>
         )}
 

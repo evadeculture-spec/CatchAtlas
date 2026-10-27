@@ -1,4 +1,4 @@
-import { ArrowRight, Crown, Medal, Route, Search, Sparkles } from 'lucide-react'
+import { ArrowRight, Crown, Gift, Medal, Radio, Route, Search, Sparkles } from 'lucide-react'
 import { useMemo, useState, type FormEvent } from 'react'
 import { Link, useNavigate } from 'react-router'
 import { Avatar, CatchRow, useAnglerName } from '../components/bits'
@@ -8,16 +8,20 @@ import { InstallTip } from '../components/InstallTip'
 import { BrandLockup } from '../components/BrandMark'
 import { ButtonLink, Card, cx, DemoTag, SectionHeader, Tag } from '../components/ui'
 import { DEMO_USER_ID } from '../data/anglers'
-import { regionName, speciesById } from '../data/catalog'
+import { damRegion, regionName, speciesById } from '../data/catalog'
 import { DAMS, damById } from '../data/dams'
 import { EVENTS } from '../data/events'
 import { formatDateLong, formatKg, greeting } from '../lib/format'
 import { computeRanking } from '../lib/ranking'
 import { simulateConditions } from '../lib/weather'
 import { useApp } from '../state/AppState'
+import { brand } from '../config/brand'
+import { ACTIVITY, periodName } from '../data/catalog'
+import { diffDays } from '../lib/dates'
+import { countEntries, currentPeriod, daysLeft } from '../lib/giveaway'
 
 export default function Home() {
-  const { state, allCatches } = useApp()
+  const { state, allCatches, allReports } = useApp()
   const navigate = useNavigate()
   const anglerName = useAnglerName()
   const [q, setQ] = useState('')
@@ -45,6 +49,13 @@ export default function Home() {
   const myPos = ranking.findIndex((r) => r.anglerId === DEMO_USER_ID)
   const mine = state.myCatches
   const best = mine.reduce<(typeof mine)[number] | null>((b, c) => (!b || c.weightG > b.weightG ? c : b), null)
+
+  const latestReports = [...allReports]
+    .filter((r) => diffDays(anchor, r.date) >= 0)
+    .sort((a, b) => b.date.localeCompare(a.date) || b.createdAt - a.createdAt)
+    .slice(0, 3)
+  const gPeriod = currentPeriod(anchor)
+  const gEntries = countEntries(gPeriod, state.myCatches, state.myReports, state.subscription.active)
 
   const onSearch = (e: FormEvent) => {
     e.preventDefault()
@@ -100,7 +111,7 @@ export default function Home() {
             </div>
             <div className="mt-auto">
               <p className="text-[13px] font-semibold text-white/70">
-                {regionName(featured.region)} · {featured.river}
+                {damRegion(featured)} · {featured.river}
               </p>
               <h2 className="font-display mt-1 text-[44px] font-semibold leading-none sm:text-[56px]">{featured.name}</h2>
               <div className="tnum mt-4 flex flex-wrap items-center gap-x-4 gap-y-1 text-[14px] font-semibold text-white/90">
@@ -181,6 +192,43 @@ export default function Home() {
           ))}
         </div>
       </section>
+
+      <div className="mt-8 grid gap-4 lg:grid-cols-[1fr_1.3fr]">
+        <Link to="/giveaway" className="press group relative overflow-hidden rounded-[var(--radius-card)] bg-amber p-5 text-ink shadow-card hover:shadow-lift">
+          <Gift className="absolute -right-3 -top-3 h-28 w-28 text-ink/10" aria-hidden />
+          <p className="text-[11px] font-bold uppercase tracking-[0.14em]">Giveaway {brand.giveaway.frequency} · fictício</p>
+          <p className="font-display mt-2 text-[22px] font-semibold leading-tight">{brand.giveaway.prize}</p>
+          <p className="tnum mt-3 text-[13px] font-bold">
+            Faltam {daysLeft(gPeriod, anchor)} dias · {gEntries.total} participações tuas
+          </p>
+          <span className="mt-3 inline-flex items-center gap-1 text-[13px] font-extrabold underline-offset-2 group-hover:underline">
+            Ver giveaway <ArrowRight className="h-4 w-4" aria-hidden />
+          </span>
+        </Link>
+        <Card className="p-2">
+          <div className="flex items-center justify-between px-3 pb-1 pt-2">
+            <h2 className="flex items-center gap-2 text-[15px] font-extrabold text-ink">
+              <Radio className="h-4 w-4 text-teal-700" aria-hidden /> Últimos reports
+            </h2>
+            <Link to="/reports" className="text-[13px] font-bold text-teal-700 hover:underline">
+              Mapa de pings
+            </Link>
+          </div>
+          {latestReports.map((r) => (
+            <Link key={r.id} to={`/reports?sel=${r.id}`} className="press flex items-center gap-3 rounded-2xl px-3 py-2.5 hover:bg-mist/70">
+              <span className="h-3 w-3 shrink-0 rounded-full" style={{ background: ACTIVITY[r.activity].color }} aria-hidden />
+              <span className="min-w-0 flex-1">
+                <span className="block truncate text-[14px] font-bold text-ink">
+                  {speciesById[r.speciesId].name} · {damById[r.damId].name}
+                </span>
+                <span className="block truncate text-[12.5px] text-muted">
+                  {ACTIVITY[r.activity].name} · {periodName(r.period).toLowerCase()} · {anglerName(r.anglerId)}
+                </span>
+              </span>
+            </Link>
+          ))}
+        </Card>
+      </div>
 
       <div className="mt-8 grid gap-8 lg:grid-cols-2">
         <section>

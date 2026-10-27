@@ -1,3 +1,4 @@
+import { WARM_REGIONS } from '../data/catalog'
 import type { Dam } from '../data/types'
 import { parseISODate } from './dates'
 import { hashString, mulberry32 } from './random'
@@ -48,7 +49,7 @@ export function simulateConditions(dam: Dam, date: string): Conditions {
   const rand = mulberry32(hashString(`${dam.id}|${date}`))
   const doy = Math.floor((d.getTime() - new Date(d.getFullYear(), 0, 0).getTime()) / 86_400_000)
   const season = Math.cos(((doy - 200) / 365) * 2 * Math.PI) // 1 no pico do verão, -1 no inverno
-  const south = dam.region === 'alentejo' ? 1.5 : 0
+  const south = WARM_REGIONS.includes(dam.region) ? 1.5 : 0
 
   const airMax = 21 + season * 9 + south + (rand() - 0.5) * 5
   const airMin = airMax - 9 - rand() * 4

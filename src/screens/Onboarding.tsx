@@ -43,7 +43,7 @@ export default function Onboarding() {
             <DemoTag tone="dark" />
             <h1 className="font-display mt-4 text-[42px] font-semibold leading-[1.02] sm:text-[54px]">{brand.tagline}</h1>
             <p className="mt-4 max-w-md text-[16px] leading-relaxed text-white/75">
-              Barragens portuguesas, condições para preparar a saída, o teu diário de capturas, rankings e provas. Tudo num só lugar.
+              Barragens de Portugal e Espanha, condições para preparar a saída, o teu diário de capturas, rankings e provas. Tudo num só lugar.
             </p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <Button size="lg" icon={ArrowRight} className="flex-row-reverse sm:flex-1" onClick={() => setStep(1)}>
@@ -133,8 +133,22 @@ export default function Onboarding() {
         <section className="page-in mt-8">
           <p className="text-[12px] font-bold uppercase tracking-[0.14em] text-teal-700">Passo 3 de 3</p>
           <h1 className="font-display mt-2 text-[32px] font-semibold leading-tight text-ink">Onde pescas mais?</h1>
-          <div className="mt-6 flex flex-wrap gap-2">
-            {REGIONS.map((r) => (
+          <p className="mt-6 text-[12px] font-bold uppercase tracking-[0.12em] text-muted">Portugal</p>
+          <div className="mt-2 flex flex-wrap gap-2">
+            {REGIONS.filter((r) => r.country === 'PT').map((r) => (
+              <button
+                key={r.id}
+                onClick={() => setRegion(r.id)}
+                aria-pressed={region === r.id}
+                className={cx('press h-11 rounded-full border px-4 text-[14px] font-bold', region === r.id ? 'border-ink bg-ink text-white' : 'border-line bg-white text-ink')}
+              >
+                {r.name}
+              </button>
+            ))}
+          </div>
+          <p className="mt-5 text-[12px] font-bold uppercase tracking-[0.12em] text-muted">Espanha</p>
+          <div className="mt-2 flex flex-wrap gap-2">
+            {REGIONS.filter((r) => r.country === 'ES').map((r) => (
               <button
                 key={r.id}
                 onClick={() => setRegion(r.id)}

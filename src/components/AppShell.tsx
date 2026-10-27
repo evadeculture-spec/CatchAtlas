@@ -1,4 +1,4 @@
-import { Compass, Fish, House, Plus, Trophy, User, Medal, TriangleAlert } from 'lucide-react'
+import { Compass, Fish, Gift, House, Medal, MessageCircle, Plus, Radio, ShoppingBag, Trophy, TriangleAlert, User, Users } from 'lucide-react'
 import { NavLink, Outlet, ScrollRestoration, useLocation, Link } from 'react-router'
 import { brand } from '../config/brand'
 import { useApp } from '../state/AppState'
@@ -9,11 +9,22 @@ const NAV = [
   { to: '/', label: 'Início', icon: House, end: true },
   { to: '/explorar', label: 'Explorar', icon: Compass },
   { to: '/capturas', label: 'Capturas', icon: Fish },
-  { to: '/provas', label: 'Provas', icon: Trophy },
+  { to: '/comunidade', label: 'Comunidade', icon: Users },
   { to: '/perfil', label: 'Perfil', icon: User },
 ]
 
-const HIDE_FAB = [/^\/capturas\/nova/, /\/editar$/, /^\/jornada/, /^\/barragens\//, /^\/provas\/./]
+const SECONDARY = [
+  { to: '/reports', label: 'Reports e pings', icon: Radio },
+  { to: '/comunidade/chat', label: 'Chat global', icon: MessageCircle },
+  { to: '/mercado', label: 'Marketplace', icon: ShoppingBag },
+  { to: '/provas', label: 'Provas', icon: Trophy },
+  { to: '/giveaway', label: 'Giveaway', icon: Gift },
+  { to: '/rankings', label: 'Rankings', icon: Medal },
+]
+
+const COMMUNITY_PATHS = /^\/(comunidade|reports|mercado|provas|giveaway|rankings)/
+
+const HIDE_FAB = [/^\/capturas\/nova/, /\/editar$/, /^\/jornada/, /^\/barragens\//, /^\/provas\/./, /^\/comunidade\/chat/, /^\/reports\/novo/, /^\/mercado\/./]
 
 export function AppShell() {
   const { pathname } = useLocation()
@@ -27,7 +38,7 @@ export function AppShell() {
       </a>
 
       {/* Navegação lateral (desktop) */}
-      <aside className="fixed inset-y-0 left-0 z-40 hidden w-[264px] flex-col bg-ink px-5 py-6 text-white lg:flex">
+      <aside className="fixed inset-y-0 left-0 z-40 hidden w-[264px] flex-col overflow-y-auto bg-ink px-5 py-6 text-white lg:flex">
         <Link to="/" className="rounded-xl px-1" aria-label={`${brand.name} — início`}>
           <BrandLockup light />
         </Link>
@@ -59,14 +70,18 @@ export function AppShell() {
               )}
             </NavLink>
           ))}
-          <NavLink
-            to="/rankings"
-            className={({ isActive }) =>
-              cx('press flex h-11 items-center gap-3 rounded-xl px-3 text-[14px] font-bold', isActive ? 'bg-white/10 text-white' : 'text-white/65 hover:bg-white/5 hover:text-white')
-            }
-          >
-            <Medal className="h-5 w-5" aria-hidden /> Rankings
-          </NavLink>
+          <p className="px-3 pb-1 pt-5 text-[11px] font-bold uppercase tracking-[0.14em] text-white/40">Comunidade</p>
+          {SECONDARY.map((n) => (
+            <NavLink
+              key={n.to}
+              to={n.to}
+              className={({ isActive }) =>
+                cx('press flex h-10 items-center gap-3 rounded-xl px-3 text-[13.5px] font-bold', isActive ? 'bg-white/10 text-white' : 'text-white/60 hover:bg-white/5 hover:text-white')
+              }
+            >
+              <n.icon className="h-[18px] w-[18px]" aria-hidden /> {n.label}
+            </NavLink>
+          ))}
         </nav>
         <div className="mt-auto rounded-2xl bg-white/5 p-4 text-[12px] leading-relaxed text-white/60">
           <p className="mb-1 flex items-center gap-1.5 font-bold text-amber">
@@ -113,18 +128,21 @@ export function AppShell() {
               <NavLink
                 to={n.to}
                 end={n.end}
-                className={({ isActive }) =>
-                  cx('press flex h-full flex-col items-center justify-center gap-1 text-[11px] font-bold', isActive ? 'text-ink' : 'text-subtle hover:text-muted')
+                className={({ isActive: a }) =>
+                  cx('press flex h-full flex-col items-center justify-center gap-1 text-[11px] font-bold', a || (n.to === '/comunidade' && COMMUNITY_PATHS.test(pathname)) ? 'text-ink' : 'text-subtle hover:text-muted')
                 }
               >
-                {({ isActive }) => (
+                {({ isActive: a }) => {
+                  const isActive = a || (n.to === '/comunidade' && COMMUNITY_PATHS.test(pathname))
+                  return (
                   <>
                     <span className={cx('grid h-8 w-12 place-items-center rounded-full transition', isActive && 'bg-teal-50')}>
                       <n.icon className={cx('h-[21px] w-[21px]', isActive && 'text-teal-700')} strokeWidth={isActive ? 2.4 : 2} aria-hidden />
                     </span>
                     {n.label}
                   </>
-                )}
+                  )
+                }}
               </NavLink>
             </li>
           ))}

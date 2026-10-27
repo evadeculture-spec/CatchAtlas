@@ -1,6 +1,19 @@
 export type SpeciesId = 'achiga' | 'carpa' | 'lucio' | 'lucioperca' | 'barbo' | 'siluro'
 export type ModalityId = 'margem' | 'caiaque' | 'embarcacao'
-export type RegionId = 'norte' | 'centro' | 'lisboa' | 'alentejo' | 'algarve'
+export type CountryId = 'PT' | 'ES'
+export type RegionId =
+  | 'norte'
+  | 'centro'
+  | 'lisboa'
+  | 'alentejo'
+  | 'algarve'
+  | 'galiza'
+  | 'castela-leao'
+  | 'castela-mancha'
+  | 'extremadura'
+  | 'andaluzia'
+  | 'aragao'
+  | 'catalunha'
 
 export interface Species {
   id: SpeciesId
@@ -14,6 +27,7 @@ export interface Species {
 export interface Dam {
   id: string
   name: string
+  country: CountryId
   region: RegionId
   /** Localidade/concelho de referência (informação geral). */
   place: string
@@ -99,4 +113,49 @@ export interface Profile {
   species: SpeciesId[]
   modalities: ModalityId[]
   avatarColor: string
+}
+
+export type Activity = 'forte' | 'moderada' | 'fraca' | 'nula'
+export type DayPeriod = 'madrugada' | 'manha' | 'tarde' | 'noite'
+
+/** Report rápido de atividade, que gera um ping (localização aproximada) no mapa. */
+export interface Report {
+  id: string
+  anglerId: string
+  damId: string
+  speciesId: SpeciesId
+  activity: Activity
+  period: DayPeriod
+  date: string
+  technique: string
+  lure: string
+  note: string
+  catches: number
+  createdAt: number
+  seeded?: boolean
+}
+
+export type ListingCategory = 'canas' | 'carretos' | 'amostras' | 'embarcacoes' | 'eletronica' | 'acessorios'
+
+export interface Listing {
+  id: string
+  sellerId: string
+  title: string
+  category: ListingCategory
+  priceEur: number
+  condition: 'novo' | 'como-novo' | 'usado'
+  region: RegionId
+  date: string
+  description: string
+  hasPhoto: boolean
+  sold: boolean
+  createdAt: number
+}
+
+export interface ChatMessage {
+  id: string
+  anglerId: string
+  text: string
+  /** Data/hora ISO local. */
+  at: string
 }

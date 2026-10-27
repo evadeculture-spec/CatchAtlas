@@ -76,6 +76,24 @@ export const EVENTS: DemoEvent[] = [
     speciesFocus: ['carpa'],
   },
   {
+    id: 'open-siluro-mequinenza',
+    title: 'Open Ibérico de Siluro',
+    damId: 'mequinenza',
+    modality: 'embarcacao',
+    dayOffset: 33,
+    startTime: '08:00',
+    organizer: 'Club Ejemplo del Ebro (fictício)',
+    format: 'Pares embarcados · captura e solta · medição em régua',
+    description:
+      'Prova fictícia em Espanha, para ilustrar como o calendário pode cruzar a fronteira e juntar pescadores dos dois países.',
+    schedule: [
+      { time: '07:00', label: 'Briefing' },
+      { time: '08:00', label: 'Partida' },
+      { time: '16:00', label: 'Entrega de fotografias e medições' },
+    ],
+    speciesFocus: ['siluro'],
+  },
+  {
     id: 'trofeu-primavera-aguieira',
     title: 'Troféu Aguieira · Achigã',
     damId: 'aguieira',
