@@ -1,6 +1,6 @@
 import { Fish, Info, MapPin, Route, Sunrise, Sunset, Trophy, Waves, Droplets, Gauge } from 'lucide-react'
 import { useState } from 'react'
-import { useNavigate, useParams, useSearchParams } from 'react-router'
+import { Link, useNavigate, useParams, useSearchParams } from 'react-router'
 import { CatchRow, SpeciesDot } from '../components/bits'
 import { HourlyChart } from '../components/charts'
 import { ConditionsGrid, EventCard, FavButton } from '../components/cards'
@@ -15,12 +15,18 @@ import { capFirst, formatDate, formatKg, relativeDay } from '../lib/format'
 import { simulateConditions } from '../lib/weather'
 import { useApp } from '../state/AppState'
 import NotFound from './NotFound'
+import { ZoneCard } from './Zones'
+import { ZONES } from '../data/zones'
+import { LEGAL } from '../data/legal'
+import { riverForDam } from '../data/rivers'
+import { ConfidenceTag } from '../components/SourceLink'
 
 const TABS = [
   { id: 'geral', label: 'Visão geral' },
   { id: 'condicoes', label: 'Condições' },
   { id: 'capturas', label: 'Capturas' },
   { id: 'provas', label: 'Provas' },
+  { id: 'regras', label: 'Regras e licenças' },
 ] as const
 type TabId = (typeof TABS)[number]['id']
 
@@ -41,6 +47,7 @@ export default function DamDetail() {
     .filter((c) => c.damId === dam.id && (c.visibility === 'publica' || c.anglerId === DEMO_USER_ID))
     .sort((a, b) => b.weightG - a.weightG)
   const events = EVENTS.filter((e) => e.damId === dam.id).sort((a, b) => a.dayOffset - b.dayOffset)
+  const damZones = ZONES.filter((z) => z.damId === dam.id)
   const bestBySpecies = dam.species
     .map((s) => ({ s, best: catches.filter((c) => c.speciesId === s)[0] }))
     .filter((x) => x.best)
@@ -92,6 +99,7 @@ export default function DamDetail() {
               {t.label}
               {t.id === 'capturas' && <span className="ml-1 text-subtle">{catches.length}</span>}
               {t.id === 'provas' && <span className="ml-1 text-subtle">{events.length}</span>}
+              {t.id === 'regras' && damZones.length > 0 && <span className="ml-1 text-subtle">{damZones.length}</span>}
               <span className={cx('absolute inset-x-3 bottom-0 h-[3px] rounded-full bg-teal transition-opacity', tab === t.id ? 'opacity-100' : 'opacity-0')} />
             </button>
           ))}
@@ -104,21 +112,30 @@ export default function DamDetail() {
             <div className="space-y-4">
               <Card className="p-5">
                 <p className="text-[15.5px] leading-relaxed text-text">{dam.summary}</p>
-                <dl className="mt-5 grid grid-cols-3 gap-3 border-t border-line pt-4">
+                {dam.traits.length > 0 && <dl className="mt-5 grid grid-cols-3 gap-3 border-t border-line pt-4">
                   {dam.traits.map((t) => (
                     <div key={t.label}>
                       <dt className="text-[11.5px] font-bold uppercase tracking-wider text-subtle">{t.label}</dt>
                       <dd className="mt-1 text-[13.5px] font-bold leading-snug text-ink">{t.value}</dd>
                     </div>
                   ))}
-                </dl>
-                <p className="mt-4 text-[12px] text-muted">Características descritivas de demonstração, não verificadas.</p>
+                </dl>}
+                <p className="mt-4 text-[12px] text-muted">
+                  {dam.detail === 'basica' ? 'Ficha básica: nome, rio e localidade são informação geral. Coordenadas aproximadas.' : 'Características descritivas de demonstração, não verificadas.'}
+                </p>
+                {riverForDam(dam.river) && (
+                  <p className="mt-2 text-[12.5px] text-muted">
+                    Bacia do {riverForDam(dam.river)!.basin} ·{' '}
+                    <Link to="/rios" className="font-bold text-teal-700 hover:underline">ver rios</Link>
+                  </p>
+                )}
               </Card>
               <Card className="p-5">
                 <div className="flex items-center justify-between">
                   <h2 className="text-[15px] font-extrabold text-ink">Espécies de exemplo</h2>
                   <Tag tone="amber">Não verificadas</Tag>
                 </div>
+                {dam.species.length === 0 && <p className="mt-3 text-[13.5px] text-muted">Espécies ainda não compiladas para esta barragem. Consulte o edital local.</p>}
                 <ul className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-3">
                   {dam.species.map((s) => {
                     const best = bestBySpecies.find((b) => b.s === s)?.best
@@ -138,6 +155,7 @@ export default function DamDetail() {
                   {dam.modalities.map((m) => (
                     <Tag key={m}>{modalityName(m)}</Tag>
                   ))}
+                  {dam.modalities.length === 0 && <span className="text-[13px] text-muted">Por confirmar</span>}
                 </div>
               </Card>
             </div>
@@ -234,6 +252,39 @@ export default function DamDetail() {
                 Eventos fictícios. Próxima data: {formatDate(addDaysISO(state.anchor, events.find((e) => e.dayOffset >= 0)!.dayOffset))}.
               </p>
             )}
+          </div>
+        )}
+        {tab === 'regras' && (
+          <div className="page-in grid gap-4 lg:grid-cols-[1.4fr_1fr] [&>*]:min-w-0">
+            <div className="space-y-3">
+              {damZones.length > 0 ? (
+                damZones.map((z) => <ZoneCard key={z.id} z={z} showDam={false} />)
+              ) : (
+                <Card className="p-5">
+                  <h2 className="text-[15px] font-extrabold text-ink">Sem concessão ou zona identificada</h2>
+                  <p className="mt-1.5 text-[13.5px] leading-relaxed text-muted">
+                    Não encontrámos documento de concessão, zona de pesca ou coto para esta {dam.country === 'PT' ? 'albufeira' : 'embalse'}. Isso não significa que não exista: confirme {dam.country === 'PT' ? 'no geocatálogo e nos editais do ICNF' : 'na ordem de pesca da comunidade autónoma'}.
+                  </p>
+                </Card>
+              )}
+            </div>
+            <Card className="p-5">
+              <h2 className="text-[15px] font-extrabold text-ink">Regras gerais · {dam.country === 'PT' ? 'Portugal' : 'Espanha'}</h2>
+              <ul className="mt-3 space-y-3">
+                {LEGAL[dam.country].flatMap((sec) => sec.items).filter((it) => /Licen|Períodos|interautonómica|invasoras/.test(it.title)).slice(0, 4).map((it) => (
+                  <li key={it.title}>
+                    <div className="flex items-start justify-between gap-2">
+                      <p className="text-[13.5px] font-extrabold text-ink">{it.title}</p>
+                      <ConfidenceTag c={it.confidence} />
+                    </div>
+                    <p className="mt-1 text-[13px] leading-relaxed text-muted">{it.text}</p>
+                  </li>
+                ))}
+              </ul>
+              <Link to={`/licencas${dam.country === 'ES' ? '?pais=ES' : ''}`} className="press mt-4 inline-flex h-10 items-center rounded-full bg-ink px-4 text-[13px] font-bold text-white hover:bg-ink-2">
+                Licenças e legislação completas
+              </Link>
+            </Card>
           </div>
         )}
       </div>

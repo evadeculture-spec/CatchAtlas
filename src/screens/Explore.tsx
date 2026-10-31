@@ -4,6 +4,7 @@ import { Link, useSearchParams } from 'react-router'
 import { DamCard, FavButton, SkyIcon } from '../components/cards'
 import { DamArt } from '../components/DamArt'
 import { SchematicMap, type MapView } from '../components/SchematicMap'
+import { ExploreTabs } from '../components/ExploreTabs'
 import { ButtonLink, Chip, cx, EmptyState, Segmented, Tag } from '../components/ui'
 import { damRegion, MODALITIES, SPECIES, speciesById } from '../data/catalog'
 import { DAMS, damById } from '../data/dams'
@@ -73,6 +74,9 @@ export default function Explore() {
             className="lg:hidden"
           />
         </div>
+        <div className="mt-4">
+          <ExploreTabs />
+        </div>
       </header>
 
       <div className="sticky top-0 z-20 -mx-4 mt-3 bg-canvas/90 px-4 pb-3 pt-2 backdrop-blur-xl lg:-mx-8 lg:px-8">
@@ -133,7 +137,7 @@ export default function Explore() {
         <EmptyState
           icon={Search}
           title="Nenhuma barragem encontrada"
-          text="Experimente outro nome ou retire alguns filtros. A demonstração inclui barragens de Portugal e Espanha."
+          text="Experimente outro nome ou retire alguns filtros. Experimente outro nome, rio ou região."
           action={<ButtonLink to="/explorar" variant="dark" size="sm">Ver todas</ButtonLink>}
         />
       ) : (
@@ -205,6 +209,7 @@ function MapCard({ id }: { id: string }) {
                 {speciesById[s].short}
               </Tag>
             ))}
+            {d.detail === 'basica' && <Tag>Ficha básica</Tag>}
           </div>
         </div>
       </div>

@@ -80,6 +80,7 @@ export function DamCard({ dam, cond, layout = 'tall', catchCount }: { dam: Dam; 
                 {speciesById[s].short}
               </Tag>
             ))}
+            {dam.detail === 'basica' && <Tag>Ficha básica</Tag>}
             {catchCount !== undefined && catchCount > 0 && <Tag tone="amber">{catchCount} capturas</Tag>}
           </div>
         </div>

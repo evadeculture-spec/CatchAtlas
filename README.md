@@ -40,7 +40,7 @@ Em alternativa, pode ligar o repositório em app.netlify.com: as definições s�
 ## Estrutura
 
 - `src/config/brand.ts` — nome, assinatura, etiqueta de demonstração, giveaway (mensal/semanal) e subscrição (substituir aqui).
-- `src/data/` — barragens, espécies, perfis, capturas e provas de demonstração.
+- `src/data/` — barragens (`dams.ts`, `moreDams.ts`), rios (`rivers.ts`), concessões e zonas com documento oficial (`zones.ts`), licenças e legislação com fontes (`legal.ts`), e dados de demonstração.
 - `src/lib/` — datas, formatação, meteorologia simulada, regras de sugestão, rankings e fotografias (IndexedDB).
 - `src/state/` — estado global persistido em `localStorage` e toasts.
 - `src/components/` — componentes reutilizáveis (navegação, cartões, gráficos, mapa esquemático, ilustrações).
@@ -54,3 +54,7 @@ Em alternativa, pode ligar o repositório em app.netlify.com: as definições s�
 - O mapa é esquemático (Portugal e Península Ibérica), com posições aproximadas, e não serve para navegação. Os pings dos reports usam uma posição aproximada dentro da barragem.
 - A subscrição é simulada: não há pagamentos. O chat, os anúncios e os reports de terceiros são fictícios; os do utilizador ficam apenas no navegador.
 - Os ícones PNG foram gerados com `scripts/make-icons.mjs` (Playwright).
+
+## Dados legais
+
+A informação de licenças e legislação foi compilada a 31/10/2026 a partir das fontes ligadas em cada ficha (`src/data/legal.ts`). As concessões e zonas de pesca são uma lista parcial com documento identificado; a lista completa portuguesa está no geocatálogo do ICNF. As barragens de `moreDams.ts` têm apenas dados gerais e coordenadas aproximadas.

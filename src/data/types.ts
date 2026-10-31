@@ -40,6 +40,38 @@ export interface Dam {
   summary: string
   traits: { label: string; value: string }[]
   art: ArtPalette
+  /** 'completa': ficha de demonstração com exemplos; 'basica': só dados gerais (nome, rio, local). */
+  detail?: 'completa' | 'basica'
+}
+
+export type ZoneKind = 'concessao' | 'zpl' | 'zpr' | 'coto'
+
+/** Concessão ou zona de pesca com documento oficial identificado. */
+export interface FishingZone {
+  id: string
+  name: string
+  country: CountryId
+  kind: ZoneKind
+  /** Barragem da app a que a zona se refere, quando existe. */
+  damId?: string
+  river?: string
+  place: string
+  manager?: string
+  notes: string[]
+  source: { label: string; url: string }
+  /** Ano do documento consultado, ou null quando não datado. */
+  docYear: number | null
+}
+
+export interface River {
+  id: string
+  name: string
+  countries: CountryId[]
+  basin: string
+  mouth: string
+  notes?: string
+  /** Texto usado para associar barragens da app a este rio (campo river da barragem). */
+  match: string[]
 }
 
 export interface ArtPalette {

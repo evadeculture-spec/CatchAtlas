@@ -64,6 +64,7 @@ export function SchematicMap({
   const px = (lon: number) => ((lon - v.lon[0]) / (v.lon[1] - v.lon[0])) * v.w
   const py = (lat: number) => ((v.lat[1] - lat) / (v.lat[1] - v.lat[0])) * v.h
   const path = (pts: [number, number][]) => pts.map(([lon, lat], i) => `${i ? 'L' : 'M'}${px(lon).toFixed(1)},${py(lat).toFixed(1)}`).join(' ') + ' Z'
+  const dense = dams.length > 30
   const pct = (lon: number, lat: number) => ({ left: `${(px(lon) / v.w) * 100}%`, top: `${(py(lat) / v.h) * 100}%` })
 
   return (
@@ -115,17 +116,17 @@ export function SchematicMap({
               onClick={() => onSelect?.(d.id)}
               aria-label={`${d.name}${favorites.includes(d.id) ? ' (favorita)' : ''}`}
               aria-pressed={active}
-              className="group absolute -translate-x-1/2 -translate-y-1/2 p-2"
+              className={cx('group absolute -translate-x-1/2 -translate-y-1/2', dense ? 'p-1' : 'p-2')}
               style={{ ...pct(d.approx.lon, d.approx.lat), zIndex: active ? 5 : 1 }}
             >
               {active && <span className="pulse-ring absolute inset-2 rounded-full bg-teal" aria-hidden />}
               <span
                 className={cx(
                   'relative grid place-items-center rounded-full border-[2.5px] border-white shadow-lift transition-transform',
-                  active ? 'h-6 w-6 scale-110 bg-teal' : pings ? 'h-3.5 w-3.5 bg-ink/70' : 'h-5 w-5 bg-ink group-hover:scale-110',
+                  active ? 'h-6 w-6 scale-110 bg-teal' : pings ? 'h-3.5 w-3.5 bg-ink/70' : dense ? 'h-3.5 w-3.5 border-2 bg-ink group-hover:scale-125' : 'h-5 w-5 bg-ink group-hover:scale-110',
                 )}
               >
-                {favorites.includes(d.id) && !pings && <span className="h-1.5 w-1.5 rounded-full bg-amber" />}
+                {favorites.includes(d.id) && !pings && !dense && <span className="h-1.5 w-1.5 rounded-full bg-amber" />}
               </span>
               <span
                 className={cx(
@@ -139,9 +140,9 @@ export function SchematicMap({
           )
         })}
       </div>
-      <p className="absolute left-3 top-3 flex max-w-[78%] items-start gap-1.5 rounded-xl bg-white/90 px-2.5 py-1.5 text-[11px] font-semibold leading-snug text-muted shadow-card backdrop-blur">
-        <Info className="mt-px h-3.5 w-3.5 shrink-0 text-teal-700" aria-hidden />
-        Mapa esquemático com posições aproximadas. Não serve para navegação.
+      <p className="absolute right-2 top-2 flex max-w-[62%] items-start gap-1 rounded-lg bg-white/90 px-2 py-1 text-[10.5px] font-semibold leading-snug text-muted shadow-card backdrop-blur">
+        <Info className="mt-px h-3 w-3 shrink-0 text-teal-700" aria-hidden />
+        Esquemático · posições aproximadas · não serve para navegação
       </p>
       {overlay}
     </div>

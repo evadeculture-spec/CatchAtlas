@@ -1,3 +1,4 @@
+import { MORE_DAMS } from './moreDams'
 import type { ArtPalette, Dam, ModalityId, RegionId, SpeciesId } from './types'
 
 // Nomes, região, localidade e rio são informação geral. Tudo o resto é ilustrativo:
@@ -186,7 +187,7 @@ type Extra = [
 // informação geral; o resto é ilustrativo e não verificado.
 const EXTRA: Extra[] = [
   ['alto-rabagao', 'Alto Rabagão', 'PT', 'norte', 'Montalegre', 'Rio Rabagão', 41.74, -7.86, ['achiga', 'carpa', 'barbo'], ['margem', 'caiaque', 'embarcacao'], 'montanha', 'Planalto de altitude, aberto e exposto ao vento. Exemplo de jornadas de margem em zona fresca.', ['Muito extensa', 'Abertas, de planalto', 'Montanha, granito']],
-  ['canicada', 'Caniçada', 'PT', 'norte', 'Vieira do Minho · Terras de Bouro', 'Rio Cávado', 41.68, -8.15, ['achiga', 'carpa', 'barbo'], ['margem', 'caiaque', 'embarcacao'], 'vale', 'Albufeira entre serras arborizadas, junto ao Gerês. Exemplo de pesca em ravinas e margens sombreadas.', ['Média', 'Íngremes, arborizadas', 'Serra, floresta']],
+  ['canicada', 'Caniçada', 'PT', 'norte', 'Vieira do Minho · Terras de Bouro', 'Rio Cávado', 41.68, -8.15, ['achiga', 'carpa', 'lucio', 'barbo'], ['margem', 'caiaque', 'embarcacao'], 'vale', 'Albufeira entre serras arborizadas, junto ao Gerês. Exemplo de pesca em ravinas e margens sombreadas.', ['Média', 'Íngremes, arborizadas', 'Serra, floresta']],
   ['baixo-sabor', 'Baixo Sabor', 'PT', 'norte', 'Torre de Moncorvo', 'Rio Sabor', 41.22, -7.0, ['achiga', 'carpa', 'barbo'], ['margem', 'caiaque', 'embarcacao'], 'serra', 'Vale encaixado no Nordeste transmontano, com muitas reentrâncias. Exemplo de jornadas embarcadas.', ['Extensa', 'Recortadas, rochosas', 'Vale encaixado']],
   ['idanha', 'Idanha', 'PT', 'centro', 'Idanha-a-Nova', 'Rio Ponsul', 39.95, -7.18, ['achiga', 'carpa', 'lucioperca', 'barbo'], ['margem', 'caiaque', 'embarcacao'], 'planicie', 'Albufeira da Beira Baixa, com margens abertas. Exemplo de jornadas tranquilas de margem.', ['Média', 'Abertas, suaves', 'Campo, montado']],
   ['caia', 'Caia', 'PT', 'alentejo', 'Elvas · Campo Maior', 'Rio Caia', 38.98, -7.12, ['achiga', 'carpa', 'lucioperca'], ['margem', 'embarcacao'], 'planicie', 'Plano de água junto à fronteira, em planície. Exemplo de pesca em zonas abertas.', ['Média a extensa', 'Abertas', 'Planície alentejana']],
@@ -223,6 +224,24 @@ export const DAMS: Dam[] = [
     ],
     art: { ...PRESETS[preset], seed: 101 + i * 13 },
   })),
+  ...MORE_DAMS.map(([id, name, country, region, place, river, lat, lon], i): Dam => {
+    const preset: keyof typeof PRESETS = region === 'norte' || region === 'galiza' ? 'montanha' : region === 'centro' || region === 'castela-leao' ? 'vale' : region === 'algarve' || region === 'andaluzia' ? 'serra' : 'planicie'
+    return {
+      id,
+      name,
+      country,
+      region,
+      place,
+      river,
+      approx: { lat, lon },
+      species: [],
+      modalities: [],
+      summary: `${country === 'PT' ? 'Albufeira' : 'Embalse'} em ${place} (${river}). Ficha com dados gerais: espécies, acessos e regras locais ainda não foram compilados.`,
+      traits: [],
+      art: { ...PRESETS[preset], seed: 401 + i * 7 },
+      detail: 'basica',
+    }
+  }),
 ]
 
 export const damById = Object.fromEntries(DAMS.map((d) => [d.id, d])) as Record<string, Dam>

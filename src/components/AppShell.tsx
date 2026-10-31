@@ -1,4 +1,4 @@
-import { Compass, Fish, Gift, House, Medal, MessageCircle, Plus, Radio, ShoppingBag, Trophy, TriangleAlert, User, Users } from 'lucide-react'
+import { Compass, FileText, Fish, Gift, Scale, House, Medal, MessageCircle, Plus, Radio, ShoppingBag, Trophy, TriangleAlert, User, Users } from 'lucide-react'
 import { NavLink, Outlet, ScrollRestoration, useLocation, Link } from 'react-router'
 import { brand } from '../config/brand'
 import { useApp } from '../state/AppState'
@@ -14,6 +14,8 @@ const NAV = [
 ]
 
 const SECONDARY = [
+  { to: '/zonas', label: 'Concessões e zonas', icon: FileText },
+  { to: '/licencas', label: 'Licenças e lei', icon: Scale },
   { to: '/reports', label: 'Reports e pings', icon: Radio },
   { to: '/comunidade/chat', label: 'Chat global', icon: MessageCircle },
   { to: '/mercado', label: 'Marketplace', icon: ShoppingBag },
@@ -23,6 +25,8 @@ const SECONDARY = [
 ]
 
 const COMMUNITY_PATHS = /^\/(comunidade|reports|mercado|provas|giveaway|rankings)/
+const EXPLORE_PATHS = /^\/(explorar|rios|zonas|licencas|barragens)/
+const sectionActive = (to: string, pathname: string) => (to === '/comunidade' && COMMUNITY_PATHS.test(pathname)) || (to === '/explorar' && EXPLORE_PATHS.test(pathname))
 
 const HIDE_FAB = [/^\/capturas\/nova/, /\/editar$/, /^\/jornada/, /^\/barragens\//, /^\/provas\/./, /^\/comunidade\/chat/, /^\/reports\/novo/, /^\/mercado\/./]
 
@@ -70,7 +74,7 @@ export function AppShell() {
               )}
             </NavLink>
           ))}
-          <p className="px-3 pb-1 pt-5 text-[11px] font-bold uppercase tracking-[0.14em] text-white/40">Comunidade</p>
+          <p className="px-3 pb-1 pt-5 text-[11px] font-bold uppercase tracking-[0.14em] text-white/40">Informação e comunidade</p>
           {SECONDARY.map((n) => (
             <NavLink
               key={n.to}
@@ -129,11 +133,11 @@ export function AppShell() {
                 to={n.to}
                 end={n.end}
                 className={({ isActive: a }) =>
-                  cx('press flex h-full flex-col items-center justify-center gap-1 text-[11px] font-bold', a || (n.to === '/comunidade' && COMMUNITY_PATHS.test(pathname)) ? 'text-ink' : 'text-subtle hover:text-muted')
+                  cx('press flex h-full flex-col items-center justify-center gap-1 text-[11px] font-bold', a || sectionActive(n.to, pathname) ? 'text-ink' : 'text-subtle hover:text-muted')
                 }
               >
                 {({ isActive: a }) => {
-                  const isActive = a || (n.to === '/comunidade' && COMMUNITY_PATHS.test(pathname))
+                  const isActive = a || sectionActive(n.to, pathname)
                   return (
                   <>
                     <span className={cx('grid h-8 w-12 place-items-center rounded-full transition', isActive && 'bg-teal-50')}>

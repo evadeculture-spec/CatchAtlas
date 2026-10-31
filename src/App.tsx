@@ -23,6 +23,9 @@ import ListingDetail from './screens/ListingDetail'
 import ListingForm from './screens/ListingForm'
 import Chat from './screens/Chat'
 import Giveaway from './screens/Giveaway'
+import Licences from './screens/Licences'
+import Zones from './screens/Zones'
+import Rivers from './screens/Rivers'
 
 /** O onboarding aparece só na primeira visita ao Início; links diretos abrem sempre. */
 function HomeGate() {
@@ -56,6 +59,9 @@ const routes = [
       { path: 'mercado/novo', element: <ListingForm /> },
       { path: 'mercado/:id', element: <ListingDetail /> },
       { path: 'giveaway', element: <Giveaway /> },
+      { path: 'licencas', element: <Licences /> },
+      { path: 'zonas', element: <Zones /> },
+      { path: 'rios', element: <Rivers /> },
       { path: '*', element: <NotFound /> },
     ],
   },
