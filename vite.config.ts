@@ -7,7 +7,15 @@ import tailwindcss from '@tailwindcss/vite'
 export default defineConfig(({ mode }) => ({
   plugins: [react(), tailwindcss()],
   // Modo "e2e": substitui o catálogo de fotografias por um catálogo de TESTE (nunca publicado).
-  resolve: mode === 'e2e' ? { alias: [{ find: /^.*\/data\/photos\/catalog\.json$/, replacement: fileURLToPath(new URL('./e2e/fixtures/photo-catalog.json', import.meta.url)) }] } : undefined,
+  resolve:
+    mode === 'e2e'
+      ? {
+          alias: [
+            { find: /^.*\/data\/photos\/catalog\.json$/, replacement: fileURLToPath(new URL('./e2e/fixtures/photo-catalog.json', import.meta.url)) },
+            { find: /^.*\/data\/photos\/unsplash\.json$/, replacement: fileURLToPath(new URL('./e2e/fixtures/empty-catalog.json', import.meta.url)) },
+          ],
+        }
+      : undefined,
   base: mode === 'artifact' ? './' : '/',
   build: {
     outDir: mode === 'artifact' ? 'dist-artifact' : mode === 'e2e' ? 'dist-e2e' : 'dist',

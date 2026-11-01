@@ -125,3 +125,40 @@ describe('pipeline: licenças e identidade', () => {
     expect(mixed.identity).toBe('revisao')
   })
 })
+
+describe('seleção Unsplash', async () => {
+  const { default: unsplash } = await import('../../data/photos/unsplash.json')
+  const { DAMS } = await import('../../data/dams')
+  const { photosForDam, coverForDam, representationOf, isSafeVariantSrc } = await import('./rules')
+  const cat = unsplash as unknown as import('../../data/photos/types').PhotoCatalog
+
+  it('todas as barragens têm capa', () => {
+    for (const d of DAMS) expect(coverForDam(cat, d.id), d.id).not.toBeNull()
+  })
+  it('nenhuma fotografia é repetida entre barragens', () => {
+    const ids = cat.links.map((l) => l.assetId)
+    expect(new Set(ids).size).toBe(ids.length)
+  })
+  it('só "local" tem identidade confirmada; as restantes nunca', () => {
+    const byId = new Map(cat.assets.map((a) => [a.id, a]))
+    for (const l of cat.links) {
+      const a = byId.get(l.assetId)!
+      expect(a.identity === 'confirmado', l.damId).toBe(representationOf(l) === 'local')
+    }
+  })
+  it('variantes só do CDN do Unsplash e créditos no formato pedido', () => {
+    for (const a of cat.assets) {
+      expect(a.variants.every((v) => isSafeVariantSrc(v.src))).toBe(true)
+      expect(a.attribution).toMatch(/^Foto de .+ no Unsplash$/)
+      expect(a.sourcePageUrl).toMatch(/^https:\/\/unsplash\.com\/photos\/.+utm_source=atlascatch/)
+    }
+  })
+  it('URL arbitrário não passa', () => {
+    expect(isSafeVariantSrc('https://images.unsplash.com.evil.com/photo-1?x=1')).toBe(false)
+    expect(isSafeVariantSrc('javascript:alert(1)')).toBe(false)
+  })
+  it('El Atazar é local; Sierra Brava é ilustrativa', () => {
+    expect(representationOf(photosForDam(cat, 'el-atazar')[0].link)).toBe('local')
+    expect(representationOf(photosForDam(cat, 'sierra-brava')[0].link)).toBe('ilustrativa')
+  })
+})

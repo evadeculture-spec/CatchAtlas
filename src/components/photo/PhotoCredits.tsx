@@ -1,6 +1,6 @@
 import { ExternalLink } from 'lucide-react'
 import type { PhotoAsset } from '../../data/photos/types'
-import { capturedLabel } from '../../lib/photos/rules'
+import { REPRESENTATION_LABEL, capturedLabel, representationOf, type DamPhoto } from '../../lib/photos/rules'
 import { Sheet } from '../Dialog'
 
 function Row({ label, children }: { label: string; children: React.ReactNode }) {
@@ -20,19 +20,26 @@ const ext = (url: string, text: string) => (
 )
 
 /** Autor, fonte, licença, data de captação e alterações da fotografia. */
-export function PhotoCredits({ asset, open, onClose }: { asset: PhotoAsset; open: boolean; onClose: () => void }) {
+export function PhotoCredits({ asset, link, open, onClose }: { asset: PhotoAsset; link?: DamPhoto['link']; open: boolean; onClose: () => void }) {
+  const rep = link ? representationOf(link) : 'local'
   return (
     <Sheet open={open} onClose={onClose} title="Sobre esta fotografia">
       <dl>
         <Row label="Autor">{asset.authorUrl ? ext(asset.authorUrl, asset.author) : asset.author}</Row>
         <Row label="Licença">{asset.license.url ? ext(asset.license.url, asset.license.name) : asset.license.name}</Row>
-        <Row label="Fonte">{ext(asset.sourcePageUrl, asset.provider === 'wikimedia-commons' ? 'Wikimedia Commons' : 'Página de origem')}</Row>
+        <Row label="Fonte">{ext(asset.sourcePageUrl, asset.provider === 'wikimedia-commons' ? 'Wikimedia Commons' : asset.provider === 'unsplash' ? 'Unsplash' : 'Página de origem')}</Row>
         <Row label="Data de captação">{capturedLabel(asset)}</Row>
         <Row label="Atribuição">{asset.attribution}</Row>
         <Row label="Alterações">{asset.changes}</Row>
-        <Row label="Verificação do local">
-          {asset.identityMethod === 'humana' ? 'Revista por pessoa' : 'Verificação automática'} · {asset.identityBasis}
-        </Row>
+        {rep === 'local' ? (
+          <Row label="Verificação do local">
+            {asset.identityMethod === 'humana' ? 'Revista por pessoa' : 'Verificação automática'} · {asset.identityBasis}
+          </Row>
+        ) : (
+          <Row label="O que esta imagem representa">
+            <strong>{REPRESENTATION_LABEL[rep]}.</strong> {link?.basis}
+          </Row>
+        )}
       </dl>
       <p className="mt-3 text-[12.5px] leading-relaxed text-muted">
         A fotografia mostra o setor e o momento em que foi captada. Não representa as condições atuais da albufeira.

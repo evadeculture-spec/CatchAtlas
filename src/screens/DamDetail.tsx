@@ -8,8 +8,9 @@ import { HeroCarousel } from '../components/photo/HeroCarousel'
 import { PhotoCredits } from '../components/photo/PhotoCredits'
 import { PhotoGallery } from '../components/photo/PhotoGallery'
 import { PhotoInsights } from '../components/photo/PhotoInsights'
+import { RepresentationTag } from '../components/photo/RepresentationTag'
 import { useDamPhotos } from '../components/photo/useDamPhotos'
-import { shortCredit } from '../lib/photos/rules'
+import { representationOf, shortCredit } from '../lib/photos/rules'
 import { ButtonLink, Card, cx, EmptyState, PageHeader, Tag } from '../components/ui'
 import { DEMO_USER_ID } from '../data/anglers'
 import { damRegion, modalityName, speciesById } from '../data/catalog'
@@ -81,6 +82,7 @@ export default function DamDetail() {
         <div className="pointer-events-none absolute inset-x-0 bottom-0 mx-auto max-w-6xl px-4 pb-6 text-white lg:px-8 [&_button]:pointer-events-auto">
           {current && (
             <div className="mb-3 flex flex-wrap items-center gap-2">
+              <RepresentationTag photo={current} />
               <button
                 type="button"
                 onClick={() => setCredits(true)}
@@ -114,7 +116,7 @@ export default function DamDetail() {
           </div>
         </div>
       </div>
-      {current && <PhotoCredits asset={current.asset} open={credits} onClose={() => setCredits(false)} />}
+      {current && <PhotoCredits asset={current.asset} link={current.link} open={credits} onClose={() => setCredits(false)} />}
       {gallery !== null && photos.length > 0 && <PhotoGallery dam={dam} photos={photos} start={gallery} onClose={() => setGallery(null)} />}
 
       <div className="sticky top-0 z-20 border-b border-line bg-canvas/90 backdrop-blur-xl lg:mx-8 lg:mt-2 lg:rounded-full lg:border-0">
@@ -144,7 +146,7 @@ export default function DamDetail() {
         {tab === 'geral' && (
           <div className="page-in grid gap-4 lg:grid-cols-[1.4fr_1fr] [&>*]:min-w-0">
             <div className="space-y-4">
-              {cover && <PhotoInsights cover={cover} onExplore={() => setGallery(0)} />}
+              {cover && representationOf(cover.link) === 'local' && <PhotoInsights cover={cover} onExplore={() => setGallery(0)} />}
               <Card className="p-5">
                 <p className="text-[15.5px] leading-relaxed text-text">{dam.summary}</p>
                 {dam.traits.length > 0 && <dl className="mt-5 grid grid-cols-3 gap-3 border-t border-line pt-4">

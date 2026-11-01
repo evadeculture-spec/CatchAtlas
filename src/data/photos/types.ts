@@ -26,7 +26,7 @@ export interface PhotoVariant {
 
 export interface PhotoAsset {
   id: string
-  provider: 'wikimedia-commons' | 'flickr' | 'openverse' | 'cedida'
+  provider: 'wikimedia-commons' | 'flickr' | 'openverse' | 'cedida' | 'unsplash'
   externalId: string | null
   title: string
   sourcePageUrl: string
@@ -75,6 +75,14 @@ export interface DamPhotoLink {
   basis: string
   /** Setor ou margem, apenas quando a fonte o permite confirmar; null caso contrário. */
   sector?: string | null
+  /**
+   * O que a fotografia representa para esta albufeira:
+   * - local: a fonte identifica esta albufeira (identidade confirmada);
+   * - regiao: a fonte indica a zona/rio, mas não confirma a albufeira;
+   * - ilustrativa: paisagem semelhante, NÃO é esta albufeira (sempre rotulada).
+   * Omisso = local.
+   */
+  representation?: 'local' | 'regiao' | 'ilustrativa'
   focal: { mobile: FocalPoint; desktop: FocalPoint }
 }
 

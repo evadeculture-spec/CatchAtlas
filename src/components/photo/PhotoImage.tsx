@@ -1,6 +1,6 @@
 import { useState, type CSSProperties } from 'react'
 import type { Dam } from '../../data/types'
-import type { DamPhoto } from '../../lib/photos/rules'
+import { representationOf, type DamPhoto } from '../../lib/photos/rules'
 import { cx } from '../ui'
 import { NoPhoto, type FallbackLayout } from './NoPhoto'
 
@@ -35,7 +35,7 @@ export function PhotoImage({
   const defaultVariant = jpeg[Math.min(1, jpeg.length - 1)] ?? asset.variants[0]
   const style = { '--fm': pos(link.focal.mobile), '--fd': pos(link.focal.desktop) } as CSSProperties
   return (
-    <picture className="absolute inset-0" data-photo-state="foto" data-asset-id={asset.id}>
+    <picture className="absolute inset-0" data-photo-state="foto" data-asset-id={asset.id} data-representation={representationOf(link)}>
       {webp.length > 0 && <source type="image/webp" srcSet={webp.map((v) => `${v.src} ${v.width}w`).join(', ')} sizes={sizes} />}
       <img
         src={defaultVariant.src}
@@ -47,6 +47,7 @@ export function PhotoImage({
         loading={priority ? 'eager' : 'lazy'}
         fetchPriority={priority ? 'high' : 'auto'}
         decoding="async"
+        referrerPolicy="strict-origin-when-cross-origin"
         onError={() => setFailedId(asset.id)}
         style={fit === 'cover' ? style : undefined}
         className={cx('h-full w-full', fit === 'cover' ? 'object-cover object-[var(--fm)] lg:object-[var(--fd)]' : 'object-contain')}

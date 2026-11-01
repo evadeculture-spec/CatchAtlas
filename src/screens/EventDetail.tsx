@@ -2,6 +2,8 @@ import { Bookmark, BookmarkCheck, CalendarDays, Clock, Info, MapPin, Medal, User
 import { useState } from 'react'
 import { Link, useParams } from 'react-router'
 import { DamCover } from '../components/photo/DamCover'
+import { RepresentationTag } from '../components/photo/RepresentationTag'
+import { useDamPhotos } from '../components/photo/useDamPhotos'
 import { Sheet } from '../components/Dialog'
 import { Button, Card, cx, PageHeader, Tag } from '../components/ui'
 import { modalityName, speciesById } from '../data/catalog'
@@ -38,6 +40,7 @@ export default function EventDetail() {
         <div className="absolute inset-x-0 bottom-0 mx-auto max-w-5xl px-4 pb-6 text-white lg:px-8">
           <div className="flex flex-wrap gap-1.5">
             <Tag tone="amber">Evento fictício — demonstração</Tag>
+            <EventCoverTag damId={dam.id} />
           </div>
           <h1 className="font-display mt-3 text-[36px] font-semibold leading-[1.05] sm:text-[48px]">{ev.title}</h1>
           <p className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-[14px] font-semibold text-white/85">
@@ -150,4 +153,9 @@ export default function EventDetail() {
       </Sheet>
     </div>
   )
+}
+
+function EventCoverTag({ damId }: { damId: string }) {
+  const { cover } = useDamPhotos(damId)
+  return <RepresentationTag photo={cover} compact />
 }

@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router'
 import { Avatar, CatchRow, useAnglerName } from '../components/bits'
 import { ConditionsGrid, DamCard, EventCard, SkyIcon } from '../components/cards'
 import { DamCover } from '../components/photo/DamCover'
+import { RepresentationTag } from '../components/photo/RepresentationTag'
 import { useDamPhotos } from '../components/photo/useDamPhotos'
 import { InstallTip } from '../components/InstallTip'
 import { BrandLockup } from '../components/BrandMark'
@@ -110,6 +111,7 @@ export default function Home() {
                 {favorites.includes(featured.id) ? 'Favorita em destaque' : 'Barragem em destaque'}
               </Tag>
               {!featuredPhotos.cover && <Tag tone="glass">Fotografia ainda não disponível</Tag>}
+              <RepresentationTag photo={featuredPhotos.cover} compact />
             </div>
             <div className="mt-auto">
               <p className="text-[13px] font-semibold text-white/70">

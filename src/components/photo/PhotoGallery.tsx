@@ -2,7 +2,7 @@ import { ChevronLeft, ChevronRight, Info, X, ZoomIn, ZoomOut } from 'lucide-reac
 import { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import type { Dam } from '../../data/types'
-import { ROLE_LABEL, shortCredit, type DamPhoto } from '../../lib/photos/rules'
+import { REPRESENTATION_LABEL, ROLE_LABEL, representationOf, shortCredit, type DamPhoto } from '../../lib/photos/rules'
 import { cx } from '../ui'
 import { PhotoCredits } from './PhotoCredits'
 
@@ -49,7 +49,7 @@ export function PhotoGallery({ dam, photos, start = 0, onClose }: { dam: Dam; ph
           <X className="h-5 w-5" />
         </button>
         <p className="min-w-0 flex-1 truncate text-[14px] font-bold">
-          {dam.name} · {ROLE_LABEL[p.link.role]} {photos.length > 1 && <span className="text-white/60">({i + 1}/{photos.length})</span>}
+          {representationOf(p.link) === 'local' ? `${dam.name} · ${ROLE_LABEL[p.link.role]}` : `${REPRESENTATION_LABEL[representationOf(p.link)]}`} {photos.length > 1 && <span className="text-white/60">({i + 1}/{photos.length})</span>}
         </p>
         <button type="button" onClick={() => setZoom((z) => !z)} className="press grid h-11 w-11 place-items-center rounded-full hover:bg-white/10" aria-label={zoom ? 'Reduzir zoom' : 'Ampliar'} aria-pressed={zoom}>
           {zoom ? <ZoomOut className="h-5 w-5" /> : <ZoomIn className="h-5 w-5" />}
@@ -81,7 +81,7 @@ export function PhotoGallery({ dam, photos, start = 0, onClose }: { dam: Dam; ph
       <p className="pb-safe px-4 py-3 text-center text-[12px] text-white/70">
         {shortCredit(p.asset)} · Fotografia de um setor e de um momento; não mostra condições atuais.
       </p>
-      <PhotoCredits asset={p.asset} open={credits} onClose={() => setCredits(false)} />
+      <PhotoCredits asset={p.asset} link={p.link} open={credits} onClose={() => setCredits(false)} />
     </div>,
     document.body,
   )

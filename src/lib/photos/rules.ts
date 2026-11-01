@@ -4,8 +4,25 @@ import type { DamPhotoLink, PhotoAsset, PhotoCatalog, PhotoObservation, PhotoRol
 export const isPublishable = (a: PhotoAsset) =>
   a.identity === 'confirmado' && a.rights === 'aprovado' && a.publication === 'publicado' && a.variants.length > 0
 
-/** Variantes servidas apenas a partir do próprio projeto (caminho relativo seguro). */
-export const isSafeVariantSrc = (src: string) => /^\/photos\/[a-z0-9-]+\/[a-z0-9._-]+\.(webp|jpe?g)$/i.test(src)
+/** Variantes servidas a partir do próprio projeto ou do CDN do Unsplash (hotlink exigido pelas regras do Unsplash). */
+export const isSafeVariantSrc = (src: string) =>
+  /^\/photos\/[a-z0-9-]+\/[a-z0-9._-]+\.(webp|jpe?g)$/i.test(src) || /^https:\/\/images\.unsplash\.com\/photo-[a-z0-9-]+\?[a-z0-9=&%._-]+$/i.test(src)
+
+export type Representation = NonNullable<DamPhotoLink['representation']>
+export const representationOf = (l: DamPhotoLink): Representation => l.representation ?? 'local'
+
+/** Publicável: direitos aprovados e publicado; identidade confirmada exigida quando se apresenta como sendo do local. */
+export const isPublishableLink = (a: PhotoAsset, l: DamPhotoLink) =>
+  representationOf(l) === 'local' ? isPublishable(a) : a.rights === 'aprovado' && a.publication === 'publicado' && a.variants.length > 0 && a.identity !== 'rejeitado'
+
+const REP_RANK: Record<Representation, number> = { local: 0, regiao: 1, ilustrativa: 2 }
+
+/** Rótulo obrigatório para imagens que não são comprovadamente desta albufeira. */
+export const REPRESENTATION_LABEL: Record<Representation, string | null> = {
+  local: null,
+  regiao: 'Imagem da região · local exato não confirmado',
+  ilustrativa: 'Imagem ilustrativa · não é desta barragem',
+}
 
 export interface DamPhoto {
   asset: PhotoAsset
@@ -17,12 +34,33 @@ export function photosForDam(catalog: PhotoCatalog, damId: string): DamPhoto[] {
   return catalog.links
     .filter((l) => l.damId === damId)
     .map((l) => ({ link: l, asset: byId.get(l.assetId) }))
-    .filter((p): p is DamPhoto => !!p.asset && isPublishable(p.asset) && p.asset.variants.every((v) => isSafeVariantSrc(v.src)))
-    .sort((a, b) => Number(b.link.role === 'capa') - Number(a.link.role === 'capa') || a.link.order - b.link.order)
+    .filter((p): p is DamPhoto => !!p.asset && isPublishableLink(p.asset, p.link) && p.asset.variants.every((v) => isSafeVariantSrc(v.src)))
+    .sort(
+      (a, b) =>
+        REP_RANK[representationOf(a.link)] - REP_RANK[representationOf(b.link)] ||
+        Number(b.link.role === 'capa') - Number(a.link.role === 'capa') ||
+        a.link.order - b.link.order,
+    )
 }
 
-export const coverForDam = (catalog: PhotoCatalog, damId: string): DamPhoto | null =>
-  photosForDam(catalog, damId).find((p) => p.link.role === 'capa') ?? null
+/** Capa: a melhor fotografia disponível (local > região > ilustrativa). */
+export const coverForDam = (catalog: PhotoCatalog, damId: string): DamPhoto | null => {
+  const all = photosForDam(catalog, damId)
+  return all.find((p) => p.link.role === 'capa') ?? all[0] ?? null
+}
+
+/** Junta catálogos (ex.: pipeline + Unsplash) sem duplicar ids. */
+export function mergeCatalogs(...cats: PhotoCatalog[]): PhotoCatalog {
+  const ids = new Set<string>()
+  const assets = cats.flatMap((c) => c.assets).filter((a) => !ids.has(a.id) && !!ids.add(a.id))
+  return {
+    generatedAt: cats.map((c) => c.generatedAt).filter(Boolean).sort().at(-1) ?? null,
+    assets,
+    links: cats.flatMap((c) => c.links),
+    observations: cats.flatMap((c) => c.observations),
+    adjacentPairs: cats.flatMap((c) => c.adjacentPairs),
+  }
+}
 
 /** Observações aprovadas e ligadas à fotografia exata (mesmo id e mesmo checksum). */
 export function observationsFor(catalog: PhotoCatalog, asset: PhotoAsset, layer?: PhotoObservation['layer']): PhotoObservation[] {
@@ -60,7 +98,7 @@ export const ROLE_LABEL: Record<PhotoRole, string> = {
   complementar: 'Complementar',
 }
 
-export const shortCredit = (a: PhotoAsset) => `${a.author} · ${a.license.name}`
+export const shortCredit = (a: PhotoAsset) => (a.provider === 'unsplash' ? `${a.author} · Unsplash` : `${a.author} · ${a.license.name}`)
 
 export const capturedLabel = (a: PhotoAsset) =>
   a.capturedAt ? `Captada em ${a.capturedAt}` : 'Data de captação não documentada na fonte'
