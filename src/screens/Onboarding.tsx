@@ -1,8 +1,8 @@
-import { ArrowRight, Check, Anchor, Footprints, Sailboat } from 'lucide-react'
+import { Check, Anchor, Footprints, Sailboat } from 'lucide-react'
 import { useState } from 'react'
 import { useNavigate } from 'react-router'
 import { BrandLockup } from '../components/BrandMark'
-import { Button, cx, DemoTag, inputCls } from '../components/ui'
+import { Button, cx, inputCls } from '../components/ui'
 import { brand } from '../config/brand'
 import { MODALITIES, REGIONS, SPECIES } from '../data/catalog'
 import type { ModalityId, RegionId, SpeciesId } from '../data/types'
@@ -25,35 +25,56 @@ export default function Onboarding() {
     navigate('/', { replace: true })
   }
 
+  // Ecrã de boas-vindas. A demonstração não tem servidor nem autenticação:
+  // "Entrar" abre a app com o perfil guardado neste navegador (antigo "Explorar demonstração");
+  // "Criar conta" abre a criação do perfil local (antigo "Personalizar em 30 segundos").
   if (step === 0)
     return (
-      <div className="relative flex min-h-dvh flex-col bg-ink text-white">
-        <div className="absolute inset-0">
-          <div className="absolute inset-0 opacity-[0.16]" style={{ backgroundImage: 'repeating-radial-gradient(circle at 75% 25%, #8fd9cd 0 1px, transparent 1px 20px)' }} />
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-ink/40 to-ink" />
+      <main className="welcome relative isolate flex min-h-dvh flex-col overflow-hidden bg-ink text-white">
+        <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
+          <div className="absolute inset-0 opacity-[0.09]" style={{ backgroundImage: 'repeating-radial-gradient(circle at 50% 44%, #8fd9cd 0 1px, transparent 1px 22px)' }} />
+          <div className="absolute inset-0" style={{ background: 'radial-gradient(ellipse 70% 55% at 50% 44%, rgb(36 73 91 / 0.55), transparent 70%)' }} />
+          <div className="absolute inset-0" style={{ background: 'radial-gradient(ellipse 120% 90% at 50% 44%, transparent 55%, rgb(8 24 33 / 0.75))' }} />
         </div>
-        <div className="pt-safe relative mx-auto flex w-full max-w-xl flex-1 flex-col px-6 pb-8">
-          <div className="flex items-center justify-between pt-5">
-            <BrandLockup light />
-          </div>
-          <div className="mt-auto">
-            <DemoTag tone="dark" />
-            <h1 className="font-display mt-4 text-[42px] font-semibold leading-[1.02] sm:text-[54px]">{brand.tagline}</h1>
-            <p className="mt-4 max-w-md text-[16px] leading-relaxed text-white/75">
-              Barragens de Portugal e Espanha, condições para preparar a saída, o teu diário de capturas, rankings e provas. Tudo num só lugar.
-            </p>
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <Button size="lg" icon={ArrowRight} className="flex-row-reverse sm:flex-1" onClick={() => setStep(1)}>
-                Personalizar em 30 segundos
-              </Button>
-              <Button size="lg" variant="ghost" className="bg-white/10 text-white hover:bg-white/15 sm:flex-1" onClick={() => finish(true)}>
-                Explorar demonstração
-              </Button>
+
+        <div className="pt-safe flex flex-1 flex-col items-center justify-center px-6 py-10 [@media(max-height:500px)]:py-6">
+          <div className="flex w-full max-w-[360px] flex-col items-center text-center sm:max-w-[440px]">
+            <h1 className="welcome-rise font-display text-[30px] font-medium leading-none tracking-[-0.01em] text-white/90 sm:text-[34px]" style={{ animationDelay: '40ms' }}>
+              Bem-vindo
+            </h1>
+            <img
+              src={brand.logo.srcLight}
+              width={brand.logo.width}
+              height={brand.logo.height}
+              alt={brand.name}
+              decoding="async"
+              fetchPriority="high"
+              className="welcome-rise mt-6 h-auto w-full max-w-[360px] sm:max-w-[440px] [@media(max-height:500px)]:max-w-[340px] drop-shadow-[0_10px_30px_rgb(0_0_0/0.25)] sm:mt-7"
+              style={{ animationDelay: '120ms' }}
+            />
+            <div className="welcome-rise mt-12 flex w-full max-w-[300px] flex-col gap-3 sm:mt-14 sm:max-w-[320px] [@media(max-height:500px)]:mt-7" style={{ animationDelay: '220ms' }}>
+              <button
+                type="button"
+                onClick={() => finish(true)}
+                className="welcome-btn h-14 w-full rounded-2xl bg-teal text-[16px] font-extrabold text-ink shadow-[0_10px_24px_-10px_rgb(32_191_169/0.75)] hover:bg-[#2fcab4]"
+              >
+                Entrar
+              </button>
+              <button
+                type="button"
+                onClick={() => setStep(1)}
+                className="welcome-btn h-14 w-full rounded-2xl border border-white/20 bg-white/[0.06] text-[16px] font-bold text-white backdrop-blur-sm hover:border-white/35 hover:bg-white/10"
+              >
+                Criar conta
+              </button>
             </div>
-            <p className="mt-5 text-center text-[12px] text-white/50">Sem registo. Os dados são fictícios e ficam apenas neste navegador.</p>
           </div>
         </div>
-      </div>
+
+        <p className="pb-safe px-6 pb-5 text-center text-[11.5px] leading-snug text-white/45">
+          {brand.demoLabel}. Sem servidor: o perfil fica apenas neste navegador.
+        </p>
+      </main>
     )
 
   return (
