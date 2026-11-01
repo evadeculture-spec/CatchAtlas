@@ -2,7 +2,7 @@ import { ChevronLeft, ChevronRight, Info, X, ZoomIn, ZoomOut } from 'lucide-reac
 import { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import type { Dam } from '../../data/types'
-import { ROLE_LABEL, shortCredit, type DamPhoto } from '../../lib/photos/rules'
+import { ROLE_LABEL, shortCredit, stockLabel, type DamPhoto } from '../../lib/photos/rules'
 import { cx } from '../ui'
 import { PhotoCredits } from './PhotoCredits'
 
@@ -79,7 +79,7 @@ export function PhotoGallery({ dam, photos, start = 0, onClose }: { dam: Dam; ph
         )}
       </div>
       <p className="pb-safe px-4 py-3 text-center text-[12px] text-white/70">
-        {shortCredit(p.asset)} · Fotografia de um setor e de um momento; não mostra condições atuais.
+        {stockLabel(p.asset) ? `${stockLabel(p.asset)} · ${shortCredit(p.asset)} · ${p.asset.alt}` : `${shortCredit(p.asset)} · Fotografia de um setor e de um momento; não mostra condições atuais.`}
       </p>
       <PhotoCredits asset={p.asset} open={credits} onClose={() => setCredits(false)} />
     </div>,

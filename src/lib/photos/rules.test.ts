@@ -125,3 +125,32 @@ describe('pipeline: licenças e identidade', () => {
     expect(mixed.identity).toBe('revisao')
   })
 })
+
+describe('fotografias do Unsplash', () => {
+  const stock = (over: Partial<PhotoAsset> = {}) =>
+    asset({
+      id: 'unsplash-x',
+      provider: 'unsplash',
+      identity: 'ilustrativa',
+      checksumSha1: 'unsplash:x',
+      depicts: 'ilustrativa',
+      variants: [{ width: 1280, height: 853, format: 'jpeg', src: 'https://images.unsplash.com/photo-123-abc?ixlib=rb-4.1.0&auto=format&fit=max&q=75&w=1280' }],
+      ...over,
+    })
+  const link = (assetId: string) => ({ assetId, damId: 'orellana', role: 'capa' as const, order: 0, basis: '', focal: { mobile: { x: 0.5, y: 0.5 }, desktop: { x: 0.5, y: 0.5 } } })
+
+  it('publica a capa ilustrativa servida pelo CDN do Unsplash', () => {
+    expect(coverForDam(catalog([stock()], [link('unsplash-x')]), 'orellana')?.asset.id).toBe('unsplash-x')
+  })
+  it('recusa outros domínios externos', () => {
+    const bad = stock({ variants: [{ width: 1280, height: 853, format: 'jpeg', src: 'https://exemplo.com/photo-1.jpg' }] })
+    expect(coverForDam(catalog([bad], [link('unsplash-x')]), 'orellana')).toBeNull()
+  })
+  it('não aceita identidade "ilustrativa" fora do Unsplash', () => {
+    expect(isPublishable(asset({ identity: 'ilustrativa' }))).toBe(false)
+  })
+  it('uma fotografia verificada substitui a do Unsplash', () => {
+    const cat = catalog([asset(), stock()], [link('wmc-1'), link('unsplash-x')])
+    expect(photosForDam(cat, 'orellana').map((p) => p.asset.id)).toEqual(['wmc-1'])
+  })
+})

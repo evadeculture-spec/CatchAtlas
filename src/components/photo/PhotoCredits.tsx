@@ -1,6 +1,6 @@
 import { ExternalLink } from 'lucide-react'
 import type { PhotoAsset } from '../../data/photos/types'
-import { capturedLabel } from '../../lib/photos/rules'
+import { capturedLabel, isStock } from '../../lib/photos/rules'
 import { Sheet } from '../Dialog'
 
 function Row({ label, children }: { label: string; children: React.ReactNode }) {
@@ -26,16 +26,22 @@ export function PhotoCredits({ asset, open, onClose }: { asset: PhotoAsset; open
       <dl>
         <Row label="Autor">{asset.authorUrl ? ext(asset.authorUrl, asset.author) : asset.author}</Row>
         <Row label="Licença">{asset.license.url ? ext(asset.license.url, asset.license.name) : asset.license.name}</Row>
-        <Row label="Fonte">{ext(asset.sourcePageUrl, asset.provider === 'wikimedia-commons' ? 'Wikimedia Commons' : 'Página de origem')}</Row>
+        <Row label="Fonte">{ext(asset.sourcePageUrl, asset.provider === 'wikimedia-commons' ? 'Wikimedia Commons' : asset.provider === 'unsplash' ? 'Unsplash' : 'Página de origem')}</Row>
         <Row label="Data de captação">{capturedLabel(asset)}</Row>
         <Row label="Atribuição">{asset.attribution}</Row>
         <Row label="Alterações">{asset.changes}</Row>
-        <Row label="Verificação do local">
-          {asset.identityMethod === 'humana' ? 'Revista por pessoa' : 'Verificação automática'} · {asset.identityBasis}
-        </Row>
+        {isStock(asset) ? (
+          <Row label="O que mostra">{asset.identityBasis}</Row>
+        ) : (
+          <Row label="Verificação do local">
+            {asset.identityMethod === 'humana' ? 'Revista por pessoa' : 'Verificação automática'} · {asset.identityBasis}
+          </Row>
+        )}
       </dl>
       <p className="mt-3 text-[12.5px] leading-relaxed text-muted">
-        A fotografia mostra o setor e o momento em que foi captada. Não representa as condições atuais da albufeira.
+        {isStock(asset)
+          ? 'Fotografia de banco de imagens, usada para ilustrar a ficha. Não representa as condições atuais da albufeira.'
+          : 'A fotografia mostra o setor e o momento em que foi captada. Não representa as condições atuais da albufeira.'}
       </p>
     </Sheet>
   )

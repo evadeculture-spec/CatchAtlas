@@ -1,11 +1,21 @@
 import type { DamPhotoLink, PhotoAsset, PhotoCatalog, PhotoObservation, PhotoRole } from '../../data/photos/types'
 
-/** Só é publicável com identidade confirmada, direitos aprovados e estado publicado. */
-export const isPublishable = (a: PhotoAsset) =>
-  a.identity === 'confirmado' && a.rights === 'aprovado' && a.publication === 'publicado' && a.variants.length > 0
+/** Fotografia de banco de imagens (Unsplash): publicada com etiqueta, nunca dada como verificada. */
+export const isStock = (a: PhotoAsset) => a.provider === 'unsplash'
 
-/** Variantes servidas apenas a partir do próprio projeto (caminho relativo seguro). */
-export const isSafeVariantSrc = (src: string) => /^\/photos\/[a-z0-9-]+\/[a-z0-9._-]+\.(webp|jpe?g)$/i.test(src)
+/**
+ * Publicável com direitos aprovados e estado publicado, e ainda: identidade confirmada,
+ * ou fotografia do Unsplash marcada como ilustrativa (mostrada sempre com essa indicação).
+ */
+export const isPublishable = (a: PhotoAsset) =>
+  (a.identity === 'confirmado' || (isStock(a) && a.identity === 'ilustrativa')) &&
+  a.rights === 'aprovado' &&
+  a.publication === 'publicado' &&
+  a.variants.length > 0
+
+/** Variantes servidas a partir do próprio projeto ou, no caso do Unsplash, do seu CDN de imagens (como exigem as regras da API). */
+export const isSafeVariantSrc = (src: string) =>
+  /^\/photos\/[a-z0-9-]+\/[a-z0-9._-]+\.(webp|jpe?g)$/i.test(src) || /^https:\/\/images\.unsplash\.com\/photo-[0-9a-f-]+\?[a-z0-9=&._-]+$/i.test(src)
 
 export interface DamPhoto {
   asset: PhotoAsset
@@ -14,10 +24,13 @@ export interface DamPhoto {
 
 export function photosForDam(catalog: PhotoCatalog, damId: string): DamPhoto[] {
   const byId = new Map(catalog.assets.map((a) => [a.id, a]))
-  return catalog.links
+  const all = catalog.links
     .filter((l) => l.damId === damId)
     .map((l) => ({ link: l, asset: byId.get(l.assetId) }))
     .filter((p): p is DamPhoto => !!p.asset && isPublishable(p.asset) && p.asset.variants.every((v) => isSafeVariantSrc(v.src)))
+  // Havendo fotografias verificadas desta albufeira, as do Unsplash deixam de aparecer.
+  const verified = all.filter((p) => !isStock(p.asset))
+  return (verified.length > 0 ? verified : all)
     .sort((a, b) => Number(b.link.role === 'capa') - Number(a.link.role === 'capa') || a.link.order - b.link.order)
 }
 
@@ -60,7 +73,15 @@ export const ROLE_LABEL: Record<PhotoRole, string> = {
   complementar: 'Complementar',
 }
 
-export const shortCredit = (a: PhotoAsset) => `${a.author} · ${a.license.name}`
+export const shortCredit = (a: PhotoAsset) => (isStock(a) ? `${a.author} · Unsplash` : `${a.author} · ${a.license.name}`)
+
+/** Etiqueta curta para fotografias do Unsplash; null nas verificadas. */
+export function stockLabel(a: PhotoAsset): string | null {
+  if (!isStock(a)) return null
+  if (a.depicts === 'esta-albufeira') return 'Segundo o autor'
+  if (a.depicts === 'mesma-zona') return 'Mesma zona'
+  return 'Imagem ilustrativa'
+}
 
 export const capturedLabel = (a: PhotoAsset) =>
   a.capturedAt ? `Captada em ${a.capturedAt}` : 'Data de captação não documentada na fonte'

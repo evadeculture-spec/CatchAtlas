@@ -1,7 +1,9 @@
 // Modelo de fotografias reais das albufeiras: proveniência, direitos e estados separados.
 // Identidade, direitos e publicação são estados independentes; só se publica com os três aprovados.
 
-export type IdentityStatus = 'candidato' | 'confirmado' | 'rejeitado' | 'revisao'
+export type IdentityStatus = 'candidato' | 'confirmado' | 'rejeitado' | 'revisao' | 'ilustrativa'
+/** Para fotografias de banco de imagens: o que a imagem representa em relação à albufeira. */
+export type PhotoDepicts = 'esta-albufeira' | 'mesma-zona' | 'ilustrativa'
 export type RightsStatus = 'por-verificar' | 'aprovado' | 'rejeitado'
 export type PublicationStatus = 'rascunho' | 'publicado' | 'retirado'
 export type PhotoRole = 'capa' | 'margens' | 'estruturas' | 'aerea' | 'complementar'
@@ -26,7 +28,7 @@ export interface PhotoVariant {
 
 export interface PhotoAsset {
   id: string
-  provider: 'wikimedia-commons' | 'cedida'
+  provider: 'wikimedia-commons' | 'cedida' | 'unsplash'
   externalId: string | null
   title: string
   sourcePageUrl: string
@@ -59,6 +61,8 @@ export interface PhotoAsset {
   exportAllowed: boolean
   variants: PhotoVariant[]
   alt: string
+  /** Só em fotografias do Unsplash (nunca verificadas no local). */
+  depicts?: PhotoDepicts
 }
 
 export interface FocalPoint {

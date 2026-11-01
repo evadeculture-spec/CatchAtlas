@@ -9,7 +9,7 @@ import { PhotoCredits } from '../components/photo/PhotoCredits'
 import { PhotoGallery } from '../components/photo/PhotoGallery'
 import { PhotoInsights } from '../components/photo/PhotoInsights'
 import { useDamPhotos } from '../components/photo/useDamPhotos'
-import { shortCredit } from '../lib/photos/rules'
+import { isStock, shortCredit, stockLabel } from '../lib/photos/rules'
 import { ButtonLink, Card, cx, EmptyState, PageHeader, Tag } from '../components/ui'
 import { DEMO_USER_ID } from '../data/anglers'
 import { damRegion, modalityName, speciesById } from '../data/catalog'
@@ -81,10 +81,13 @@ export default function DamDetail() {
                 type="button"
                 onClick={() => setCredits(true)}
                 className="press inline-flex max-w-full items-center gap-1.5 rounded-full bg-black/40 px-3 py-1.5 text-[12px] font-bold text-white backdrop-blur hover:bg-black/55"
-                aria-label={`Créditos da fotografia: ${shortCredit(cover.asset)}`}
+                aria-label={`Créditos da fotografia: ${stockLabel(cover.asset) ? `${stockLabel(cover.asset)}, ` : ''}${shortCredit(cover.asset)}`}
               >
                 <Info className="h-3.5 w-3.5 shrink-0" aria-hidden />
-                <span className="truncate">© {shortCredit(cover.asset)}</span>
+                <span className="truncate">
+                  {stockLabel(cover.asset) ? `${stockLabel(cover.asset)} · ` : '© '}
+                  {shortCredit(cover.asset)}
+                </span>
               </button>
               <button
                 type="button"
@@ -139,7 +142,7 @@ export default function DamDetail() {
         {tab === 'geral' && (
           <div className="page-in grid gap-4 lg:grid-cols-[1.4fr_1fr] [&>*]:min-w-0">
             <div className="space-y-4">
-              {cover && <PhotoInsights cover={cover} onExplore={() => setGallery(0)} />}
+              {cover && !isStock(cover.asset) && <PhotoInsights cover={cover} onExplore={() => setGallery(0)} />}
               <Card className="p-5">
                 <p className="text-[15.5px] leading-relaxed text-text">{dam.summary}</p>
                 {dam.traits.length > 0 && <dl className="mt-5 grid grid-cols-3 gap-3 border-t border-line pt-4">
