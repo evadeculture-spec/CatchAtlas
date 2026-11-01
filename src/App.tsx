@@ -9,6 +9,7 @@ import EventDetail from './screens/EventDetail'
 import Events from './screens/Events'
 import Explore from './screens/Explore'
 import Home from './screens/Home'
+import StoriesHome from './screens/home/StoriesHome'
 import NotFound from './screens/NotFound'
 import Onboarding from './screens/Onboarding'
 import PlanTrip from './screens/PlanTrip'
@@ -27,10 +28,11 @@ import Licences from './screens/Licences'
 import Zones from './screens/Zones'
 import Rivers from './screens/Rivers'
 
-/** O onboarding aparece só na primeira visita ao Início; links diretos abrem sempre. */
+/** O onboarding aparece só na primeira visita ao Início; links diretos abrem sempre.
+ * Depois de entrar, o Início é o ecrã dividido "Prepara a tua jornada | Gera a tua história". */
 function HomeGate() {
   const { state } = useApp()
-  return state.onboarded ? <Home /> : <Navigate to="/boas-vindas" replace />
+  return state.onboarded ? <StoriesHome /> : <Navigate to="/boas-vindas" replace />
 }
 
 const routes = [
@@ -39,6 +41,7 @@ const routes = [
     element: <AppShell />,
     children: [
       { index: true, element: <HomeGate /> },
+      { path: 'painel', element: <Home /> },
       { path: 'explorar', element: <Explore /> },
       { path: 'barragens/:id', element: <DamDetail /> },
       { path: 'jornada/nova', element: <PlanTrip /> },

@@ -147,6 +147,25 @@ body {
   transform: scale(0.97);
 }
 
+/* Gaveta do menu */
+@keyframes drawer-in {
+  from { transform: translateX(-100%); }
+  to { transform: none; }
+}
+.drawer-in {
+  animation: drawer-in 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Página inicial: indicador de história ativo */
+@keyframes story-bar {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+.story-bar-fill {
+  transform-origin: left;
+  animation: story-bar 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
 /* Boas-vindas: entrada suave (desligada por prefers-reduced-motion no bloco acima) */
 @keyframes welcome-rise {
   from { opacity: 0; transform: translateY(10px); }

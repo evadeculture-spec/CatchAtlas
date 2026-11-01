@@ -1,28 +1,10 @@
-import { Compass, FileText, Fish, Gift, Scale, House, Medal, MessageCircle, Plus, Radio, ShoppingBag, Trophy, TriangleAlert, User, Users } from 'lucide-react'
+import { Plus, TriangleAlert } from 'lucide-react'
 import { NavLink, Outlet, ScrollRestoration, useLocation, Link } from 'react-router'
 import { brand } from '../config/brand'
 import { useApp } from '../state/AppState'
 import { BrandLockup } from './BrandMark'
+import { NAV, SECONDARY } from './nav'
 import { cx } from './ui'
-
-const NAV = [
-  { to: '/', label: 'Início', icon: House, end: true },
-  { to: '/explorar', label: 'Explorar', icon: Compass },
-  { to: '/capturas', label: 'Capturas', icon: Fish },
-  { to: '/comunidade', label: 'Comunidade', icon: Users },
-  { to: '/perfil', label: 'Perfil', icon: User },
-]
-
-const SECONDARY = [
-  { to: '/zonas', label: 'Concessões e zonas', icon: FileText },
-  { to: '/licencas', label: 'Licenças e lei', icon: Scale },
-  { to: '/reports', label: 'Reports e pings', icon: Radio },
-  { to: '/comunidade/chat', label: 'Chat global', icon: MessageCircle },
-  { to: '/mercado', label: 'Marketplace', icon: ShoppingBag },
-  { to: '/provas', label: 'Provas', icon: Trophy },
-  { to: '/giveaway', label: 'Giveaway', icon: Gift },
-  { to: '/rankings', label: 'Rankings', icon: Medal },
-]
 
 const COMMUNITY_PATHS = /^\/(comunidade|reports|mercado|provas|giveaway|rankings)/
 const EXPLORE_PATHS = /^\/(explorar|rios|zonas|licencas|barragens)/
@@ -32,8 +14,26 @@ const HIDE_FAB = [/^\/capturas\/nova/, /\/editar$/, /^\/jornada/, /^\/barragens\
 
 export function AppShell() {
   const { pathname } = useLocation()
-  const { storageWarning } = useApp()
+  const { storageWarning, state } = useApp()
   const showFab = !HIDE_FAB.some((r) => r.test(pathname))
+  // Página inicial imersiva (ecrã dividido + histórias): sem barra lateral, barra inferior nem botão flutuante.
+  // O menu completo continua acessível pelo botão de menu da própria página.
+  const immersive = pathname === '/' && state.onboarded
+
+  if (immersive)
+    return (
+      <div className="min-h-dvh bg-ink">
+        {storageWarning && (
+          <div className="fixed inset-x-0 top-0 z-[60] flex items-start gap-2 bg-amber-50 px-4 py-2.5 text-[13px] font-semibold text-amber-800" role="alert">
+            <TriangleAlert className="mt-0.5 h-4 w-4 shrink-0" aria-hidden />
+            {storageWarning}
+          </div>
+        )}
+        <main id="conteudo">
+          <Outlet />
+        </main>
+      </div>
+    )
 
   return (
     <div className="min-h-dvh">

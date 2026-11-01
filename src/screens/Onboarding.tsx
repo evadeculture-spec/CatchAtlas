@@ -71,7 +71,7 @@ export default function Onboarding() {
           </div>
         </div>
 
-        <p className="pb-safe px-6 pb-5 text-center text-[11.5px] leading-snug text-white/45">
+        <p className="px-6 pb-[calc(env(safe-area-inset-bottom)+1.25rem)] text-center text-[11.5px] leading-snug text-white/45">
           {brand.demoLabel}. Sem servidor: o perfil fica apenas neste navegador.
         </p>
       </main>
