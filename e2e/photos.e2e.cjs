@@ -49,11 +49,25 @@ async function setup(browser, viewport) {
   ok('créditos abrem', await page.getByRole('dialog', { name: 'Sobre esta fotografia' }).isVisible())
   ok('créditos: data desconhecida não é inventada', await page.getByText('Data de captação não documentada na fonte').isVisible())
   await page.keyboard.press('Escape')
+  // Carrossel do cabeçalho: swipe (scroll horizontal) muda de fotografia e de créditos
+  ok('carrossel: 3 slides', (await page.locator('[aria-roledescription="diapositivo"]').count()) === 3)
+  ok('carrossel: contador inicial', await page.getByRole('button', { name: '1/3 fotografias' }).isVisible())
+  await page.locator('[aria-roledescription="carrossel"] > div[tabindex="0"]').evaluate((el) => el.scrollTo({ left: el.clientWidth * 2 }))
+  await page.waitForTimeout(400)
+  ok('carrossel: swipe muda para a 3.ª', await page.getByRole('button', { name: '3/3 fotografias' }).isVisible())
+  ok('carrossel: setor só quando indicado', await page.getByText('Setor de teste (indicado pela fonte)').isVisible())
+  ok('carrossel: setas escondidas no telemóvel', !(await page.getByRole('button', { name: 'Fotografia anterior' }).isVisible()))
+  await page.screenshot({ path: `${shots}/carrossel-mobile-3.png` })
+  await page.getByRole('button', { name: /fotografias|Ver fotografia/ }).first().click()
+  ok('galeria abre na foto atual', await page.getByText('(3/3)').isVisible())
+  await page.keyboard.press('Escape')
+  await page.locator('[aria-roledescription="carrossel"] > div[tabindex="0"]').evaluate((el) => el.scrollTo({ left: 0 }))
+  await page.waitForTimeout(400)
   await page.getByRole('button', { name: /fotografias|Ver fotografia/ }).first().click()
   ok('galeria abre', await page.getByRole('dialog', { name: /Fotografias de Orellana/ }).isVisible())
-  ok('galeria: 2 fotografias', await page.getByText('(1/2)').isVisible())
+  ok('galeria: 3 fotografias', await page.getByText('(1/3)').isVisible())
   await page.keyboard.press('ArrowRight')
-  ok('galeria: teclado muda de foto', await page.getByText('(2/2)').isVisible())
+  ok('galeria: teclado muda de foto', await page.getByText('(2/3)').isVisible())
   await page.getByRole('button', { name: 'Ampliar' }).click()
   ok('galeria: zoom', (await page.getByRole('button', { name: 'Reduzir zoom' }).count()) === 1)
   await page.screenshot({ path: `${shots}/photo-gallery.png` })
@@ -88,7 +102,24 @@ async function setup(browser, viewport) {
   ok('sem erros de consola', errors.length === 0, JSON.stringify(errors))
   await ctx.close()
 
-  // 6. Nome longo em vários formatos
+  // 6. Setas do carrossel no computador
+  {
+    const d = await setup(browser, { width: 1440, height: 900 })
+    await d.page.goto(base + '/barragens/orellana')
+    await d.page.waitForTimeout(400)
+    await d.page.getByRole('button', { name: 'Fotografia seguinte' }).click()
+    await d.page.waitForTimeout(700)
+    ok('desktop: seta seguinte muda de foto', await d.page.getByRole('button', { name: '2/3 fotografias' }).isVisible())
+    await d.page.locator('[aria-roledescription="carrossel"] > div[tabindex="0"]').focus()
+    await d.page.keyboard.press('ArrowRight')
+    await d.page.waitForTimeout(700)
+    ok('desktop: teclado no carrossel', await d.page.getByRole('button', { name: '3/3 fotografias' }).isVisible())
+    await d.page.screenshot({ path: `${shots}/carrossel-desktop.png` })
+    ok('desktop: sem erros', d.errors.length === 0, JSON.stringify(d.errors))
+    await d.ctx.close()
+  }
+
+  // 7. Nome longo em vários formatos
   for (const [label, viewport] of [['mobile', { width: 360, height: 780 }], ['tablet', { width: 820, height: 1180 }], ['paisagem', { width: 844, height: 390 }], ['desktop', { width: 1440, height: 900 }]]) {
     const s = await setup(browser, viewport)
     await s.page.goto(base + '/barragens/marateca')

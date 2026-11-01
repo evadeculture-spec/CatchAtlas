@@ -1,0 +1,55 @@
+{
+  "_leia": "Páginas encontradas por pesquisa web (01/11/2026), sem acesso às imagens neste ambiente. Nada aqui está verificado: abrir a página, ver a imagem, confirmar local e licença.",
+  "leads": [
+    {
+      "damId": "orellana",
+      "url": "https://commons.wikimedia.org/wiki/Category:Orellana_Reservoir",
+      "note": "Categoria do embalse de Orellana (inclui «Pantano de Orellana.jpg» e «Verano en el pantano de Orellana, en la parte de Campanario.jpg»)."
+    },
+    {
+      "damId": "orellana",
+      "url": "https://commons.wikimedia.org/wiki/File:BA-Orellana_la_Vieja_13.jpg",
+      "note": "Usada como imagem do artigo da Wikipédia em espanhol sobre o embalse; parece mostrar a zona da praia de Orellana la Vieja."
+    },
+    {
+      "damId": "orellana",
+      "url": "https://commons.wikimedia.org/wiki/File:Vista_a%C3%A9rea_La_Serena_y_Orellana.jpg",
+      "note": "Vista aérea com La Serena e Orellana: evitar como capa."
+    },
+    {
+      "damId": "castelo-de-bode",
+      "url": "https://commons.wikimedia.org/wiki/Category:Barragem_de_Castelo_de_Bode",
+      "note": "Categoria com cerca de 42 ficheiros, incluindo várias fotografias «Albufeira de Castelo de Bode - Portugal» (2048 × 1364)."
+    },
+    {
+      "damId": "castelo-de-bode",
+      "url": "https://commons.wikimedia.org/wiki/Category:Vila_de_Rei",
+      "note": "Inclui «Proximidades da Albufeira de Castelo de Bode» e outras fotografias da albufeira do lado de Vila de Rei."
+    },
+    {
+      "damId": "castelo-de-bode",
+      "url": "https://commons.wikimedia.org/wiki/File:Barragem_de_Castelo_de_Bode_-_Portugal_(14198783948).jpg",
+      "note": "Título indica a barragem: confirmar se mostra água e margem ou só o paredão."
+    },
+    {
+      "damId": "alqueva",
+      "url": "https://commons.wikimedia.org/wiki/Category:Alqueva_Reservoir",
+      "note": "Categoria da albufeira; inclui «Albufeira do Alqueva - Campinho - Portugal (52552165445).jpg» e «Albufeira da Barragem de Alqueva 01»."
+    },
+    {
+      "damId": "alqueva",
+      "url": "https://commons.wikimedia.org/wiki/File:Albufeira_do_Alqueva_-_Portugal_(3316062523).jpg",
+      "note": "Fotografia da albufeira (não do paredão, pelo título)."
+    },
+    {
+      "damId": "alqueva",
+      "url": "https://www.flickr.com/photos/vitor107/4752012312",
+      "note": "Flickr «Albufeira do Alqueva - Portugal»: confirmar a licença na página."
+    },
+    {
+      "damId": "sierra-brava",
+      "url": null,
+      "note": "Pesquisa sem resultados de Sierra Brava. Os resultados devolvidos eram de Zorita de los Canes (Guadalajara, embalse de Bolarque): local diferente, NÃO associar."
+    }
+  ]
+}

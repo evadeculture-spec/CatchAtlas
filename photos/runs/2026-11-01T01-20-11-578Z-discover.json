@@ -1,0 +1,20 @@
+{
+  "kind": "discover",
+  "startedAt": "2026-11-01T01:20:11.081Z",
+  "dryRun": false,
+  "sources": [
+    "commons",
+    "openverse",
+    "flickr"
+  ],
+  "dams": 1,
+  "skipped": 0,
+  "found": 0,
+  "added": 0,
+  "errors": [
+    "orellana/commons: fetch failed",
+    "orellana/openverse: fetch failed",
+    "orellana/flickr: FLICKR_API_KEY não definida (fonte ignorada)"
+  ],
+  "finishedAt": "2026-11-01T01:20:11.578Z"
+}

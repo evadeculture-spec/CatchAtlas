@@ -26,7 +26,7 @@ export interface PhotoVariant {
 
 export interface PhotoAsset {
   id: string
-  provider: 'wikimedia-commons' | 'cedida'
+  provider: 'wikimedia-commons' | 'flickr' | 'openverse' | 'cedida'
   externalId: string | null
   title: string
   sourcePageUrl: string
@@ -73,6 +73,8 @@ export interface DamPhotoLink {
   role: PhotoRole
   order: number
   basis: string
+  /** Setor ou margem, apenas quando a fonte o permite confirmar; null caso contrário. */
+  sector?: string | null
   focal: { mobile: FocalPoint; desktop: FocalPoint }
 }
 

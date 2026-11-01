@@ -370,6 +370,80 @@
         }
       ],
       "alt": "Imagem de teste (castelo-de-bode)"
+    },
+    {
+      "id": "teste-6",
+      "provider": "cedida",
+      "externalId": null,
+      "title": "Imagem de teste e2e",
+      "sourcePageUrl": "https://example.org/teste",
+      "originalFileUrl": null,
+      "author": "Teste automático",
+      "authorUrl": null,
+      "license": {
+        "name": "Imagem de teste (não publicada)",
+        "url": null,
+        "requiresAttribution": true,
+        "shareAlike": false,
+        "commercialUse": false,
+        "derivatives": false
+      },
+      "attribution": "Imagem de teste e2e",
+      "changes": "Nenhuma",
+      "width": 2000,
+      "height": 1333,
+      "capturedAt": null,
+      "collectedAt": "2026-11-01",
+      "checksumSha1": "teste-6",
+      "location": null,
+      "locationEvidence": [],
+      "identity": "confirmado",
+      "identityBasis": "Fixture de teste",
+      "identityMethod": "automatica",
+      "identityReviewer": null,
+      "rights": "aprovado",
+      "rightsBasis": "Fixture de teste",
+      "publication": "publicado",
+      "exportAllowed": false,
+      "variants": [
+        {
+          "width": 640,
+          "height": 427,
+          "format": "webp",
+          "src": "/photos/orellana/teste-6-640.webp"
+        },
+        {
+          "width": 640,
+          "height": 427,
+          "format": "jpeg",
+          "src": "/photos/orellana/teste-6-640.jpg"
+        },
+        {
+          "width": 1280,
+          "height": 853,
+          "format": "webp",
+          "src": "/photos/orellana/teste-6-1280.webp"
+        },
+        {
+          "width": 1280,
+          "height": 853,
+          "format": "jpeg",
+          "src": "/photos/orellana/teste-6-1280.jpg"
+        },
+        {
+          "width": 1920,
+          "height": 1280,
+          "format": "webp",
+          "src": "/photos/orellana/teste-6-1920.webp"
+        },
+        {
+          "width": 1920,
+          "height": 1280,
+          "format": "jpeg",
+          "src": "/photos/orellana/teste-6-1920.jpg"
+        }
+      ],
+      "alt": "Imagem de teste (orellana)"
     }
   ],
   "links": [
@@ -447,6 +521,24 @@
       "role": "capa",
       "order": 0,
       "basis": "teste (identidade pendente)",
+      "focal": {
+        "mobile": {
+          "x": 0.5,
+          "y": 0.5
+        },
+        "desktop": {
+          "x": 0.5,
+          "y": 0.5
+        }
+      }
+    },
+    {
+      "assetId": "teste-6",
+      "damId": "orellana",
+      "role": "margens",
+      "order": 2,
+      "basis": "teste",
+      "sector": "Setor de teste (indicado pela fonte)",
       "focal": {
         "mobile": {
           "x": 0.5,

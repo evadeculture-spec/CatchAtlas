@@ -1,11 +1,40 @@
 # Fotografias das albufeiras
 
-Pipeline em `scripts/photos/pipeline.ts`. Corre num ambiente com acesso a `commons.wikimedia.org` e `upload.wikimedia.org`.
+Importador em lote: `scripts/photos/pipeline.ts`. Corre num ambiente com acesso às fontes.
 
-1. `npm run photos -- discover [--dam orellana] [--limit 20] [--dry-run]`: pesquisa no Wikimedia Commons por nome, tipo (albufeira/embalse), rio e coordenadas; guarda candidatos em `candidates.json` com autor, licença, data de captação documentada, coordenadas, categorias, checksum e sugestões automáticas de identidade e direitos. Idempotente: não duplica candidatos.
-2. Curadoria humana em `curation.json`: ver a imagem na página de origem, confirmar o local e a licença, escolher a função (capa, margens, estruturas, aérea) e o ponto focal. Só aqui uma fotografia passa a `confirmado` + `aprovado` + `publicado`.
-3. `npm run photos -- derive`: descarrega apenas de `upload.wikimedia.org` (sem redirecionamentos, até 60 MB), confirma o checksum e o formato real, e gera variantes WebP/JPEG (640, 1280, 1920 px) sem EXIF/GPS em `public/photos/<barragem>/`.
-4. `npm run photos -- publish`: gera `src/data/photos/catalog.json` só com fotografias aprovadas e com derivados. Interrompe se a mesma imagem estiver ligada a albufeiras não adjacentes.
-5. `npm run photos -- audit`: escreve `coverage.json` com a cobertura e as pendências.
+## Fontes
 
-Cada execução fica registada em `runs/`. A cache da API e os originais não são versionados.
+| Fonte | Chave | Licenças aceites |
+|---|---|---|
+| Wikimedia Commons | não | CC0, domínio público, CC BY, CC BY-SA |
+| Openverse | não | só `commercial,modification` |
+| Flickr | `FLICKR_API_KEY` (variável de ambiente, nunca no código) | CC BY 2.0, CC BY-SA 2.0, sem restrições conhecidas, CC0, PDM |
+
+Licenças NC, ND, GFDL-only ou desconhecidas são excluídas automaticamente.
+
+## Comandos
+
+```bash
+NODE_USE_ENV_PROXY=1 npm run photos -- discover --dam orellana        # amostra
+NODE_USE_ENV_PROXY=1 npm run photos -- discover                       # todas as barragens
+NODE_USE_ENV_PROXY=1 npm run photos -- discover --resume              # retomar (salta fontes já concluídas)
+npm run photos -- discover --sources commons,openverse --limit 20     # fontes e lote
+npm run photos:gallery                                                # galeria de revisão em photos/review/index.html
+# curadoria humana em photos/curation.json (chave do candidato)
+npm run photos -- derive && npm run photos -- publish && npm run photos -- audit
+npm run photos -- pending                                             # atualiza photos/pending.json
+```
+
+`NODE_USE_ENV_PROXY=1` só é necessário atrás de um proxy HTTPS.
+
+## Ficheiros
+
+- `candidates.json`: candidatos com fonte, autor, licença, página original, data de captação documentada, coordenadas, setor (só quando indicado pela fonte), adequação como capa e sugestão de identidade. Gravado a cada barragem; não duplica.
+- `progress.json`: estado por barragem e fonte (permite retomar).
+- `pending.json`: barragens sem capa publicada e o motivo.
+- `curation.json`: decisões humanas; nunca sobrescrito.
+- `manual-candidates.json`, `web-leads.json`: candidatos fornecidos e pistas da pesquisa web, por verificar.
+- `review/index.html`: galeria de revisão, regenerável com `npm run photos:gallery`.
+- `runs/`: registo de cada execução.
+
+Nada é publicado sem identidade confirmada, direitos aprovados e publicação marcados na curadoria. A capa privilegia fotografias horizontais da água e da margem; paredões, vistas aéreas, ecrãs e texto são penalizados.

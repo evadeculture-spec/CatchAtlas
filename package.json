@@ -12,7 +12,8 @@
     "typecheck": "tsc -b --noEmit",
     "photos": "tsx scripts/photos/pipeline.ts",
     "test": "vitest run",
-    "photos:review": "tsx scripts/photos/review-list.ts"
+    "photos:review": "tsx scripts/photos/review-list.ts",
+    "photos:gallery": "tsx scripts/photos/review-gallery.ts"
   },
   "dependencies": {
     "@fontsource-variable/fraunces": "^5.3.0",

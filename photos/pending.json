@@ -1,0 +1,654 @@
+{
+  "updatedAt": "2026-11-01T01:21:15.058Z",
+  "total": 108,
+  "pending": [
+    {
+      "damId": "alqueva",
+      "name": "Alqueva",
+      "country": "PT",
+      "reason": "Fontes inacessíveis — commons: fetch failed (ligação recusada pela política de rede do ambiente: commons.wikimedia.org); openverse: fetch failed (ligação recusada pela política de rede do ambiente: api.openverse.org); flickr: FLICKR_API_KEY não definida (fonte ignorada)"
+    },
+    {
+      "damId": "castelo-de-bode",
+      "name": "Castelo de Bode",
+      "country": "PT",
+      "reason": "Fontes inacessíveis — commons: fetch failed (ligação recusada pela política de rede do ambiente: commons.wikimedia.org); openverse: fetch failed (ligação recusada pela política de rede do ambiente: api.openverse.org); flickr: FLICKR_API_KEY não definida (fonte ignorada)"
+    },
+    {
+      "damId": "cabril",
+      "name": "Cabril",
+      "country": "PT",
+      "reason": "Fontes inacessíveis — commons: fetch failed (ligação recusada pela política de rede do ambiente: commons.wikimedia.org); openverse: fetch failed (ligação recusada pela política de rede do ambiente: api.openverse.org); flickr: FLICKR_API_KEY não definida (fonte ignorada)"
+    },
+    {
+      "damId": "bouca",
+      "name": "Bouçã",
+      "country": "PT",
+      "reason": "Fontes inacessíveis — commons: fetch failed (ligação recusada pela política de rede do ambiente: commons.wikimedia.org); openverse: fetch failed (ligação recusada pela política de rede do ambiente: api.openverse.org); flickr: FLICKR_API_KEY não definida (fonte ignorada)"
+    },
+    {
+      "damId": "montargil",
+      "name": "Montargil",
+      "country": "PT",
+      "reason": "Fontes inacessíveis — commons: fetch failed (ligação recusada pela política de rede do ambiente: commons.wikimedia.org); openverse: fetch failed (ligação recusada pela política de rede do ambiente: api.openverse.org); flickr: FLICKR_API_KEY não definida (fonte ignorada)"
+    },
+    {
+      "damId": "maranhao",
+      "name": "Maranhão",
+      "country": "PT",
+      "reason": "Fontes inacessíveis — commons: fetch failed (ligação recusada pela política de rede do ambiente: commons.wikimedia.org); openverse: fetch failed (ligação recusada pela política de rede do ambiente: api.openverse.org); flickr: FLICKR_API_KEY não definida (fonte ignorada)"
+    },
+    {
+      "damId": "santa-clara",
+      "name": "Santa Clara",
+      "country": "PT",
+      "reason": "Fontes inacessíveis — commons: fetch failed (ligação recusada pela política de rede do ambiente: commons.wikimedia.org); openverse: fetch failed (ligação recusada pela política de rede do ambiente: api.openverse.org); flickr: FLICKR_API_KEY não definida (fonte ignorada)"
+    },
+    {
+      "damId": "aguieira",
+      "name": "Aguieira",
+      "country": "PT",
+      "reason": "Fontes inacessíveis — commons: fetch failed (ligação recusada pela política de rede do ambiente: commons.wikimedia.org); openverse: fetch failed (ligação recusada pela política de rede do ambiente: api.openverse.org); flickr: FLICKR_API_KEY não definida (fonte ignorada)"
+    },
+    {
+      "damId": "alto-rabagao",
+      "name": "Alto Rabagão",
+      "country": "PT",
+      "reason": "Fontes inacessíveis — commons: fetch failed (ligação recusada pela política de rede do ambiente: commons.wikimedia.org); openverse: fetch failed (ligação recusada pela política de rede do ambiente: api.openverse.org); flickr: FLICKR_API_KEY não definida (fonte ignorada)"
+    },
+    {
+      "damId": "canicada",
+      "name": "Caniçada",
+      "country": "PT",
+      "reason": "Fontes inacessíveis — commons: fetch failed (ligação recusada pela política de rede do ambiente: commons.wikimedia.org); openverse: fetch failed (ligação recusada pela política de rede do ambiente: api.openverse.org); flickr: FLICKR_API_KEY não definida (fonte ignorada)"
+    },
+    {
+      "damId": "baixo-sabor",
+      "name": "Baixo Sabor",
+      "country": "PT",
+      "reason": "Fontes inacessíveis — commons: fetch failed (ligação recusada pela política de rede do ambiente: commons.wikimedia.org); openverse: fetch failed (ligação recusada pela política de rede do ambiente: api.openverse.org); flickr: FLICKR_API_KEY não definida (fonte ignorada)"
+    },
+    {
+      "damId": "idanha",
+      "name": "Idanha",
+      "country": "PT",
+      "reason": "Fontes inacessíveis — commons: fetch failed (ligação recusada pela política de rede do ambiente: commons.wikimedia.org); openverse: fetch failed (ligação recusada pela política de rede do ambiente: api.openverse.org); flickr: FLICKR_API_KEY não definida (fonte ignorada)"
+    },
+    {
+      "damId": "caia",
+      "name": "Caia",
+      "country": "PT",
+      "reason": "Fontes inacessíveis — commons: fetch failed (ligação recusada pela política de rede do ambiente: commons.wikimedia.org); openverse: fetch failed (ligação recusada pela política de rede do ambiente: api.openverse.org); flickr: FLICKR_API_KEY não definida (fonte ignorada)"
+    },
+    {
+      "damId": "pego-do-altar",
+      "name": "Pego do Altar",
+      "country": "PT",
+      "reason": "Fontes inacessíveis — commons: fetch failed (ligação recusada pela política de rede do ambiente: commons.wikimedia.org); openverse: fetch failed (ligação recusada pela política de rede do ambiente: api.openverse.org); flickr: FLICKR_API_KEY não definida (fonte ignorada)"
+    },
+    {
+      "damId": "roxo",
+      "name": "Roxo",
+      "country": "PT",
+      "reason": "Fontes inacessíveis — commons: fetch failed (ligação recusada pela política de rede do ambiente: commons.wikimedia.org); openverse: fetch failed (ligação recusada pela política de rede do ambiente: api.openverse.org); flickr: FLICKR_API_KEY não definida (fonte ignorada)"
+    },
+    {
+      "damId": "odeleite",
+      "name": "Odeleite",
+      "country": "PT",
+      "reason": "Fontes inacessíveis — commons: fetch failed (ligação recusada pela política de rede do ambiente: commons.wikimedia.org); openverse: fetch failed (ligação recusada pela política de rede do ambiente: api.openverse.org); flickr: FLICKR_API_KEY não definida (fonte ignorada)"
+    },
+    {
+      "damId": "alcantara",
+      "name": "Alcántara",
+      "country": "ES",
+      "reason": "Fontes inacessíveis — commons: fetch failed (ligação recusada pela política de rede do ambiente: commons.wikimedia.org); openverse: fetch failed (ligação recusada pela política de rede do ambiente: api.openverse.org); flickr: FLICKR_API_KEY não definida (fonte ignorada)"
+    },
+    {
+      "damId": "valdecanas",
+      "name": "Valdecañas",
+      "country": "ES",
+      "reason": "Fontes inacessíveis — commons: fetch failed (ligação recusada pela política de rede do ambiente: commons.wikimedia.org); openverse: fetch failed (ligação recusada pela política de rede do ambiente: api.openverse.org); flickr: FLICKR_API_KEY não definida (fonte ignorada)"
+    },
+    {
+      "damId": "orellana",
+      "name": "Orellana",
+      "country": "ES",
+      "reason": "Fontes inacessíveis — commons: fetch failed (ligação recusada pela política de rede do ambiente: commons.wikimedia.org); openverse: fetch failed (ligação recusada pela política de rede do ambiente: api.openverse.org); flickr: FLICKR_API_KEY não definida (fonte ignorada)"
+    },
+    {
+      "damId": "la-serena",
+      "name": "La Serena",
+      "country": "ES",
+      "reason": "Fontes inacessíveis — commons: fetch failed (ligação recusada pela política de rede do ambiente: commons.wikimedia.org); openverse: fetch failed (ligação recusada pela política de rede do ambiente: api.openverse.org); flickr: FLICKR_API_KEY não definida (fonte ignorada)"
+    },
+    {
+      "damId": "mequinenza",
+      "name": "Mequinenza",
+      "country": "ES",
+      "reason": "Fontes inacessíveis — commons: fetch failed (ligação recusada pela política de rede do ambiente: commons.wikimedia.org); openverse: fetch failed (ligação recusada pela política de rede do ambiente: api.openverse.org); flickr: FLICKR_API_KEY não definida (fonte ignorada)"
+    },
+    {
+      "damId": "ricobayo",
+      "name": "Ricobayo",
+      "country": "ES",
+      "reason": "Fontes inacessíveis — commons: fetch failed (ligação recusada pela política de rede do ambiente: commons.wikimedia.org); openverse: fetch failed (ligação recusada pela política de rede do ambiente: api.openverse.org); flickr: FLICKR_API_KEY não definida (fonte ignorada)"
+    },
+    {
+      "damId": "iznajar",
+      "name": "Iznájar",
+      "country": "ES",
+      "reason": "Fontes inacessíveis — commons: fetch failed (ligação recusada pela política de rede do ambiente: commons.wikimedia.org); openverse: fetch failed (ligação recusada pela política de rede do ambiente: api.openverse.org); flickr: FLICKR_API_KEY não definida (fonte ignorada)"
+    },
+    {
+      "damId": "buendia",
+      "name": "Buendía",
+      "country": "ES",
+      "reason": "Fontes inacessíveis — commons: fetch failed (ligação recusada pela política de rede do ambiente: commons.wikimedia.org); openverse: fetch failed (ligação recusada pela política de rede do ambiente: api.openverse.org); flickr: FLICKR_API_KEY não definida (fonte ignorada)"
+    },
+    {
+      "damId": "alto-lindoso",
+      "name": "Alto Lindoso",
+      "country": "PT",
+      "reason": "Fontes inacessíveis — commons: fetch failed (ligação recusada pela política de rede do ambiente: commons.wikimedia.org); openverse: fetch failed (ligação recusada pela política de rede do ambiente: api.openverse.org); flickr: FLICKR_API_KEY não definida (fonte ignorada)"
+    },
+    {
+      "damId": "touvedo",
+      "name": "Touvedo",
+      "country": "PT",
+      "reason": "Fontes inacessíveis — commons: fetch failed (ligação recusada pela política de rede do ambiente: commons.wikimedia.org); openverse: fetch failed (ligação recusada pela política de rede do ambiente: api.openverse.org); flickr: FLICKR_API_KEY não definida (fonte ignorada)"
+    },
+    {
+      "damId": "vilarinho-das-furnas",
+      "name": "Vilarinho das Furnas",
+      "country": "PT",
+      "reason": "Fontes inacessíveis — commons: fetch failed (ligação recusada pela política de rede do ambiente: commons.wikimedia.org); openverse: fetch failed (ligação recusada pela política de rede do ambiente: api.openverse.org); flickr: FLICKR_API_KEY não definida (fonte ignorada)"
+    },
+    {
+      "damId": "paradela",
+      "name": "Paradela",
+      "country": "PT",
+      "reason": "Fontes inacessíveis — commons: fetch failed (ligação recusada pela política de rede do ambiente: commons.wikimedia.org); openverse: fetch failed (ligação recusada pela política de rede do ambiente: api.openverse.org); flickr: FLICKR_API_KEY não definida (fonte ignorada)"
+    },
+    {
+      "damId": "alto-cavado",
+      "name": "Alto Cávado",
+      "country": "PT",
+      "reason": "Fontes inacessíveis — commons: fetch failed (ligação recusada pela política de rede do ambiente: commons.wikimedia.org); openverse: fetch failed (ligação recusada pela política de rede do ambiente: api.openverse.org); flickr: FLICKR_API_KEY não definida (fonte ignorada)"
+    },
+    {
+      "damId": "salamonde",
+      "name": "Salamonde",
+      "country": "PT",
+      "reason": "Fontes inacessíveis — commons: fetch failed (ligação recusada pela política de rede do ambiente: commons.wikimedia.org); openverse: fetch failed (ligação recusada pela política de rede do ambiente: api.openverse.org); flickr: FLICKR_API_KEY não definida (fonte ignorada)"
+    },
+    {
+      "damId": "venda-nova",
+      "name": "Venda Nova",
+      "country": "PT",
+      "reason": "Fontes inacessíveis — commons: fetch failed (ligação recusada pela política de rede do ambiente: commons.wikimedia.org); openverse: fetch failed (ligação recusada pela política de rede do ambiente: api.openverse.org); flickr: FLICKR_API_KEY não definida (fonte ignorada)"
+    },
+    {
+      "damId": "torrao",
+      "name": "Torrão",
+      "country": "PT",
+      "reason": "Fontes inacessíveis — commons: fetch failed (ligação recusada pela política de rede do ambiente: commons.wikimedia.org); openverse: fetch failed (ligação recusada pela política de rede do ambiente: api.openverse.org); flickr: FLICKR_API_KEY não definida (fonte ignorada)"
+    },
+    {
+      "damId": "crestuma-lever",
+      "name": "Crestuma-Lever",
+      "country": "PT",
+      "reason": "Fontes inacessíveis — commons: fetch failed (ligação recusada pela política de rede do ambiente: commons.wikimedia.org); openverse: fetch failed (ligação recusada pela política de rede do ambiente: api.openverse.org); flickr: FLICKR_API_KEY não definida (fonte ignorada)"
+    },
+    {
+      "damId": "carrapatelo",
+      "name": "Carrapatelo",
+      "country": "PT",
+      "reason": "Fontes inacessíveis — commons: fetch failed (ligação recusada pela política de rede do ambiente: commons.wikimedia.org); openverse: fetch failed (ligação recusada pela política de rede do ambiente: api.openverse.org); flickr: FLICKR_API_KEY não definida (fonte ignorada)"
+    },
+    {
+      "damId": "regua",
+      "name": "Régua",
+      "country": "PT",
+      "reason": "Fontes inacessíveis — commons: fetch failed (ligação recusada pela política de rede do ambiente: commons.wikimedia.org); openverse: fetch failed (ligação recusada pela política de rede do ambiente: api.openverse.org); flickr: FLICKR_API_KEY não definida (fonte ignorada)"
+    },
+    {
+      "damId": "valeira",
+      "name": "Valeira",
+      "country": "PT",
+      "reason": "Fontes inacessíveis — commons: fetch failed (ligação recusada pela política de rede do ambiente: commons.wikimedia.org); openverse: fetch failed (ligação recusada pela política de rede do ambiente: api.openverse.org); flickr: FLICKR_API_KEY não definida (fonte ignorada)"
+    },
+    {
+      "damId": "pocinho",
+      "name": "Pocinho",
+      "country": "PT",
+      "reason": "Fontes inacessíveis — commons: fetch failed (ligação recusada pela política de rede do ambiente: commons.wikimedia.org); openverse: fetch failed (ligação recusada pela política de rede do ambiente: api.openverse.org); flickr: FLICKR_API_KEY não definida (fonte ignorada)"
+    },
+    {
+      "damId": "miranda",
+      "name": "Miranda",
+      "country": "PT",
+      "reason": "Fontes inacessíveis — commons: fetch failed (ligação recusada pela política de rede do ambiente: commons.wikimedia.org); openverse: fetch failed (ligação recusada pela política de rede do ambiente: api.openverse.org); flickr: FLICKR_API_KEY não definida (fonte ignorada)"
+    },
+    {
+      "damId": "picote",
+      "name": "Picote",
+      "country": "PT",
+      "reason": "Fontes inacessíveis — commons: fetch failed (ligação recusada pela política de rede do ambiente: commons.wikimedia.org); openverse: fetch failed (ligação recusada pela política de rede do ambiente: api.openverse.org); flickr: FLICKR_API_KEY não definida (fonte ignorada)"
+    },
+    {
+      "damId": "bemposta",
+      "name": "Bemposta",
+      "country": "PT",
+      "reason": "Fontes inacessíveis — commons: fetch failed (ligação recusada pela política de rede do ambiente: commons.wikimedia.org); openverse: fetch failed (ligação recusada pela política de rede do ambiente: api.openverse.org); flickr: FLICKR_API_KEY não definida (fonte ignorada)"
+    },
+    {
+      "damId": "azibo",
+      "name": "Azibo",
+      "country": "PT",
+      "reason": "Fontes inacessíveis — commons: fetch failed (ligação recusada pela política de rede do ambiente: commons.wikimedia.org); openverse: fetch failed (ligação recusada pela política de rede do ambiente: api.openverse.org); flickr: FLICKR_API_KEY não definida (fonte ignorada)"
+    },
+    {
+      "damId": "vilar",
+      "name": "Vilar",
+      "country": "PT",
+      "reason": "Fontes inacessíveis — commons: fetch failed (ligação recusada pela política de rede do ambiente: commons.wikimedia.org); openverse: fetch failed (ligação recusada pela política de rede do ambiente: api.openverse.org); flickr: FLICKR_API_KEY não definida (fonte ignorada)"
+    },
+    {
+      "damId": "varosa",
+      "name": "Varosa",
+      "country": "PT",
+      "reason": "Fontes inacessíveis — commons: fetch failed (ligação recusada pela política de rede do ambiente: commons.wikimedia.org); openverse: fetch failed (ligação recusada pela política de rede do ambiente: api.openverse.org); flickr: FLICKR_API_KEY não definida (fonte ignorada)"
+    },
+    {
+      "damId": "fronhas",
+      "name": "Fronhas",
+      "country": "PT",
+      "reason": "Fontes inacessíveis — commons: fetch failed (ligação recusada pela política de rede do ambiente: commons.wikimedia.org); openverse: fetch failed (ligação recusada pela política de rede do ambiente: api.openverse.org); flickr: FLICKR_API_KEY não definida (fonte ignorada)"
+    },
+    {
+      "damId": "raiva",
+      "name": "Raiva",
+      "country": "PT",
+      "reason": "Fontes inacessíveis — commons: fetch failed (ligação recusada pela política de rede do ambiente: commons.wikimedia.org); openverse: fetch failed (ligação recusada pela política de rede do ambiente: api.openverse.org); flickr: FLICKR_API_KEY não definida (fonte ignorada)"
+    },
+    {
+      "damId": "caldeirao",
+      "name": "Caldeirão",
+      "country": "PT",
+      "reason": "Fontes inacessíveis — commons: fetch failed (ligação recusada pela política de rede do ambiente: commons.wikimedia.org); openverse: fetch failed (ligação recusada pela política de rede do ambiente: api.openverse.org); flickr: FLICKR_API_KEY não definida (fonte ignorada)"
+    },
+    {
+      "damId": "sabugal",
+      "name": "Sabugal",
+      "country": "PT",
+      "reason": "Fontes inacessíveis — commons: fetch failed (ligação recusada pela política de rede do ambiente: commons.wikimedia.org); openverse: fetch failed (ligação recusada pela política de rede do ambiente: api.openverse.org); flickr: FLICKR_API_KEY não definida (fonte ignorada)"
+    },
+    {
+      "damId": "santa-luzia",
+      "name": "Santa Luzia",
+      "country": "PT",
+      "reason": "Fontes inacessíveis — commons: fetch failed (ligação recusada pela política de rede do ambiente: commons.wikimedia.org); openverse: fetch failed (ligação recusada pela política de rede do ambiente: api.openverse.org); flickr: FLICKR_API_KEY não definida (fonte ignorada)"
+    },
+    {
+      "damId": "meimoa",
+      "name": "Meimoa",
+      "country": "PT",
+      "reason": "Fontes inacessíveis — commons: fetch failed (ligação recusada pela política de rede do ambiente: commons.wikimedia.org); openverse: fetch failed (ligação recusada pela política de rede do ambiente: api.openverse.org); flickr: FLICKR_API_KEY não definida (fonte ignorada)"
+    },
+    {
+      "damId": "marateca",
+      "name": "Marateca (Santa Águeda)",
+      "country": "PT",
+      "reason": "Fontes inacessíveis — commons: fetch failed (ligação recusada pela política de rede do ambiente: commons.wikimedia.org); openverse: fetch failed (ligação recusada pela política de rede do ambiente: api.openverse.org); flickr: FLICKR_API_KEY não definida (fonte ignorada)"
+    },
+    {
+      "damId": "pracana",
+      "name": "Pracana",
+      "country": "PT",
+      "reason": "Fontes inacessíveis — commons: fetch failed (ligação recusada pela política de rede do ambiente: commons.wikimedia.org); openverse: fetch failed (ligação recusada pela política de rede do ambiente: api.openverse.org); flickr: FLICKR_API_KEY não definida (fonte ignorada)"
+    },
+    {
+      "damId": "fratel",
+      "name": "Fratel",
+      "country": "PT",
+      "reason": "Fontes inacessíveis — commons: fetch failed (ligação recusada pela política de rede do ambiente: commons.wikimedia.org); openverse: fetch failed (ligação recusada pela política de rede do ambiente: api.openverse.org); flickr: FLICKR_API_KEY não definida (fonte ignorada)"
+    },
+    {
+      "damId": "belver",
+      "name": "Belver",
+      "country": "PT",
+      "reason": "Fontes inacessíveis — commons: fetch failed (ligação recusada pela política de rede do ambiente: commons.wikimedia.org); openverse: fetch failed (ligação recusada pela política de rede do ambiente: api.openverse.org); flickr: FLICKR_API_KEY não definida (fonte ignorada)"
+    },
+    {
+      "damId": "magos",
+      "name": "Magos",
+      "country": "PT",
+      "reason": "Fontes inacessíveis — commons: fetch failed (ligação recusada pela política de rede do ambiente: commons.wikimedia.org); openverse: fetch failed (ligação recusada pela política de rede do ambiente: api.openverse.org); flickr: FLICKR_API_KEY não definida (fonte ignorada)"
+    },
+    {
+      "damId": "sao-domingos",
+      "name": "São Domingos",
+      "country": "PT",
+      "reason": "Fontes inacessíveis — commons: fetch failed (ligação recusada pela política de rede do ambiente: commons.wikimedia.org); openverse: fetch failed (ligação recusada pela política de rede do ambiente: api.openverse.org); flickr: FLICKR_API_KEY não definida (fonte ignorada)"
+    },
+    {
+      "damId": "povoa-e-meadas",
+      "name": "Póvoa e Meadas",
+      "country": "PT",
+      "reason": "Fontes inacessíveis — commons: fetch failed (ligação recusada pela política de rede do ambiente: commons.wikimedia.org); openverse: fetch failed (ligação recusada pela política de rede do ambiente: api.openverse.org); flickr: FLICKR_API_KEY não definida (fonte ignorada)"
+    },
+    {
+      "damId": "apartadura",
+      "name": "Apartadura",
+      "country": "PT",
+      "reason": "Fontes inacessíveis — commons: fetch failed (ligação recusada pela política de rede do ambiente: commons.wikimedia.org); openverse: fetch failed (ligação recusada pela política de rede do ambiente: api.openverse.org); flickr: FLICKR_API_KEY não definida (fonte ignorada)"
+    },
+    {
+      "damId": "lucefecit",
+      "name": "Lucefécit",
+      "country": "PT",
+      "reason": "Fontes inacessíveis — commons: fetch failed (ligação recusada pela política de rede do ambiente: commons.wikimedia.org); openverse: fetch failed (ligação recusada pela política de rede do ambiente: api.openverse.org); flickr: FLICKR_API_KEY não definida (fonte ignorada)"
+    },
+    {
+      "damId": "vigia",
+      "name": "Vigia",
+      "country": "PT",
+      "reason": "Fontes inacessíveis — commons: fetch failed (ligação recusada pela política de rede do ambiente: commons.wikimedia.org); openverse: fetch failed (ligação recusada pela política de rede do ambiente: api.openverse.org); flickr: FLICKR_API_KEY não definida (fonte ignorada)"
+    },
+    {
+      "damId": "divor",
+      "name": "Divor",
+      "country": "PT",
+      "reason": "Fontes inacessíveis — commons: fetch failed (ligação recusada pela política de rede do ambiente: commons.wikimedia.org); openverse: fetch failed (ligação recusada pela política de rede do ambiente: api.openverse.org); flickr: FLICKR_API_KEY não definida (fonte ignorada)"
+    },
+    {
+      "damId": "monte-novo",
+      "name": "Monte Novo",
+      "country": "PT",
+      "reason": "Fontes inacessíveis — commons: fetch failed (ligação recusada pela política de rede do ambiente: commons.wikimedia.org); openverse: fetch failed (ligação recusada pela política de rede do ambiente: api.openverse.org); flickr: FLICKR_API_KEY não definida (fonte ignorada)"
+    },
+    {
+      "damId": "alvito",
+      "name": "Alvito",
+      "country": "PT",
+      "reason": "Fontes inacessíveis — commons: fetch failed (ligação recusada pela política de rede do ambiente: commons.wikimedia.org); openverse: fetch failed (ligação recusada pela política de rede do ambiente: api.openverse.org); flickr: FLICKR_API_KEY não definida (fonte ignorada)"
+    },
+    {
+      "damId": "odivelas",
+      "name": "Odivelas",
+      "country": "PT",
+      "reason": "Fontes inacessíveis — commons: fetch failed (ligação recusada pela política de rede do ambiente: commons.wikimedia.org); openverse: fetch failed (ligação recusada pela política de rede do ambiente: api.openverse.org); flickr: FLICKR_API_KEY não definida (fonte ignorada)"
+    },
+    {
+      "damId": "vale-do-gaio",
+      "name": "Vale do Gaio",
+      "country": "PT",
+      "reason": "Fontes inacessíveis — commons: fetch failed (ligação recusada pela política de rede do ambiente: commons.wikimedia.org); openverse: fetch failed (ligação recusada pela política de rede do ambiente: api.openverse.org); flickr: FLICKR_API_KEY não definida (fonte ignorada)"
+    },
+    {
+      "damId": "campilhas",
+      "name": "Campilhas",
+      "country": "PT",
+      "reason": "Fontes inacessíveis — commons: fetch failed (ligação recusada pela política de rede do ambiente: commons.wikimedia.org); openverse: fetch failed (ligação recusada pela política de rede do ambiente: api.openverse.org); flickr: FLICKR_API_KEY não definida (fonte ignorada)"
+    },
+    {
+      "damId": "monte-da-rocha",
+      "name": "Monte da Rocha",
+      "country": "PT",
+      "reason": "Fontes inacessíveis — commons: fetch failed (ligação recusada pela política de rede do ambiente: commons.wikimedia.org); openverse: fetch failed (ligação recusada pela política de rede do ambiente: api.openverse.org); flickr: FLICKR_API_KEY não definida (fonte ignorada)"
+    },
+    {
+      "damId": "pedrogao",
+      "name": "Pedrógão",
+      "country": "PT",
+      "reason": "Fontes inacessíveis — commons: fetch failed (ligação recusada pela política de rede do ambiente: commons.wikimedia.org); openverse: fetch failed (ligação recusada pela política de rede do ambiente: api.openverse.org); flickr: FLICKR_API_KEY não definida (fonte ignorada)"
+    },
+    {
+      "damId": "enxoe",
+      "name": "Enxoé",
+      "country": "PT",
+      "reason": "Fontes inacessíveis — commons: fetch failed (ligação recusada pela política de rede do ambiente: commons.wikimedia.org); openverse: fetch failed (ligação recusada pela política de rede do ambiente: api.openverse.org); flickr: FLICKR_API_KEY não definida (fonte ignorada)"
+    },
+    {
+      "damId": "chanca",
+      "name": "Chança",
+      "country": "PT",
+      "reason": "Fontes inacessíveis — commons: fetch failed (ligação recusada pela política de rede do ambiente: commons.wikimedia.org); openverse: fetch failed (ligação recusada pela política de rede do ambiente: api.openverse.org); flickr: FLICKR_API_KEY não definida (fonte ignorada)"
+    },
+    {
+      "damId": "misericordia",
+      "name": "Misericórdia",
+      "country": "PT",
+      "reason": "Fontes inacessíveis — commons: fetch failed (ligação recusada pela política de rede do ambiente: commons.wikimedia.org); openverse: fetch failed (ligação recusada pela política de rede do ambiente: api.openverse.org); flickr: FLICKR_API_KEY não definida (fonte ignorada)"
+    },
+    {
+      "damId": "foro-do-espanhol",
+      "name": "Foro do Espanhol",
+      "country": "PT",
+      "reason": "Fontes inacessíveis — commons: fetch failed (ligação recusada pela política de rede do ambiente: commons.wikimedia.org); openverse: fetch failed (ligação recusada pela política de rede do ambiente: api.openverse.org); flickr: FLICKR_API_KEY não definida (fonte ignorada)"
+    },
+    {
+      "damId": "beliche",
+      "name": "Beliche",
+      "country": "PT",
+      "reason": "Fontes inacessíveis — commons: fetch failed (ligação recusada pela política de rede do ambiente: commons.wikimedia.org); openverse: fetch failed (ligação recusada pela política de rede do ambiente: api.openverse.org); flickr: FLICKR_API_KEY não definida (fonte ignorada)"
+    },
+    {
+      "damId": "bravura",
+      "name": "Bravura",
+      "country": "PT",
+      "reason": "Fontes inacessíveis — commons: fetch failed (ligação recusada pela política de rede do ambiente: commons.wikimedia.org); openverse: fetch failed (ligação recusada pela política de rede do ambiente: api.openverse.org); flickr: FLICKR_API_KEY não definida (fonte ignorada)"
+    },
+    {
+      "damId": "arade",
+      "name": "Arade",
+      "country": "PT",
+      "reason": "Fontes inacessíveis — commons: fetch failed (ligação recusada pela política de rede do ambiente: commons.wikimedia.org); openverse: fetch failed (ligação recusada pela política de rede do ambiente: api.openverse.org); flickr: FLICKR_API_KEY não definida (fonte ignorada)"
+    },
+    {
+      "damId": "funcho",
+      "name": "Funcho",
+      "country": "PT",
+      "reason": "Fontes inacessíveis — commons: fetch failed (ligação recusada pela política de rede do ambiente: commons.wikimedia.org); openverse: fetch failed (ligação recusada pela política de rede do ambiente: api.openverse.org); flickr: FLICKR_API_KEY não definida (fonte ignorada)"
+    },
+    {
+      "damId": "odelouca",
+      "name": "Odelouca",
+      "country": "PT",
+      "reason": "Fontes inacessíveis — commons: fetch failed (ligação recusada pela política de rede do ambiente: commons.wikimedia.org); openverse: fetch failed (ligação recusada pela política de rede do ambiente: api.openverse.org); flickr: FLICKR_API_KEY não definida (fonte ignorada)"
+    },
+    {
+      "damId": "cijara",
+      "name": "Cíjara",
+      "country": "ES",
+      "reason": "Fontes inacessíveis — commons: fetch failed (ligação recusada pela política de rede do ambiente: commons.wikimedia.org); openverse: fetch failed (ligação recusada pela política de rede do ambiente: api.openverse.org); flickr: FLICKR_API_KEY não definida (fonte ignorada)"
+    },
+    {
+      "damId": "garcia-de-sola",
+      "name": "García de Sola",
+      "country": "ES",
+      "reason": "Fontes inacessíveis — commons: fetch failed (ligação recusada pela política de rede do ambiente: commons.wikimedia.org); openverse: fetch failed (ligação recusada pela política de rede do ambiente: api.openverse.org); flickr: FLICKR_API_KEY não definida (fonte ignorada)"
+    },
+    {
+      "damId": "alange",
+      "name": "Alange",
+      "country": "ES",
+      "reason": "Fontes inacessíveis — commons: fetch failed (ligação recusada pela política de rede do ambiente: commons.wikimedia.org); openverse: fetch failed (ligação recusada pela política de rede do ambiente: api.openverse.org); flickr: FLICKR_API_KEY não definida (fonte ignorada)"
+    },
+    {
+      "damId": "gabriel-y-galan",
+      "name": "Gabriel y Galán",
+      "country": "ES",
+      "reason": "Fontes inacessíveis — commons: fetch failed (ligação recusada pela política de rede do ambiente: commons.wikimedia.org); openverse: fetch failed (ligação recusada pela política de rede do ambiente: api.openverse.org); flickr: FLICKR_API_KEY não definida (fonte ignorada)"
+    },
+    {
+      "damId": "borbollon",
+      "name": "Borbollón",
+      "country": "ES",
+      "reason": "Fontes inacessíveis — commons: fetch failed (ligação recusada pela política de rede do ambiente: commons.wikimedia.org); openverse: fetch failed (ligação recusada pela política de rede do ambiente: api.openverse.org); flickr: FLICKR_API_KEY não definida (fonte ignorada)"
+    },
+    {
+      "damId": "sierra-brava",
+      "name": "Sierra Brava",
+      "country": "ES",
+      "reason": "Fontes inacessíveis — commons: fetch failed (ligação recusada pela política de rede do ambiente: commons.wikimedia.org); openverse: fetch failed (ligação recusada pela política de rede do ambiente: api.openverse.org); flickr: FLICKR_API_KEY não definida (fonte ignorada)"
+    },
+    {
+      "damId": "entrepenas",
+      "name": "Entrepeñas",
+      "country": "ES",
+      "reason": "Fontes inacessíveis — commons: fetch failed (ligação recusada pela política de rede do ambiente: commons.wikimedia.org); openverse: fetch failed (ligação recusada pela política de rede do ambiente: api.openverse.org); flickr: FLICKR_API_KEY não definida (fonte ignorada)"
+    },
+    {
+      "damId": "alarcon",
+      "name": "Alarcón",
+      "country": "ES",
+      "reason": "Fontes inacessíveis — commons: fetch failed (ligação recusada pela política de rede do ambiente: commons.wikimedia.org); openverse: fetch failed (ligação recusada pela política de rede do ambiente: api.openverse.org); flickr: FLICKR_API_KEY não definida (fonte ignorada)"
+    },
+    {
+      "damId": "contreras",
+      "name": "Contreras",
+      "country": "ES",
+      "reason": "Fontes inacessíveis — commons: fetch failed (ligação recusada pela política de rede do ambiente: commons.wikimedia.org); openverse: fetch failed (ligação recusada pela política de rede do ambiente: api.openverse.org); flickr: FLICKR_API_KEY não definida (fonte ignorada)"
+    },
+    {
+      "damId": "el-atazar",
+      "name": "El Atazar",
+      "country": "ES",
+      "reason": "Fontes inacessíveis — commons: fetch failed (ligação recusada pela política de rede do ambiente: commons.wikimedia.org); openverse: fetch failed (ligação recusada pela política de rede do ambiente: api.openverse.org); flickr: FLICKR_API_KEY não definida (fonte ignorada)"
+    },
+    {
+      "damId": "pinilla",
+      "name": "Pinilla",
+      "country": "ES",
+      "reason": "Fontes inacessíveis — commons: fetch failed (ligação recusada pela política de rede do ambiente: commons.wikimedia.org); openverse: fetch failed (ligação recusada pela política de rede do ambiente: api.openverse.org); flickr: FLICKR_API_KEY não definida (fonte ignorada)"
+    },
+    {
+      "damId": "san-juan",
+      "name": "San Juan",
+      "country": "ES",
+      "reason": "Fontes inacessíveis — commons: fetch failed (ligação recusada pela política de rede do ambiente: commons.wikimedia.org); openverse: fetch failed (ligação recusada pela política de rede do ambiente: api.openverse.org); flickr: FLICKR_API_KEY não definida (fonte ignorada)"
+    },
+    {
+      "damId": "valmayor",
+      "name": "Valmayor",
+      "country": "ES",
+      "reason": "Fontes inacessíveis — commons: fetch failed (ligação recusada pela política de rede do ambiente: commons.wikimedia.org); openverse: fetch failed (ligação recusada pela política de rede do ambiente: api.openverse.org); flickr: FLICKR_API_KEY não definida (fonte ignorada)"
+    },
+    {
+      "damId": "almendra",
+      "name": "Almendra",
+      "country": "ES",
+      "reason": "Fontes inacessíveis — commons: fetch failed (ligação recusada pela política de rede do ambiente: commons.wikimedia.org); openverse: fetch failed (ligação recusada pela política de rede do ambiente: api.openverse.org); flickr: FLICKR_API_KEY não definida (fonte ignorada)"
+    },
+    {
+      "damId": "santa-teresa",
+      "name": "Santa Teresa",
+      "country": "ES",
+      "reason": "Fontes inacessíveis — commons: fetch failed (ligação recusada pela política de rede do ambiente: commons.wikimedia.org); openverse: fetch failed (ligação recusada pela política de rede do ambiente: api.openverse.org); flickr: FLICKR_API_KEY não definida (fonte ignorada)"
+    },
+    {
+      "damId": "aldeadavila",
+      "name": "Aldeadávila",
+      "country": "ES",
+      "reason": "Fontes inacessíveis — commons: fetch failed (ligação recusada pela política de rede do ambiente: commons.wikimedia.org); openverse: fetch failed (ligação recusada pela política de rede do ambiente: api.openverse.org); flickr: FLICKR_API_KEY não definida (fonte ignorada)"
+    },
+    {
+      "damId": "barrios-de-luna",
+      "name": "Barrios de Luna",
+      "country": "ES",
+      "reason": "Fontes inacessíveis — commons: fetch failed (ligação recusada pela política de rede do ambiente: commons.wikimedia.org); openverse: fetch failed (ligação recusada pela política de rede do ambiente: api.openverse.org); flickr: FLICKR_API_KEY não definida (fonte ignorada)"
+    },
+    {
+      "damId": "riano",
+      "name": "Riaño",
+      "country": "ES",
+      "reason": "Fontes inacessíveis — commons: fetch failed (ligação recusada pela política de rede do ambiente: commons.wikimedia.org); openverse: fetch failed (ligação recusada pela política de rede do ambiente: api.openverse.org); flickr: FLICKR_API_KEY não definida (fonte ignorada)"
+    },
+    {
+      "damId": "cuerda-del-pozo",
+      "name": "Cuerda del Pozo",
+      "country": "ES",
+      "reason": "Fontes inacessíveis — commons: fetch failed (ligação recusada pela política de rede do ambiente: commons.wikimedia.org); openverse: fetch failed (ligação recusada pela política de rede do ambiente: api.openverse.org); flickr: FLICKR_API_KEY não definida (fonte ignorada)"
+    },
+    {
+      "damId": "belesar",
+      "name": "Belesar",
+      "country": "ES",
+      "reason": "Fontes inacessíveis — commons: fetch failed (ligação recusada pela política de rede do ambiente: commons.wikimedia.org); openverse: fetch failed (ligação recusada pela política de rede do ambiente: api.openverse.org); flickr: FLICKR_API_KEY não definida (fonte ignorada)"
+    },
+    {
+      "damId": "ribarroja",
+      "name": "Riba-roja",
+      "country": "ES",
+      "reason": "Fontes inacessíveis — commons: fetch failed (ligação recusada pela política de rede do ambiente: commons.wikimedia.org); openverse: fetch failed (ligação recusada pela política de rede do ambiente: api.openverse.org); flickr: FLICKR_API_KEY não definida (fonte ignorada)"
+    },
+    {
+      "damId": "yesa",
+      "name": "Yesa",
+      "country": "ES",
+      "reason": "Fontes inacessíveis — commons: fetch failed (ligação recusada pela política de rede do ambiente: commons.wikimedia.org); openverse: fetch failed (ligação recusada pela política de rede do ambiente: api.openverse.org); flickr: FLICKR_API_KEY não definida (fonte ignorada)"
+    },
+    {
+      "damId": "mediano",
+      "name": "Mediano",
+      "country": "ES",
+      "reason": "Fontes inacessíveis — commons: fetch failed (ligação recusada pela política de rede do ambiente: commons.wikimedia.org); openverse: fetch failed (ligação recusada pela política de rede do ambiente: api.openverse.org); flickr: FLICKR_API_KEY não definida (fonte ignorada)"
+    },
+    {
+      "damId": "el-grado",
+      "name": "El Grado",
+      "country": "ES",
+      "reason": "Fontes inacessíveis — commons: fetch failed (ligação recusada pela política de rede do ambiente: commons.wikimedia.org); openverse: fetch failed (ligação recusada pela política de rede do ambiente: api.openverse.org); flickr: FLICKR_API_KEY não definida (fonte ignorada)"
+    },
+    {
+      "damId": "santa-ana",
+      "name": "Santa Ana",
+      "country": "ES",
+      "reason": "Fontes inacessíveis — commons: fetch failed (ligação recusada pela política de rede do ambiente: commons.wikimedia.org); openverse: fetch failed (ligação recusada pela política de rede do ambiente: api.openverse.org); flickr: FLICKR_API_KEY não definida (fonte ignorada)"
+    },
+    {
+      "damId": "canelles",
+      "name": "Canelles",
+      "country": "ES",
+      "reason": "Fontes inacessíveis — commons: fetch failed (ligação recusada pela política de rede do ambiente: commons.wikimedia.org); openverse: fetch failed (ligação recusada pela política de rede do ambiente: api.openverse.org); flickr: FLICKR_API_KEY não definida (fonte ignorada)"
+    },
+    {
+      "damId": "sau",
+      "name": "Sau",
+      "country": "ES",
+      "reason": "Fontes inacessíveis — commons: fetch failed (ligação recusada pela política de rede do ambiente: commons.wikimedia.org); openverse: fetch failed (ligação recusada pela política de rede do ambiente: api.openverse.org); flickr: FLICKR_API_KEY não definida (fonte ignorada)"
+    },
+    {
+      "damId": "guadalcacin",
+      "name": "Guadalcacín",
+      "country": "ES",
+      "reason": "Fontes inacessíveis — commons: fetch failed (ligação recusada pela política de rede do ambiente: commons.wikimedia.org); openverse: fetch failed (ligação recusada pela política de rede do ambiente: api.openverse.org); flickr: FLICKR_API_KEY não definida (fonte ignorada)"
+    },
+    {
+      "damId": "negratin",
+      "name": "Negratín",
+      "country": "ES",
+      "reason": "Fontes inacessíveis — commons: fetch failed (ligação recusada pela política de rede do ambiente: commons.wikimedia.org); openverse: fetch failed (ligação recusada pela política de rede do ambiente: api.openverse.org); flickr: FLICKR_API_KEY não definida (fonte ignorada)"
+    },
+    {
+      "damId": "tranco-de-beas",
+      "name": "Tranco de Beas",
+      "country": "ES",
+      "reason": "Fontes inacessíveis — commons: fetch failed (ligação recusada pela política de rede do ambiente: commons.wikimedia.org); openverse: fetch failed (ligação recusada pela política de rede do ambiente: api.openverse.org); flickr: FLICKR_API_KEY não definida (fonte ignorada)"
+    },
+    {
+      "damId": "andevalo",
+      "name": "Andévalo",
+      "country": "ES",
+      "reason": "Fontes inacessíveis — commons: fetch failed (ligação recusada pela política de rede do ambiente: commons.wikimedia.org); openverse: fetch failed (ligação recusada pela política de rede do ambiente: api.openverse.org); flickr: FLICKR_API_KEY não definida (fonte ignorada)"
+    },
+    {
+      "damId": "brena-ii",
+      "name": "Breña II",
+      "country": "ES",
+      "reason": "Fontes inacessíveis — commons: fetch failed (ligação recusada pela política de rede do ambiente: commons.wikimedia.org); openverse: fetch failed (ligação recusada pela política de rede do ambiente: api.openverse.org); flickr: FLICKR_API_KEY não definida (fonte ignorada)"
+    }
+  ]
+}

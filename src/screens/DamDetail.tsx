@@ -4,7 +4,7 @@ import { Link, useNavigate, useParams, useSearchParams } from 'react-router'
 import { CatchRow, SpeciesDot } from '../components/bits'
 import { HourlyChart } from '../components/charts'
 import { ConditionsGrid, EventCard, FavButton } from '../components/cards'
-import { PhotoImage } from '../components/photo/PhotoImage'
+import { HeroCarousel } from '../components/photo/HeroCarousel'
 import { PhotoCredits } from '../components/photo/PhotoCredits'
 import { PhotoGallery } from '../components/photo/PhotoGallery'
 import { PhotoInsights } from '../components/photo/PhotoInsights'
@@ -46,6 +46,10 @@ export default function DamDetail() {
   const { cover, all: photos } = useDamPhotos(id)
   const [credits, setCredits] = useState(false)
   const [gallery, setGallery] = useState<number | null>(null)
+  const [slideFor, setSlideFor] = useState({ id, i: 0 })
+  const slide = slideFor.id === id ? slideFor.i : 0
+  const setSlide = (i: number) => setSlideFor({ id, i })
+  const current = photos[slide] ?? null
   if (!dam) return <NotFound />
 
   const days = Array.from({ length: 5 }, (_, i) => addDaysISO(state.anchor, i))
@@ -71,29 +75,30 @@ export default function DamDetail() {
     <div className="relative">
       <PageHeader back="/explorar" transparent actions={<FavButton dam={dam} />} />
       <div className="relative h-[56dvh] max-h-[560px] min-h-[360px] overflow-hidden bg-ink lg:mx-8 lg:mt-6 lg:h-[480px] lg:min-h-0 lg:rounded-[28px] [@media(max-height:520px)]:h-[calc(100dvh-var(--nav-h))] [@media(max-height:520px)]:min-h-[300px]">
-        <PhotoImage dam={dam} photo={cover} variant="hero" sizes="(min-width: 1024px) calc(100vw - 330px), 100vw" priority />
+        <HeroCarousel key={id} dam={dam} photos={photos} index={slide} onIndex={setSlide} sizes="(min-width: 1024px) calc(100vw - 330px), 100vw" />
         <div className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-black/35 to-transparent" aria-hidden />
         <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[64%] bg-gradient-to-t from-ink/95 via-ink/55 to-transparent" aria-hidden />
-        <div className="absolute inset-x-0 bottom-0 mx-auto max-w-6xl px-4 pb-6 text-white lg:px-8">
-          {cover && (
-            <div className="mb-3 flex flex-wrap gap-2">
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 mx-auto max-w-6xl px-4 pb-6 text-white lg:px-8 [&_button]:pointer-events-auto">
+          {current && (
+            <div className="mb-3 flex flex-wrap items-center gap-2">
               <button
                 type="button"
                 onClick={() => setCredits(true)}
                 className="press inline-flex max-w-full items-center gap-1.5 rounded-full bg-black/40 px-3 py-1.5 text-[12px] font-bold text-white backdrop-blur hover:bg-black/55"
-                aria-label={`Créditos da fotografia: ${shortCredit(cover.asset)}`}
+                aria-label={`Créditos da fotografia: ${shortCredit(current.asset)}`}
               >
                 <Info className="h-3.5 w-3.5 shrink-0" aria-hidden />
-                <span className="truncate">© {shortCredit(cover.asset)}</span>
+                <span className="truncate">© {shortCredit(current.asset)}</span>
               </button>
               <button
                 type="button"
-                onClick={() => setGallery(0)}
+                onClick={() => setGallery(slide)}
                 className="press inline-flex items-center gap-1.5 rounded-full bg-black/40 px-3 py-1.5 text-[12px] font-bold text-white backdrop-blur hover:bg-black/55"
               >
                 <Images className="h-3.5 w-3.5" aria-hidden />
-                {photos.length > 1 ? `${photos.length} fotografias` : 'Ver fotografia'}
+                {photos.length > 1 ? `${slide + 1}/${photos.length} fotografias` : 'Ver fotografia'}
               </button>
+              {current.link.sector && <span className="rounded-full bg-black/40 px-3 py-1.5 text-[12px] font-bold backdrop-blur">{current.link.sector}</span>}
             </div>
           )}
           <h1 className="font-display break-words text-[clamp(2rem,min(9vw,10dvh),3.75rem)] font-semibold leading-[0.98] [text-wrap:balance] [text-shadow:0_1px_12px_rgb(0_0_0/0.35)]">{dam.name}</h1>
@@ -109,7 +114,7 @@ export default function DamDetail() {
           </div>
         </div>
       </div>
-      {cover && <PhotoCredits asset={cover.asset} open={credits} onClose={() => setCredits(false)} />}
+      {current && <PhotoCredits asset={current.asset} open={credits} onClose={() => setCredits(false)} />}
       {gallery !== null && photos.length > 0 && <PhotoGallery dam={dam} photos={photos} start={gallery} onClose={() => setGallery(null)} />}
 
       <div className="sticky top-0 z-20 border-b border-line bg-canvas/90 backdrop-blur-xl lg:mx-8 lg:mt-2 lg:rounded-full lg:border-0">
