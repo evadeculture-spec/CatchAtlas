@@ -70,17 +70,28 @@ export default function DamDetail() {
   return (
     <div className="relative">
       <PageHeader back="/explorar" transparent actions={<FavButton dam={dam} />} />
-      <div className="relative h-[56dvh] max-h-[560px] min-h-[360px] overflow-hidden bg-ink lg:mx-8 lg:mt-6 lg:h-[480px] lg:min-h-0 lg:rounded-[28px] [@media(max-height:520px)]:h-[calc(100dvh-var(--nav-h))] [@media(max-height:520px)]:min-h-[300px]">
+      <div className="relative h-[64dvh] max-h-[640px] min-h-[400px] overflow-hidden bg-[#0b2236] lg:mx-8 lg:mt-6 lg:h-[min(66vh,620px)] lg:min-h-[460px] lg:rounded-[32px] lg:shadow-lift [@media(max-height:520px)]:h-[calc(100dvh-var(--nav-h))] [@media(max-height:520px)]:min-h-[300px]">
         <PhotoImage dam={dam} photo={cover} variant="hero" sizes="(min-width: 1024px) calc(100vw - 330px), 100vw" priority />
-        <div className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-black/35 to-transparent" aria-hidden />
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[64%] bg-gradient-to-t from-ink/95 via-ink/55 to-transparent" aria-hidden />
-        <div className="absolute inset-x-0 bottom-0 mx-auto max-w-6xl px-4 pb-6 text-white lg:px-8">
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-black/30 to-transparent" aria-hidden />
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[58%] bg-gradient-to-t from-[#0b2236]/95 via-[#0b2236]/45 to-transparent" aria-hidden />
+        <div className="absolute inset-x-0 bottom-0 px-5 pb-6 text-white sm:px-8 lg:px-12 lg:pb-9">
+          <h1 className="font-display break-words text-[clamp(2.5rem,min(11vw,11dvh),5rem)] font-semibold leading-[0.95] tracking-[-0.01em] [text-wrap:balance] [text-shadow:0_2px_18px_rgb(0_0_0/0.35)]">{dam.name}</h1>
+          <p className="mt-3 flex items-start gap-2 text-[15px] font-semibold text-white/95 lg:text-[17px]">
+            <MapPin className="mt-0.5 h-[18px] w-[18px] shrink-0" aria-hidden />
+            <span className="min-w-0">{dam.place} · {damRegion(dam)}</span>
+          </p>
+          <div className="tnum mt-4 flex flex-wrap items-center gap-x-6 gap-y-2 text-[14px] font-semibold text-white/95 lg:mt-5 lg:text-[16px]">
+            <span className="flex items-center gap-2"><Waves className="h-[18px] w-[18px] text-teal" aria-hidden />{dam.river}</span>
+            <span className="flex items-center gap-2"><Droplets className="h-[18px] w-[18px] text-teal" aria-hidden />Água {today.water} °C</span>
+            <span className="flex items-center gap-2"><Fish className="h-[18px] w-[18px] text-teal" aria-hidden />{catches.length} capturas registadas</span>
+            <Tag tone="glass">Dados de demonstração · temperatura simulada</Tag>
+          </div>
           {cover && (
-            <div className="mb-3 flex flex-wrap gap-2">
+            <div className="mt-4 flex min-w-0 items-center gap-1 text-[11.5px] font-semibold text-white/70 lg:absolute lg:right-8 lg:top-[-2.25rem] lg:mt-0 lg:max-w-[46%]">
               <button
                 type="button"
                 onClick={() => setCredits(true)}
-                className="press inline-flex max-w-full items-center gap-1.5 rounded-full bg-black/40 px-3 py-1.5 text-[12px] font-bold text-white backdrop-blur hover:bg-black/55"
+                className="press inline-flex min-w-0 items-center gap-1.5 rounded-full py-1 pr-2 hover:text-white"
                 aria-label={`Créditos da fotografia: ${stockLabel(cover.asset) ? `${stockLabel(cover.asset)}, ` : ''}${shortCredit(cover.asset)}`}
               >
                 <Info className="h-3.5 w-3.5 shrink-0" aria-hidden />
@@ -92,24 +103,14 @@ export default function DamDetail() {
               <button
                 type="button"
                 onClick={() => setGallery(0)}
-                className="press inline-flex items-center gap-1.5 rounded-full bg-black/40 px-3 py-1.5 text-[12px] font-bold text-white backdrop-blur hover:bg-black/55"
+                className="press inline-flex shrink-0 items-center gap-1 rounded-full py-1 pl-1 hover:text-white"
+                aria-label={photos.length > 1 ? `${photos.length} fotografias` : 'Ver fotografia'}
               >
                 <Images className="h-3.5 w-3.5" aria-hidden />
-                {photos.length > 1 ? `${photos.length} fotografias` : 'Ver fotografia'}
+                <span className="hidden sm:inline">{photos.length > 1 ? `${photos.length} fotografias` : 'Ampliar'}</span>
               </button>
             </div>
           )}
-          <h1 className="font-display break-words text-[clamp(2rem,min(9vw,10dvh),3.75rem)] font-semibold leading-[0.98] [text-wrap:balance] [text-shadow:0_1px_12px_rgb(0_0_0/0.35)]">{dam.name}</h1>
-          <p className="mt-2 flex items-start gap-1.5 text-[14px] font-semibold text-white/90">
-            <MapPin className="mt-0.5 h-4 w-4 shrink-0" aria-hidden />
-            <span className="min-w-0">{dam.place} · {damRegion(dam)}</span>
-          </p>
-          <div className="tnum mt-4 flex flex-wrap items-center gap-x-5 gap-y-1.5 text-[13.5px] font-semibold text-white/95">
-            <span className="flex items-center gap-1.5"><Waves className="h-4 w-4 text-teal" aria-hidden />{dam.river}</span>
-            <span className="flex items-center gap-1.5"><Droplets className="h-4 w-4 text-teal" aria-hidden />Água {today.water} °C</span>
-            <span className="flex items-center gap-1.5"><Fish className="h-4 w-4 text-teal" aria-hidden />{catches.length} capturas registadas</span>
-            <Tag tone="glass">Dados de demonstração · temperatura simulada</Tag>
-          </div>
         </div>
       </div>
       {cover && <PhotoCredits asset={cover.asset} open={credits} onClose={() => setCredits(false)} />}
