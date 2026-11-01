@@ -1,7 +1,7 @@
 // Cache básico do shell: navegação "network-first" com recurso ao index em cache;
 // recursos com hash (assets) em "cache-first". Não garante funcionamento offline completo.
-const CACHE = 'atlascatch-shell-v1'
-const SHELL = ['/', '/index.html', '/manifest.webmanifest', '/icons/icon.svg', '/icons/icon-192.png']
+const CACHE = 'catchatlas-shell-v2'
+const SHELL = ['/', '/index.html', '/manifest.webmanifest', '/icons/favicon-64.png', '/brand/logo.png', '/brand/logo-light.png', '/icons/icon-192.png']
 
 self.addEventListener('install', (e) => {
   e.waitUntil(caches.open(CACHE).then((c) => c.addAll(SHELL)).then(() => self.skipWaiting()))

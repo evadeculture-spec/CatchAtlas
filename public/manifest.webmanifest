@@ -1,13 +1,13 @@
 {
-  "name": "AtlasCatch — demonstração",
-  "short_name": "AtlasCatch",
+  "name": "CatchAtlas — demonstração",
+  "short_name": "CatchAtlas",
   "description": "Descobre barragens, prepara jornadas, regista capturas e acompanha rankings e provas. Dados ilustrativos.",
   "lang": "pt-PT",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#F4F7F8",
+  "background_color": "#FFFFFF",
   "theme_color": "#102B3A",
   "icons": [
     { "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png" },

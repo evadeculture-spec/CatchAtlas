@@ -1,11 +1,14 @@
 // Configuração central da marca: substituir aqui para mudar nome e assinatura em toda a app.
 export const brand = {
-  name: 'AtlasCatch',
-  shortName: 'AtlasCatch',
+  name: 'CatchAtlas',
+  shortName: 'CatchAtlas',
+  /** Logótipo (fundo transparente): versão normal para fundos claros e versão clara para fundos escuros. */
+  logo: { src: '/brand/logo.png', srcLight: '/brand/logo-light.png', width: 1166, height: 226 },
   tagline: 'A tua próxima jornada começa aqui.',
   description:
     'Descobre barragens, prepara jornadas, regista capturas e acompanha rankings e provas.',
   demoLabel: 'Demonstração — dados ilustrativos',
+  // Chaves antigas mantidas de propósito: mudar apagaria os dados já guardados no navegador.
   storageKey: 'atlascatch-demo-v1',
   photoDbName: 'atlascatch-demo-photos',
   themeColor: '#102B3A',
@@ -16,7 +19,7 @@ export const brand = {
     maxEntries: 10,
   },
   subscription: {
-    name: 'AtlasCatch Pro',
+    name: 'CatchAtlas Pro',
     /** Valor apenas ilustrativo: não há pagamentos na demonstração. */
     priceLabel: '3,99 €/mês (valor ilustrativo)',
   },

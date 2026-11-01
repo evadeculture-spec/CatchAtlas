@@ -228,7 +228,7 @@ export default function Profile() {
             <div className="flex gap-3 border-t border-line pt-4">
               <Info className="mt-0.5 h-5 w-5 shrink-0 text-teal-700" aria-hidden />
               <p className="text-[13px] leading-relaxed text-muted">
-                {brand.name} é um protótipo. Não há conta, servidor nem partilha entre utilizadores: tudo o que regista fica neste navegador. Perfis, capturas de terceiros, provas, rankings e condições são fictícios. As imagens das barragens são ilustrações geradas para a demonstração.
+                {brand.name} é um protótipo. Não há conta, servidor nem partilha entre utilizadores: tudo o que regista fica neste navegador. Perfis, capturas de terceiros, provas, rankings e condições são fictícios. As fotografias das barragens vêm do Unsplash, com crédito ao autor; quando não mostram a própria barragem, isso é indicado junto da imagem.
               </p>
             </div>
             <div className="border-t border-line pt-4">

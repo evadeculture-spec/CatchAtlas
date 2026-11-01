@@ -1,4 +1,4 @@
-# AtlasCatch — demonstração
+# CatchAtlas — demonstração
 
 Protótipo navegável de uma aplicação de pesca desportiva em barragens de Portugal e Espanha: descobrir barragens, preparar jornadas, registar capturas, rankings, provas e comunidade (reports com mapa de pings, chat global de subscritores, marketplace e giveaway).
 
