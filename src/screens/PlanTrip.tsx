@@ -1,7 +1,7 @@
 import { Anchor, Check, Footprints, Sailboat, Save } from 'lucide-react'
 import { useNavigate, useSearchParams } from 'react-router'
 import { SpeciesDot } from '../components/bits'
-import { DamArt } from '../components/DamArt'
+import { DamCover } from '../components/photo/DamCover'
 import { TripSummary } from '../components/TripSummary'
 import { Button, cx, inputCls, PageHeader, Tag } from '../components/ui'
 import { damRegion, MODALITIES, SPECIES } from '../data/catalog'
@@ -84,7 +84,7 @@ export default function PlanTrip() {
               {DAMS.filter((d) => d.country === country).map((d) => (
                 <button key={d.id} onClick={() => update('barragem', d.id)} aria-pressed={damId === d.id} className={cx('press flex items-center gap-3 rounded-2xl border-2 bg-white p-2 text-left', damId === d.id ? 'border-ink' : 'border-transparent shadow-card')}>
                   <span className="h-14 w-16 shrink-0 overflow-hidden rounded-xl">
-                    <DamArt art={d.art} detail="lite" />
+                    <DamCover dam={d} variant="thumb" sizes="64px" />
                   </span>
                   <span className="min-w-0 flex-1">
                     <span className="block truncate font-extrabold text-ink">{d.name}</span>

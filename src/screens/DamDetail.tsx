@@ -1,10 +1,15 @@
-import { Fish, Info, MapPin, Route, Sunrise, Sunset, Trophy, Waves, Droplets, Gauge } from 'lucide-react'
+import { Fish, Info, MapPin, Route, Sunrise, Sunset, Trophy, Waves, Droplets, Gauge, Images } from 'lucide-react'
 import { useState } from 'react'
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router'
 import { CatchRow, SpeciesDot } from '../components/bits'
 import { HourlyChart } from '../components/charts'
 import { ConditionsGrid, EventCard, FavButton } from '../components/cards'
-import { DamArt } from '../components/DamArt'
+import { PhotoImage } from '../components/photo/PhotoImage'
+import { PhotoCredits } from '../components/photo/PhotoCredits'
+import { PhotoGallery } from '../components/photo/PhotoGallery'
+import { PhotoInsights } from '../components/photo/PhotoInsights'
+import { useDamPhotos } from '../components/photo/useDamPhotos'
+import { shortCredit } from '../lib/photos/rules'
 import { ButtonLink, Card, cx, EmptyState, PageHeader, Tag } from '../components/ui'
 import { DEMO_USER_ID } from '../data/anglers'
 import { damRegion, modalityName, speciesById } from '../data/catalog'
@@ -38,6 +43,9 @@ export default function DamDetail() {
   const { state, allCatches } = useApp()
   const navigate = useNavigate()
   const [dayIdx, setDayIdx] = useState(0)
+  const { cover, all: photos } = useDamPhotos(id)
+  const [credits, setCredits] = useState(false)
+  const [gallery, setGallery] = useState<number | null>(null)
   if (!dam) return <NotFound />
 
   const days = Array.from({ length: 5 }, (_, i) => addDaysISO(state.anchor, i))
@@ -62,26 +70,47 @@ export default function DamDetail() {
   return (
     <div className="relative">
       <PageHeader back="/explorar" transparent actions={<FavButton dam={dam} />} />
-      <div className="relative h-[52dvh] max-h-[520px] min-h-[340px] overflow-hidden bg-ink lg:mx-8 lg:mt-6 lg:h-[440px] lg:min-h-0 lg:rounded-[28px]">
-        <DamArt art={dam.art} />
-        <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/25 to-ink/30" />
+      <div className="relative h-[56dvh] max-h-[560px] min-h-[360px] overflow-hidden bg-ink lg:mx-8 lg:mt-6 lg:h-[480px] lg:min-h-0 lg:rounded-[28px] [@media(max-height:520px)]:h-[calc(100dvh-var(--nav-h))] [@media(max-height:520px)]:min-h-[300px]">
+        <PhotoImage dam={dam} photo={cover} variant="hero" sizes="(min-width: 1024px) calc(100vw - 330px), 100vw" priority />
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-black/35 to-transparent" aria-hidden />
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[64%] bg-gradient-to-t from-ink/95 via-ink/55 to-transparent" aria-hidden />
         <div className="absolute inset-x-0 bottom-0 mx-auto max-w-6xl px-4 pb-6 text-white lg:px-8">
-          <div className="flex flex-wrap gap-1.5">
-            <Tag tone="glass">Imagem ilustrativa</Tag>
-            <Tag tone="glass">Dados de demonstração</Tag>
-          </div>
-          <h1 className="font-display mt-3 text-[46px] font-semibold leading-none sm:text-[60px]">{dam.name}</h1>
-          <p className="mt-2 flex items-center gap-1.5 text-[14px] font-semibold text-white/80">
-            <MapPin className="h-4 w-4" aria-hidden />
-            {dam.place} · {damRegion(dam)}
+          {cover && (
+            <div className="mb-3 flex flex-wrap gap-2">
+              <button
+                type="button"
+                onClick={() => setCredits(true)}
+                className="press inline-flex max-w-full items-center gap-1.5 rounded-full bg-black/40 px-3 py-1.5 text-[12px] font-bold text-white backdrop-blur hover:bg-black/55"
+                aria-label={`Créditos da fotografia: ${shortCredit(cover.asset)}`}
+              >
+                <Info className="h-3.5 w-3.5 shrink-0" aria-hidden />
+                <span className="truncate">© {shortCredit(cover.asset)}</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setGallery(0)}
+                className="press inline-flex items-center gap-1.5 rounded-full bg-black/40 px-3 py-1.5 text-[12px] font-bold text-white backdrop-blur hover:bg-black/55"
+              >
+                <Images className="h-3.5 w-3.5" aria-hidden />
+                {photos.length > 1 ? `${photos.length} fotografias` : 'Ver fotografia'}
+              </button>
+            </div>
+          )}
+          <h1 className="font-display break-words text-[clamp(2rem,min(9vw,10dvh),3.75rem)] font-semibold leading-[0.98] [text-wrap:balance] [text-shadow:0_1px_12px_rgb(0_0_0/0.35)]">{dam.name}</h1>
+          <p className="mt-2 flex items-start gap-1.5 text-[14px] font-semibold text-white/90">
+            <MapPin className="mt-0.5 h-4 w-4 shrink-0" aria-hidden />
+            <span className="min-w-0">{dam.place} · {damRegion(dam)}</span>
           </p>
-          <div className="tnum mt-4 flex flex-wrap gap-x-5 gap-y-1 text-[13.5px] font-semibold text-white/90">
+          <div className="tnum mt-4 flex flex-wrap items-center gap-x-5 gap-y-1.5 text-[13.5px] font-semibold text-white/95">
             <span className="flex items-center gap-1.5"><Waves className="h-4 w-4 text-teal" aria-hidden />{dam.river}</span>
-            <span className="flex items-center gap-1.5"><Droplets className="h-4 w-4 text-teal" aria-hidden />Água {today.water} °C (sim.)</span>
+            <span className="flex items-center gap-1.5"><Droplets className="h-4 w-4 text-teal" aria-hidden />Água {today.water} °C</span>
             <span className="flex items-center gap-1.5"><Fish className="h-4 w-4 text-teal" aria-hidden />{catches.length} capturas registadas</span>
+            <Tag tone="glass">Dados de demonstração · temperatura simulada</Tag>
           </div>
         </div>
       </div>
+      {cover && <PhotoCredits asset={cover.asset} open={credits} onClose={() => setCredits(false)} />}
+      {gallery !== null && photos.length > 0 && <PhotoGallery dam={dam} photos={photos} start={gallery} onClose={() => setGallery(null)} />}
 
       <div className="sticky top-0 z-20 border-b border-line bg-canvas/90 backdrop-blur-xl lg:mx-8 lg:mt-2 lg:rounded-full lg:border-0">
         <div role="tablist" aria-label="Secções da barragem" className="no-scrollbar mx-auto flex max-w-6xl gap-1 overflow-x-auto px-3 lg:px-4">
@@ -110,6 +139,7 @@ export default function DamDetail() {
         {tab === 'geral' && (
           <div className="page-in grid gap-4 lg:grid-cols-[1.4fr_1fr] [&>*]:min-w-0">
             <div className="space-y-4">
+              {cover && <PhotoInsights cover={cover} onExplore={() => setGallery(0)} />}
               <Card className="p-5">
                 <p className="text-[15.5px] leading-relaxed text-text">{dam.summary}</p>
                 {dam.traits.length > 0 && <dl className="mt-5 grid grid-cols-3 gap-3 border-t border-line pt-4">
@@ -289,7 +319,7 @@ export default function DamDetail() {
         )}
       </div>
 
-      <div className="pointer-events-none sticky bottom-[calc(var(--nav-h)+env(safe-area-inset-bottom)+14px)] z-30 mt-8 flex justify-center px-4 lg:bottom-6">
+      <div className="pointer-events-none sticky bottom-[calc(var(--nav-h)+env(safe-area-inset-bottom)+14px)] z-30 mt-8 flex justify-center px-4 lg:bottom-6 [@media(max-height:520px)]:static">
         <ButtonLink to={`/jornada/nova?barragem=${dam.id}`} size="lg" variant="dark" icon={Route} className="pointer-events-auto shadow-lift">
           Preparar jornada aqui
         </ButtonLink>

@@ -8,7 +8,7 @@ import { formatDate, monthShort, relativeDay } from '../lib/format'
 import type { Conditions, Sky } from '../lib/weather'
 import { useApp } from '../state/AppState'
 import { useToast } from '../state/Toasts'
-import { DamArt } from './DamArt'
+import { DamCover } from './photo/DamCover'
 import { cx, Tag } from './ui'
 
 const SKY_ICONS = { limpo: Sun, 'poucas-nuvens': CloudSun, nublado: Cloud, 'chuva-fraca': CloudRain }
@@ -56,7 +56,7 @@ export function DamCard({ dam, cond, layout = 'tall', catchCount }: { dam: Dam; 
     return (
       <Link to={`/barragens/${dam.id}`} className="press group flex gap-3 rounded-[var(--radius-card)] bg-white p-2.5 shadow-card hover:shadow-lift">
         <div className="relative h-24 w-28 shrink-0 overflow-hidden rounded-2xl sm:w-36">
-          <DamArt art={dam.art} detail="lite" />
+          <DamCover dam={dam} variant="thumb" sizes="144px" />
         </div>
         <div className="flex min-w-0 flex-1 flex-col py-1 pr-1">
           <div className="flex items-start justify-between gap-2">
@@ -89,7 +89,7 @@ export function DamCard({ dam, cond, layout = 'tall', catchCount }: { dam: Dam; 
   return (
     <Link to={`/barragens/${dam.id}`} className="press group relative block w-[248px] shrink-0 overflow-hidden rounded-[var(--radius-card)] bg-ink shadow-card hover:shadow-lift sm:w-[272px]">
       <div className="relative h-[200px]">
-        <DamArt art={dam.art} detail="lite" />
+        <DamCover dam={dam} variant="card" sizes="272px" />
         <div className="absolute inset-0 bg-gradient-to-t from-ink/85 via-ink/10 to-transparent" />
         <div className="absolute right-3 top-3">
           <FavButton dam={dam} />

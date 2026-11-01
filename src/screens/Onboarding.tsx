@@ -2,11 +2,9 @@ import { ArrowRight, Check, Anchor, Footprints, Sailboat } from 'lucide-react'
 import { useState } from 'react'
 import { useNavigate } from 'react-router'
 import { BrandLockup } from '../components/BrandMark'
-import { DamArt } from '../components/DamArt'
 import { Button, cx, DemoTag, inputCls } from '../components/ui'
 import { brand } from '../config/brand'
 import { MODALITIES, REGIONS, SPECIES } from '../data/catalog'
-import { damById } from '../data/dams'
 import type { ModalityId, RegionId, SpeciesId } from '../data/types'
 import { useApp } from '../state/AppState'
 
@@ -31,13 +29,12 @@ export default function Onboarding() {
     return (
       <div className="relative flex min-h-dvh flex-col bg-ink text-white">
         <div className="absolute inset-0">
-          <DamArt art={damById['santa-clara'].art} />
-          <div className="absolute inset-0 bg-gradient-to-b from-ink/40 via-ink/30 to-ink" />
+          <div className="absolute inset-0 opacity-[0.16]" style={{ backgroundImage: 'repeating-radial-gradient(circle at 75% 25%, #8fd9cd 0 1px, transparent 1px 20px)' }} />
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-ink/40 to-ink" />
         </div>
         <div className="pt-safe relative mx-auto flex w-full max-w-xl flex-1 flex-col px-6 pb-8">
           <div className="flex items-center justify-between pt-5">
             <BrandLockup light />
-            <span className="rounded-full bg-black/25 px-2.5 py-1 text-[11px] font-bold text-white/85 backdrop-blur">Imagem ilustrativa</span>
           </div>
           <div className="mt-auto">
             <DemoTag tone="dark" />

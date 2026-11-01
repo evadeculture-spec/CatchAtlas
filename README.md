@@ -2,7 +2,7 @@
 
 Protótipo navegável de uma aplicação de pesca desportiva em barragens de Portugal e Espanha: descobrir barragens, preparar jornadas, registar capturas, rankings, provas e comunidade (reports com mapa de pings, chat global de subscritores, marketplace e giveaway).
 
-> Demonstração — dados ilustrativos. Perfis, capturas de terceiros, provas, rankings e condições meteorológicas são fictícios. As imagens das barragens são ilustrações SVG geradas no código, e não fotografias.
+> Demonstração — dados ilustrativos. Perfis, capturas de terceiros, provas, rankings e condições meteorológicas são fictícios. As barragens só mostram fotografias reais, verificadas e licenciadas (ver `photos/README.md`); sem fotografia aprovada aparece uma superfície neutra com a localização aproximada.
 
 ## Executar localmente
 
@@ -58,3 +58,9 @@ Em alternativa, pode ligar o repositório em app.netlify.com: as definições s�
 ## Dados legais
 
 A informação de licenças e legislação foi compilada a 31/10/2026 a partir das fontes ligadas em cada ficha (`src/data/legal.ts`). As concessões e zonas de pesca são uma lista parcial com documento identificado; a lista completa portuguesa está no geocatálogo do ICNF. As barragens de `moreDams.ts` têm apenas dados gerais e coordenadas aproximadas.
+
+## Fotografias e testes
+
+- Pipeline de fotografias: `photos/README.md` (`npm run photos -- discover|derive|publish|audit`).
+- Testes unitários: `npm test` (regras de publicação, duplicados, observações, licenças, identidade).
+- Testes de comportamento das fotografias: `npx vite build --mode e2e`, servir `dist-e2e` e correr `node e2e/photos.e2e.cjs <url>`. O modo e2e usa um catálogo e uma imagem de TESTE que nunca entram no build de produção.

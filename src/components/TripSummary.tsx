@@ -1,7 +1,7 @@
 import { Check, Clock, Lightbulb, MapPin, CalendarDays, Fish } from 'lucide-react'
 import { HourlyChart } from './charts'
 import { ConditionsGrid } from './cards'
-import { DamArt } from './DamArt'
+import { DamCover } from './photo/DamCover'
 import { Card, cx, Tag } from './ui'
 import { modalityName, speciesById } from '../data/catalog'
 import { damById } from '../data/dams'
@@ -36,7 +36,7 @@ export function TripSummary({
     <div className="space-y-4">
       <div className="relative overflow-hidden rounded-[var(--radius-card)] bg-ink text-white">
         <div className="absolute inset-0 opacity-70">
-          <DamArt art={dam.art} detail="lite" />
+          <DamCover dam={dam} variant="thumb" sizes="(min-width: 768px) 720px, 100vw" />
         </div>
         <div className="absolute inset-0 bg-gradient-to-r from-ink via-ink/85 to-ink/30" />
         <div className="relative p-5">

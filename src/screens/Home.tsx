@@ -3,7 +3,8 @@ import { useMemo, useState, type FormEvent } from 'react'
 import { Link, useNavigate } from 'react-router'
 import { Avatar, CatchRow, useAnglerName } from '../components/bits'
 import { ConditionsGrid, DamCard, EventCard, SkyIcon } from '../components/cards'
-import { DamArt } from '../components/DamArt'
+import { DamCover } from '../components/photo/DamCover'
+import { useDamPhotos } from '../components/photo/useDamPhotos'
 import { InstallTip } from '../components/InstallTip'
 import { BrandLockup } from '../components/BrandMark'
 import { ButtonLink, Card, cx, DemoTag, SectionHeader, Tag } from '../components/ui'
@@ -32,6 +33,7 @@ export default function Home() {
     return favInRegion ?? damById[favorites[0]] ?? DAMS.find((d) => d.region === profile.region) ?? DAMS[0]
   }, [favorites, profile.region])
   const cond = simulateConditions(featured, anchor)
+  const featuredPhotos = useDamPhotos(featured.id)
 
   const highlighted = useMemo(() => {
     const score = (d: (typeof DAMS)[number]) =>
@@ -98,16 +100,16 @@ export default function Home() {
       <section className="mt-5 grid gap-4 lg:grid-cols-[1.55fr_1fr]">
         <div className="relative isolate overflow-hidden rounded-[28px] bg-ink text-white shadow-lift">
           <div className="absolute inset-0 -z-10">
-            <DamArt art={featured.art} />
+            <DamCover dam={featured} variant="hero" sizes="(min-width: 1024px) 60vw, 100vw" priority fallback={{ labelClass: "hidden", locatorClass: "right-[6%] top-[16%] w-[min(42%,300px)] opacity-60" }} />
             <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/45 to-ink/5" />
           </div>
           <div className="flex min-h-[400px] flex-col p-5 sm:min-h-[440px] sm:p-7">
-            <div className="flex items-center justify-between">
+            <div className="flex flex-wrap items-center gap-1.5">
               <Tag tone="glass">
                 <Sparkles className="h-3 w-3" aria-hidden />
                 {favorites.includes(featured.id) ? 'Favorita em destaque' : 'Barragem em destaque'}
               </Tag>
-              <Tag tone="glass">Imagem ilustrativa</Tag>
+              {!featuredPhotos.cover && <Tag tone="glass">Fotografia ainda não disponível</Tag>}
             </div>
             <div className="mt-auto">
               <p className="text-[13px] font-semibold text-white/70">

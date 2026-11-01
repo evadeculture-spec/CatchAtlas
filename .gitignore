@@ -4,3 +4,6 @@ dist-artifact
 .netlify
 *.local
 screenshots
+photos/.cache
+photos/.originals
+dist-e2e

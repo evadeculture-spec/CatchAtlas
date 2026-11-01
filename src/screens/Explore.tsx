@@ -2,7 +2,7 @@ import { Heart, List, Map as MapIcon, Search, SlidersHorizontal, X, MapPin, Arro
 import { useMemo } from 'react'
 import { Link, useSearchParams } from 'react-router'
 import { DamCard, FavButton, SkyIcon } from '../components/cards'
-import { DamArt } from '../components/DamArt'
+import { DamCover } from '../components/photo/DamCover'
 import { SchematicMap, type MapView } from '../components/SchematicMap'
 import { ExploreTabs } from '../components/ExploreTabs'
 import { ButtonLink, Chip, cx, EmptyState, Segmented, Tag } from '../components/ui'
@@ -187,7 +187,7 @@ function MapCard({ id }: { id: string }) {
     <div key={id} className="page-in relative z-10 mt-3 overflow-hidden rounded-[var(--radius-card)] bg-white shadow-lift lg:mx-0 lg:mt-3">
       <div className="flex gap-3 p-3">
         <div className="relative h-20 w-24 shrink-0 overflow-hidden rounded-xl">
-          <DamArt art={d.art} detail="lite" />
+          <DamCover dam={d} variant="thumb" sizes="96px" />
         </div>
         <div className="min-w-0 flex-1">
           <div className="flex items-start justify-between gap-2">

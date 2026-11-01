@@ -1,7 +1,7 @@
 import { Bookmark, BookmarkCheck, CalendarDays, Clock, Info, MapPin, Medal, Users } from 'lucide-react'
 import { useState } from 'react'
 import { Link, useParams } from 'react-router'
-import { DamArt } from '../components/DamArt'
+import { DamCover } from '../components/photo/DamCover'
 import { Sheet } from '../components/Dialog'
 import { Button, Card, cx, PageHeader, Tag } from '../components/ui'
 import { modalityName, speciesById } from '../data/catalog'
@@ -33,12 +33,11 @@ export default function EventDetail() {
     <div>
       <PageHeader back="/provas" transparent />
       <div className="relative h-[42dvh] max-h-[420px] min-h-[300px] overflow-hidden bg-ink lg:mx-8 lg:mt-6 lg:h-[360px] lg:min-h-0 lg:rounded-[28px]">
-        <DamArt art={dam.art} />
+        <DamCover dam={dam} variant="hero" sizes="100vw" priority fallback={{ labelClass: "right-4 top-[4.5rem] px-2.5 py-1 text-[11px] lg:top-6 lg:right-6" }} />
         <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/40 to-ink/25" />
         <div className="absolute inset-x-0 bottom-0 mx-auto max-w-5xl px-4 pb-6 text-white lg:px-8">
           <div className="flex flex-wrap gap-1.5">
             <Tag tone="amber">Evento fictício — demonstração</Tag>
-            <Tag tone="glass">Imagem ilustrativa</Tag>
           </div>
           <h1 className="font-display mt-3 text-[36px] font-semibold leading-[1.05] sm:text-[48px]">{ev.title}</h1>
           <p className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-[14px] font-semibold text-white/85">
