@@ -1,9 +1,9 @@
 {
-  "auditedAt": "2026-11-01T00:21:11.046Z",
-  "totalDams": 107,
+  "auditedAt": "2026-11-01T00:55:25.911Z",
+  "totalDams": 108,
   "byCountry": {
     "PT": 68,
-    "ES": 39
+    "ES": 40
   },
   "approvedCovers": 0,
   "damsWithCandidates": 0,
@@ -92,6 +92,7 @@
     "alange",
     "gabriel-y-galan",
     "borbollon",
+    "sierra-brava",
     "entrepenas",
     "alarcon",
     "contreras",

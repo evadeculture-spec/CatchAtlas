@@ -69,6 +69,7 @@ export const MORE_DAMS: BasicDam[] = [
   ['alange', 'Alange', 'ES', 'extremadura', 'Badajoz', 'Rio Matachel', 38.78, -6.24],
   ['gabriel-y-galan', 'Gabriel y Galán', 'ES', 'extremadura', 'Cáceres', 'Rio Alagón', 40.25, -6.15],
   ['borbollon', 'Borbollón', 'ES', 'extremadura', 'Cáceres', 'Rio Árrago', 40.16, -6.57],
+  ['sierra-brava', 'Sierra Brava', 'ES', 'extremadura', 'Zorita · Cáceres', 'Arroyo Pizarroso', 39.25, -5.66],
   // Espanha — Castela-La Mancha e Madrid
   ['entrepenas', 'Entrepeñas', 'ES', 'castela-mancha', 'Guadalajara', 'Rio Tejo', 40.55, -2.65],
   ['alarcon', 'Alarcón', 'ES', 'castela-mancha', 'Cuenca', 'Rio Júcar', 39.55, -2.08],
