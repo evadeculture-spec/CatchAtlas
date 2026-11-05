@@ -54,6 +54,9 @@ O separador **Mapa** do Explorar usa **MapLibre GL JS** (Mercator, plano, norte 
 - **Albufeiras**: contornos reais do **OpenStreetMap** (© contribuidores do OSM, **ODbL**), 3 137 albufeiras ≥ 5 ha de Portugal e Espanha, extraídas por [bquelhas/barragens](https://github.com/bquelhas/barragens) (extração de 2 nov. 2026). `npm run map:build` gera `public/map/water/` (visão geral + 88 blocos de 1°, carregados pela área visível), o índice de pesquisa e as correspondências com as fichas (`src/data/map/catalogWater.json`, relatório em `photos/MAPA-CORRESPONDENCIAS.txt`).
 - **Área**: geodésica no elipsoide WGS84 (GeographicLib), sobre o contorno completo. Os escalões (≥ 40, 15–40, 3–15, 0,5–3 e < 0,5 km²) e os limiares de zoom, relativos ao enquadramento da Península em cada ecrã, estão documentados em `src/lib/map/waterConfig.ts`.
 - **Mapa base**: tiles vetoriais do **OpenFreeMap** (OpenMapTiles, dados OSM; gratuito, sem chave). A água do mapa base só aparece à escala local. Se não carregar, o mapa usa a base **Natural Earth** (domínio público) e mostra um aviso.
+- **Nomes**: albufeiras sem nome próprio no OSM usam o nome da barragem associada, quando é inequívoco (64 casos). À escala local aparecem também os nomes de lagos e lagoas do mapa base, sem repetir os das albufeiras.
+- **Açudes e barragens**: 6 484 açudes e 3 600 estruturas de barragem do OSM (`public/map/structures/`, blocos carregados só à escala local): primeiro como ponto, depois com a forma real e o nome.
+- **Concessões e zonas de pesca**: as zonas com albufeira conhecida (`osmWater` ou ficha em `src/data/zones.ts`) aparecem com marca dourada e contorno tracejado; o painel liga ao documento. A lista é parcial (ver página Concessões e zonas).
 - **Rótulos**: fontes Noto Sans (OFL) servidas pelo próprio site (`public/map/fonts`).
 - Os contornos são de referência: não indicam o nível atual da água.
 

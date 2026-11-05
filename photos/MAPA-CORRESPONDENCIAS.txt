@@ -108,3 +108,30 @@ LIGADA        negratin (Negratín) → Embalse del Negratín [relation/9607539] 
 LIGADA        tranco-de-beas (Tranco de Beas) → Embalse de Tranco de Beas [relation/9670496] 16.6 km², a 0.8 km
 LIGADA        andevalo (Andévalo) → Embalse del Andévalo [relation/2499761] 3.9 km², a 12.6 km
 LIGADA        brena-ii (Breña II) → Embalse de la Breña [relation/3313918] 17.0 km², a 3.0 km
+ZONA NO MAPA  zpl-canicada-geres → Albufeira da Caniçada [relation/2441813] (parcial)
+ZONA NO MAPA  zpl-rio-homem → Albufeira de Vilarinho das Furnas [relation/16202417] (parcial)
+ZONA SEM MAPA zpl-rio-mente (Zona de Pesca Lúdica do Rio Mente)
+ZONA SEM MAPA zpl-rio-mouro (Zona de Pesca Lúdica do Rio Mouro)
+ZONA SEM MAPA zpl-castro-laboreiro (Zona de Pesca Lúdica do Rio Castro Laboreiro e Corga da Varziela)
+ZONA SEM MAPA zpr-serra-estrela (Zona de Pesca Reservada das Lagoas da Serra da Estrela)
+ZONA SEM MAPA zpl-quinta-i (Zona de Pesca Lúdica da Albufeira da Quinta I)
+ZONA SEM MAPA zpl-rio-alva (Zona de Pesca Lúdica do Rio Alva)
+ZONA NO MAPA  zpl-venda-velha → Albufeira da Venda Velha [relation/5366185]
+ZONA SEM MAPA zpl-rio-seco (Zona de Pesca Lúdica da Barragem do Rio Seco)
+ZONA NO MAPA  conc-rio-cabril-lindoso → Albufeira do Alto-Lindoso [relation/16196443] (parcial)
+ZONA NO MAPA  conc-touvedo → Albufeira de Touvedo [relation/2446035]
+ZONA NO MAPA  conc-vilar → Albufeira de Vilar [relation/1661467]
+ZONA NO MAPA  conc-belver → Albufeira de Belver [relation/2431470]
+ZONA NO MAPA  conc-unhais → Albufeira de Santa Luzia [relation/3301627] (parcial)
+ZONA NO MAPA  conc-coa-sabugal → Albufeira do Sabugal [relation/4774337] (parcial)
+ZONA NO MAPA  conc-apartadura → Albufeira da Apartadura [relation/20032208]
+ZONA SEM MAPA conc-foro-espanhol (Concessão de Pesca da Albufeira do Foro do Espanhol)
+ZONA SEM MAPA conc-misericordia (Concessão de Pesca da Albufeira da Misericórdia)
+ZONA NO MAPA  conc-vale-cobrao → Albufeira de Vale do Cobrão [way/132800346]
+ZONA SEM MAPA conc-corte-pereiro (Concessão de Pesca da Albufeira 2 de Corte Pereiro)
+ZONA NO MAPA  conc-bouca-cova → Albufeira de Bouça Cova [relation/4007088]
+ZONA SEM MAPA conc-azinhal (Concessão de Pesca na Albufeira Norte da Herdade do Azinhal)
+ZONA NO MAPA  conc-coutada-rodao → Barragem da Coutada [way/194995899]
+ZONA SEM MAPA ref-herdade-urgueira (Herdade da Urgueira — barragens com concessão de pesca (referida em notícia))
+ZONA NO MAPA  coto-santa-ana → Pantà de Santa Anna [relation/5597868]
+ZONA SEM MAPA cotos-la-rioja (Cotos de pesca intensiva — La Rioja)

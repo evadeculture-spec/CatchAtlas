@@ -9,6 +9,7 @@ import { ExploreTabs } from '../components/ExploreTabs'
 import { ButtonLink, Chip, cx, EmptyState, Segmented, Tag } from '../components/ui'
 import { damRegion, MODALITIES, SPECIES, speciesById } from '../data/catalog'
 import { DAMS, damById } from '../data/dams'
+import { ZONE_KIND, ZONES } from '../data/zones'
 import type { CountryId, ModalityId, SpeciesId } from '../data/types'
 import { simulateConditions } from '../lib/weather'
 import { useApp } from '../state/AppState'
@@ -178,6 +179,7 @@ export default function Explore() {
                   dams={results}
                   selectedDamId={sel?.id}
                   focus={focus}
+                  focusWaterId={params.get('agua') ?? undefined}
                   onSelectDam={(id) => set('sel', id)}
                   view={mapView}
                   onView={(v) => set('mapa', v === 'iberia' ? null : v)}
@@ -231,6 +233,9 @@ function MapCard({ id }: { id: string }) {
               </Tag>
             ))}
             {d.detail === 'basica' && <Tag>Ficha básica</Tag>}
+            {ZONES.filter((z) => z.damId === d.id).map((z) => (
+              <Tag key={z.id} tone="amber">{ZONE_KIND[z.kind]}</Tag>
+            ))}
           </div>
         </div>
       </div>

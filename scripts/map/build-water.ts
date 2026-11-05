@@ -14,7 +14,9 @@
  *  - water/index.json: metadados, fonte, licença e lista de blocos com a extensão real.
  *  - water/search.json: nomes, extensão e escalão para a pesquisa no mapa.
  *  - base.geojson: base Natural Earth recortada à região.
+ *  - structures/s_<x>_<y>.geojson + index.json: açudes e estruturas de barragem (OSM), por blocos.
  *  - src/data/map/catalogWater.json: correspondências verificadas ficha ↔ albufeira.
+ *  - src/data/map/zoneWater.json: zonas/concessões de pesca ↔ albufeira (para o mapa).
  */
 import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
@@ -23,6 +25,7 @@ import geodesic from 'geographiclib-geodesic'
 import { clipPolygon, clipPolyline } from 'lineclip'
 import polylabel from 'polylabel'
 import { DAMS } from '../../src/data/dams'
+import { ZONES } from '../../src/data/zones'
 import { AREA_TIERS, OVERVIEW_MAX_TIER, tierForArea } from '../../src/lib/map/waterConfig'
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..')
@@ -62,6 +65,18 @@ function ringAreaM2(r: Ring) {
 const polyAreaM2 = (p: Poly) => ringAreaM2(p[0]) - p.slice(1).reduce((s, r) => s + ringAreaM2(r), 0)
 const polysOf = (g: GJFeature['geometry']): Poly[] => (g.type === 'Polygon' ? [g.coordinates as Poly] : g.type === 'MultiPolygon' ? (g.coordinates as Poly[]) : [])
 
+/** Extensão de qualquer geometria GeoJSON. */
+function bboxOfGeom(g: { coordinates: unknown }): [number, number, number, number] {
+  let a = Infinity, b = Infinity, c = -Infinity, d = -Infinity
+  const walk = (v: unknown) => {
+    if (typeof (v as number[])[0] === 'number') {
+      const [x, y] = v as number[]
+      if (x < a) a = x; if (y < b) b = y; if (x > c) c = x; if (y > d) d = y
+    } else (v as unknown[]).forEach(walk)
+  }
+  walk(g.coordinates)
+  return [a, b, c, d]
+}
 function bboxOf(polys: Poly[]): [number, number, number, number] {
   let a = Infinity, b = Infinity, c = -Infinity, d = -Infinity
   for (const p of polys) for (const [x, y] of p[0]) { if (x < a) a = x; if (y < b) b = y; if (x > c) c = x; if (y > d) d = y }
@@ -128,7 +143,7 @@ const subset = (a: Set<string>, b: Set<string>) => a.size > 0 && [...a].every((t
 /** Nome curto para rótulo: retira apenas o termo genérico inicial (Albufeira de…, Embalse de…). */
 function shortName(n: string | null) {
   if (!n) return ''
-  const s = n.split(/\s*\/\s*/)[0].replace(/^(albufeira|barragem|embalse|pantano|pant[aà]|embassament|encoro|presa)\s+(d[aeo]s?\s+|del\s+|de\s+la\s+|de\s+los\s+|de\s+les\s+|de\s+l')?/i, '')
+  const s = n.split(/\s*\/\s*/)[0].replace(/^(albufeira|barragem|embalse|pantano|pant[aà]|embassament|encoro|presa|açude|acude|dique|resclosa|represa)\s+(d[aeo]s?\s+|del\s+|de\s+la\s+|de\s+los\s+|de\s+les\s+|de\s+l')?/i, '')
   return s ? s.charAt(0).toUpperCase() + s.slice(1) : n
 }
 
@@ -136,9 +151,21 @@ async function main() {
   // ---------- albufeiras (OSM) ----------
   const pt = await cached(`reservoirs_pt_${SRC_COMMIT.slice(0, 7)}.geojson`, `${OSM_BASE}/reservoirs_pt.geojson`)
   const es = await cached(`reservoirs_es_${SRC_COMMIT.slice(0, 7)}.geojson`, `${OSM_BASE}/reservoirs_es.geojson`)
+  const damsPt = await cached(`dams_pt_${SRC_COMMIT.slice(0, 7)}.geojson`, `${OSM_BASE}/dams_pt.geojson`)
+  const damsEs = await cached(`dams_es_${SRC_COMMIT.slice(0, 7)}.geojson`, `${OSM_BASE}/dams_es.geojson`)
+  const damFeatures = [...damsPt.features, ...damsEs.features]
+  // Nomes das barragens associadas a cada albufeira (associação espacial feita na extração, ≤ 200 m).
+  const damNamesByRes = new Map<string, Set<string>>()
+  for (const f of damFeatures) {
+    const p = f.properties as Record<string, string | null>
+    const n = p.name_pt || p.name || p.name_es
+    if (p.reservoir_id && n) damNamesByRes.set(p.reservoir_id, new Set([...(damNamesByRes.get(p.reservoir_id) ?? []), n]))
+  }
   interface W {
     id: string; osm: string; name: string | null; names: string[]; countries: Set<string>; polys: Poly[]
     area: number; tier: number; bbox: [number, number, number, number]; label: Pos; usage: string | null
+    /** Nome da barragem associada, quando a albufeira não tem nome próprio no OSM. */
+    damName: string | null
   }
   const byId = new Map<string, W>()
   for (const f of [...pt.features, ...es.features]) {
@@ -152,10 +179,14 @@ async function main() {
     byId.set(osm, {
       id: `osm-${osm.replace('/', '-')}`, osm, name: (p.name_pt as string) || (p.name as string) || (p.name_es as string) || null, names,
       countries: new Set([p.country as string]), polys, area: 0, tier: 5, bbox: bboxOf(polys), label: [0, 0], usage: (p.usage as string) || null,
+      damName: null,
     })
   }
   const waters = [...byId.values()]
   for (const w of waters) {
+    // Sem nome próprio: usa o nome da barragem associada, só quando é inequívoco (uma única barragem com nome).
+    const dn = damNamesByRes.get(w.osm)
+    if (!w.name && dn && dn.size === 1) w.damName = [...dn][0]
     // Área arredondada ao m² × 1000 (3 casas em km²): o mesmo valor guardado é o usado na classificação.
     w.area = round(w.polys.reduce((s, p) => s + polyAreaM2(p), 0) / 1e6, 3)
     w.tier = tierForArea(w.area)
@@ -174,7 +205,7 @@ async function main() {
     const dt = tokens(d.name)
     const pt0: Pos = [d.approx.lon, d.approx.lat]
     const cands = waters
-      .filter((w) => w.names.some((n) => { const nt = tokens(n); return subset(dt, nt) || subset(nt, dt) }))
+      .filter((w) => [...w.names, ...(w.damName ? [w.damName] : [])].some((n) => { const nt = tokens(n); return subset(dt, nt) || subset(nt, dt) }))
       .map((w) => ({ w, dist: distToPolysKm(pt0, w.polys) }))
       .filter((c) => c.dist <= 15)
       .sort((a, b) => a.dist - b.dist || b.w.area - a.w.area)
@@ -182,10 +213,33 @@ async function main() {
     if (!c) { report.push(`SEM CONTORNO  ${d.id} (${d.name}): nenhuma albufeira OSM com nome compatível a ≤ 15 km do ponto aproximado`); continue }
     if (used.has(c.w.id)) { report.push(`CONFLITO      ${d.id} (${d.name}) → ${c.w.name} já ligada a ${used.get(c.w.id)}: não ligada`); continue }
     used.set(c.w.id, d.id)
-    catalog[d.id] = { waterId: c.w.id, name: c.w.name ?? d.name, areaKm2: round(c.w.area, 2), tier: c.w.tier, bbox: c.w.bbox.map((v) => round(v, 4)), label: c.w.label, method: 'nome compatível + ponto da ficha a ≤ 15 km do contorno', distanceKm: round(c.dist, 1) }
-    report.push(`LIGADA        ${d.id} (${d.name}) → ${c.w.name} [${c.w.osm}] ${c.w.area.toFixed(1)} km², a ${c.dist.toFixed(1)} km`)
+    catalog[d.id] = { waterId: c.w.id, name: c.w.name ?? (c.w.damName ? `Albufeira (${c.w.damName})` : d.name), areaKm2: round(c.w.area, 2), tier: c.w.tier, bbox: c.w.bbox.map((v) => round(v, 4)), label: c.w.label, method: 'nome compatível + ponto da ficha a ≤ 15 km do contorno', distanceKm: round(c.dist, 1) }
+    report.push(`LIGADA        ${d.id} (${d.name}) → ${c.w.name ?? `sem nome; barragem ${c.w.damName}`} [${c.w.osm}] ${c.w.area.toFixed(1)} km², a ${c.dist.toFixed(1)} km`)
   }
   const catOf = new Map(Object.entries(catalog).map(([k, v]) => [v.waterId, k]))
+
+  // ---------- zonas e concessões de pesca ↔ albufeira ----------
+  const waterById = new Map(waters.map((w) => [w.id, w]))
+  const zoneWater: Record<string, { waterId: string; name: string; short: string; label: Pos; bbox: number[]; tier: number; areaKm2: number; partial: boolean }[]> = {}
+  const zonesOfWater = new Map<string, { id: string; partial: boolean }[]>()
+  for (const z of ZONES) {
+    const ids = new Set<string>()
+    if (z.damId && catalog[z.damId]) ids.add(catalog[z.damId].waterId)
+    for (const o of z.osmWater ?? []) {
+      const wid = `osm-${o.replace('/', '-')}`
+      if (!waterById.has(wid)) throw new Error(`Zona ${z.id}: albufeira OSM ${o} não existe nos dados`)
+      ids.add(wid)
+    }
+    if (!ids.size) { report.push(`ZONA SEM MAPA ${z.id} (${z.name})`); continue }
+    // Zonas de rio ou de troços: a albufeira é só parte da zona (limites no edital).
+    const partial = /\brio\b|troço/i.test(z.name)
+    zoneWater[z.id] = [...ids].map((wid) => {
+      const w = waterById.get(wid)!
+      zonesOfWater.set(wid, [...(zonesOfWater.get(wid) ?? []), { id: z.id, partial }])
+      report.push(`ZONA NO MAPA  ${z.id} → ${w.name ?? w.damName} [${w.osm}]${partial ? ' (parcial)' : ''}`)
+      return { waterId: wid, name: w.name ?? (w.damName ? `Albufeira (${w.damName})` : ''), short: shortName(w.name ?? w.damName), label: w.label, bbox: w.bbox.map((v) => round(v, 4)), tier: w.tier, areaKm2: round(w.area, 2), partial }
+    })
+  }
 
   // ---------- saída: visão geral + blocos ----------
   const dir = join(OUT, 'water')
@@ -193,8 +247,10 @@ async function main() {
   mkdirSync(dir, { recursive: true })
   writeFileSync(join(dir, 'LICENSE.txt'), LICENSE_TEXT)
   const props = (w: W) => ({
-    id: w.id, osm: w.osm, name: w.name ?? '', short: shortName(w.name), alt: w.names.filter((n) => n !== w.name).join(' | '), countries: [...w.countries].sort().join(','),
+    id: w.id, osm: w.osm, name: w.name ?? '', dam: w.damName ?? '', short: shortName(w.name ?? w.damName), alt: w.names.filter((n) => n !== w.name).join(' | '), countries: [...w.countries].sort().join(','),
     type: 'albufeira', area_km2: round(w.area, 3), tier: w.tier, catalog: catOf.get(w.id) ?? '',
+    zone: (zonesOfWater.get(w.id) ?? []).map((z) => z.id).join(','),
+    zone_full: (zonesOfWater.get(w.id) ?? []).filter((z) => !z.partial).map((z) => z.id).join(','),
   })
   const labelFeature = (w: W) => ({ type: 'Feature', properties: { ...props(w), kind: 'label' }, geometry: { type: 'Point', coordinates: w.label } })
   const polyFeature = (w: W, polys: Poly[]) => ({
@@ -233,17 +289,102 @@ async function main() {
     },
     area: 'Área geodésica no elipsoide WGS84 (GeographicLib), calculada sobre o contorno completo.',
     tiers: AREA_TIERS,
-    counts: { total: waters.length, byTier: AREA_TIERS.map((t) => waters.filter((w) => w.tier === t.tier).length), named: waters.filter((w) => w.name).length, overview: overview.length },
+    counts: { total: waters.length, byTier: AREA_TIERS.map((t) => waters.filter((w) => w.tier === t.tier).length), named: waters.filter((w) => w.name).length, namedByDam: waters.filter((w) => w.damName).length, overview: overview.length },
     chunks: chunkIndex,
   }
   writeFileSync(join(dir, 'index.json'), JSON.stringify(meta))
   writeFileSync(
     join(dir, 'search.json'),
-    JSON.stringify(waters.filter((w) => w.name).map((w) => [w.id, w.name, w.names.filter((n) => n !== w.name).join(' | '), w.bbox.map((v) => round(v, 4)), w.tier, round(w.area, 3), catOf.get(w.id) ?? ''])),
+    JSON.stringify(
+      waters
+        .filter((w) => w.name || w.damName)
+        .map((w) => [w.id, w.name ?? `Albufeira (${w.damName})`, w.name ? w.names.filter((n) => n !== w.name).join(' | ') : 'sem nome próprio no OSM; nome da barragem associada', w.bbox.map((v) => round(v, 4)), w.tier, round(w.area, 3), catOf.get(w.id) ?? '']),
+    ),
   )
   mkdirSync(join(ROOT, 'src', 'data', 'map'), { recursive: true })
   writeFileSync(join(ROOT, 'src', 'data', 'map', 'catalogWater.json'), JSON.stringify(catalog, null, 1))
+  writeFileSync(join(ROOT, 'src', 'data', 'map', 'zoneWater.json'), JSON.stringify(zoneWater, null, 1))
   writeFileSync(join(ROOT, 'photos', 'MAPA-CORRESPONDENCIAS.txt'), `Correspondências ficha ↔ albufeira OSM (gerado por npm run map:build)\n\n${report.join('\n')}\n`)
+
+  // ---------- estruturas: açudes e barragens (OSM), só para escalas locais ----------
+  const gPt = await cached(`dam_geoms_pt_${SRC_COMMIT.slice(0, 7)}.geojson`, `${OSM_BASE}/dam_geoms_pt.geojson`)
+  const gEs = await cached(`dam_geoms_es_${SRC_COMMIT.slice(0, 7)}.geojson`, `${OSM_BASE}/dam_geoms_es.geojson`)
+  const wPt = await cached(`weirs_pt_${SRC_COMMIT.slice(0, 7)}.geojson`, `${OSM_BASE}/weirs_pt.geojson`)
+  const wEs = await cached(`weirs_es_${SRC_COMMIT.slice(0, 7)}.geojson`, `${OSM_BASE}/weirs_es.geojson`)
+  const damMeta = new Map<string, Record<string, string | number | null>>()
+  for (const f of damFeatures) damMeta.set(String(f.properties.dam_id), f.properties as Record<string, string | number | null>)
+  const roundGeom = (g: GJFeature['geometry']): GJFeature['geometry'] => {
+    const r = (c: unknown): unknown => (typeof (c as number[])[0] === 'number' ? [round((c as number[])[0], 5), round((c as number[])[1], 5)] : (c as unknown[]).map(r))
+    return { type: g.type, coordinates: r(g.coordinates) }
+  }
+  /** Ponto representativo: o próprio ponto, o vértice central de uma linha ou o polo de inacessibilidade. */
+  const repPoint = (g: GJFeature['geometry']): Pos | null => {
+    if (g.type === 'Point') return g.coordinates as Pos
+    if (g.type === 'LineString') { const c = g.coordinates as Pos[]; return c[Math.floor(c.length / 2)] }
+    const polys = polysOf(g)
+    if (!polys.length) return null
+    const pl = polylabel(polys[0], 0.00005) as unknown as number[]
+    return [pl[0], pl[1]]
+  }
+  interface S { id: string; kind: 'weir' | 'dam'; name: string; operator: string; height: string; water: string; catalog: string; geom: GJFeature['geometry']; at: Pos }
+  const structs: S[] = []
+  for (const f of [...gPt.features, ...gEs.features]) {
+    const p = f.properties as Record<string, string | null>
+    const meta = damMeta.get(String(p.dam_id)) ?? {}
+    const at = repPoint(f.geometry)
+    if (!at) continue
+    const water = meta.reservoir_id ? `osm-${String(meta.reservoir_id).replace('/', '-')}` : ''
+    structs.push({
+      id: `osm-${String(p.dam_id).replace('/', '-')}`, kind: 'dam', name: String(meta.name_pt || meta.name || meta.name_es || p.name || ''),
+      operator: String(meta.operator ?? ''), height: meta.height != null ? String(meta.height) : '', water: waterById.has(water) ? water : '', catalog: catOf.get(water) ?? '',
+      geom: f.geometry, at,
+    })
+  }
+  for (const f of [...wPt.features, ...wEs.features]) {
+    const p = f.properties as Record<string, string | number | null>
+    const at = repPoint(f.geometry)
+    if (!at) continue
+    structs.push({ id: `osm-${p.osm_type}-${p.osm_id}`, kind: 'weir', name: String(p.name ?? ''), operator: String(p.operator ?? ''), height: '', water: '', catalog: '', geom: f.geometry, at })
+  }
+  // Estruturas transfronteiriças aparecem nos ficheiros de Portugal e de Espanha: fica uma só.
+  {
+    const seen = new Set<string>()
+    for (let i = structs.length - 1; i >= 0; i--) {
+      const k = `${structs[i].kind}:${structs[i].id}`
+      if (seen.has(k)) structs.splice(i, 1)
+      else seen.add(k)
+    }
+  }
+  const sdir = join(OUT, 'structures')
+  rmSync(sdir, { recursive: true, force: true })
+  mkdirSync(sdir, { recursive: true })
+  writeFileSync(join(sdir, 'LICENSE.txt'), LICENSE_TEXT.replace('Contornos das albufeiras (public/map/water/*)', 'Açudes e estruturas de barragem (public/map/structures/*)'))
+  /** Propriedades sem valores vazios (poupa espaço; no mapa, uma propriedade em falta vale null). */
+  const compact = (o: Record<string, unknown>) => Object.fromEntries(Object.entries(o).filter(([, v]) => v !== '' && v !== false && v != null))
+  const sChunks = new Map<string, S[]>()
+  for (const st of structs) {
+    const key = `s_${Math.floor(st.at[0])}_${Math.floor(st.at[1])}`
+    sChunks.set(key, [...(sChunks.get(key) ?? []), st])
+  }
+  const sIndex = []
+  for (const [key, ss] of sChunks) {
+    const features = [
+      ...ss.filter((st) => st.geom.type !== 'Point').map((st) => ({ type: 'Feature', properties: compact({ id: st.id, kind: st.kind, name: st.name }), geometry: roundGeom(st.geom) })),
+      // Ponto de cada estrutura: marca a sua posição nas escalas em que a forma ainda não se distingue
+      // (e é a única representação quando o OSM só tem um ponto). Também serve de âncora ao rótulo.
+      ...ss.map((st) => ({ type: 'Feature', properties: compact({ id: st.id, kind: 'spt', skind: st.kind, name: st.name, ptonly: st.geom.type === 'Point', water: st.water, catalog: st.catalog, operator: st.operator, height: st.height }), geometry: { type: 'Point', coordinates: [round(st.at[0], 5), round(st.at[1], 5)] } })),
+    ]
+    const json = JSON.stringify({ type: 'FeatureCollection', features })
+    writeFileSync(join(sdir, `${key}.geojson`), json)
+    const bb = ss.reduce((b, st) => { const g = bboxOfGeom(st.geom); return [Math.min(b[0], g[0]), Math.min(b[1], g[1]), Math.max(b[2], g[2]), Math.max(b[3], g[3])] }, [Infinity, Infinity, -Infinity, -Infinity])
+    sIndex.push({ key, bbox: bb.map((v) => round(v, 4)), count: ss.length, bytes: json.length })
+  }
+  writeFileSync(join(sdir, 'index.json'), JSON.stringify({
+    generatedAt: new Date().toISOString().slice(0, 10),
+    source: meta.source,
+    counts: { weirs: structs.filter((x) => x.kind === 'weir').length, dams: structs.filter((x) => x.kind === 'dam').length, named: structs.filter((x) => x.name).length },
+    chunks: sIndex,
+  }))
 
   // ---------- base Natural Earth (recurso, sempre disponível) ----------
   const countries = await cached('ne_10m_admin_0_countries.geojson', `${NE_BASE}/ne_10m_admin_0_countries.geojson`)
@@ -294,6 +435,8 @@ async function main() {
   console.log(`visão geral: ${overview.length} (${size(join(dir, 'overview.geojson'))}) | blocos: ${chunkIndex.length} (maior ${(Math.max(...chunkIndex.map((c) => c.bytes)) / 1024).toFixed(0)} KB)`)
   console.log(`pesquisa: ${size(join(dir, 'search.json'))} | base NE: ${size(join(OUT, 'base.geojson'))}`)
   console.log(`catálogo: ${Object.keys(catalog).length}/${DAMS.length} fichas ligadas a um contorno`)
+  console.log(`nomes pela barragem associada: ${meta.counts.namedByDam} | zonas no mapa: ${Object.keys(zoneWater).length}/${ZONES.length}`)
+  console.log(`estruturas: ${structs.length} (açudes ${structs.filter((x) => x.kind === 'weir').length}, barragens ${structs.filter((x) => x.kind === 'dam').length}; com nome ${structs.filter((x) => x.name).length}) em ${sIndex.length} blocos (maior ${(Math.max(...sIndex.map((c) => c.bytes)) / 1024).toFixed(0)} KB)`)
 }
 
 main().catch((e) => {

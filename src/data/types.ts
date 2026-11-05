@@ -46,7 +46,7 @@ export interface Dam {
 
 export type ZoneKind = 'concessao' | 'zpl' | 'zpr' | 'coto'
 
-/** Concessão ou zona de pesca com documento oficial identificado. */
+/** Concessão ou zona de pesca. Por omissão tem documento oficial identificado (ver `evidence`). */
 export interface FishingZone {
   id: string
   name: string
@@ -61,6 +61,13 @@ export interface FishingZone {
   source: { label: string; url: string }
   /** Ano do documento consultado, ou null quando não datado. */
   docYear: number | null
+  /**
+   * Albufeira(s) do OpenStreetMap a que a zona se refere (ex.: 'relation/5366185'), associadas
+   * por nome e, quando existe, pelo operador da barragem. Usado para a mostrar no mapa.
+   */
+  osmWater?: string[]
+  /** Tipo de prova: documento oficial (omisso) ou apenas referência noutra fonte (ex.: notícia). */
+  evidence?: 'oficial' | 'noticia'
 }
 
 export interface River {

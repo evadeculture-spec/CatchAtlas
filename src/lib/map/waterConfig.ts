@@ -35,8 +35,11 @@ export const tierForArea = (km2: number): Tier => (AREA_TIERS.find((t) => km2 >=
 
 /** Zoom (relativo a fitZoom) a partir do qual cada escalão começa a aparecer (com fade de FADE). */
 export const TIER_ZOOM_OFFSET: Record<Tier, number> = { 1: -4, 2: 0.8, 3: 1.8, 4: 3.0, 5: 4.2 }
-/** Os rótulos aparecem um pouco depois do polígono, para não sobrecarregar a vista. */
-export const LABEL_ZOOM_OFFSET: Record<Tier, number> = { 1: -0.2, 2: 1.3, 3: 2.4, 4: 3.6, 5: 4.8 }
+/**
+ * Os rótulos aparecem logo a seguir ao polígono (+0,1 a +0,2). A deteção de colisões do MapLibre
+ * escolhe os que cabem, dando prioridade às maiores albufeiras, por isso não há sobreposições.
+ */
+export const LABEL_ZOOM_OFFSET: Record<Tier, number> = { 1: -0.2, 2: 0.9, 3: 2.0, 4: 3.1, 5: 4.3 }
 /** Duração (em níveis de zoom) do fade de opacidade. Evita aparecimentos bruscos e cintilação. */
 export const FADE = 0.4
 
@@ -55,6 +58,16 @@ export const BASEMAP_WATER_OFFSET = 3.2
 export const RIVER_OFFSET = { major: 1.2, minor: 3.4, streams: 5.2 }
 /** Pontos das barragens do catálogo (infraestrutura): só em níveis de detalhe. */
 export const DAM_POINT_OFFSET = 2.6
+/**
+ * Estruturas do OSM (barragens e açudes). Medem dezenas a centenas de metros: primeiro aparecem como
+ * ponto discreto (barragens à escala local, açudes um pouco depois) e, quando já se distinguem, com a
+ * forma real (linha ou polígono). Os blocos só são pedidos a partir de STRUCTURE_PREFETCH_OFFSET.
+ */
+export const STRUCTURE_OFFSET = { prefetch: 3.0, damPoint: 3.4, damLabel: 3.9, weirPoint: 4.2, weirLabel: 5.0, shape: 5.4 }
+/** Nomes da água do mapa base (lagos e lagoas fora das albufeiras da CatchAtlas), à escala local. */
+export const BASEMAP_WATER_NAME_OFFSET = 3.8
+/** Concessões e zonas de pesca: marca a partir da escala de país/região; contorno tracejado com o detalhe. */
+export const ZONE_OFFSET = { badge: 1.2, badgeLabel: 1.9, outline: 2.4 }
 
 /** Limites usados para o enquadramento "Península" e "Portugal" ([oeste, sul, este, norte]). */
 export const IBERIA_BOUNDS: [number, number, number, number] = [-9.6, 35.95, 3.4, 43.85]

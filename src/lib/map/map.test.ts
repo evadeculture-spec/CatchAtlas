@@ -73,3 +73,44 @@ describe('dados das albufeiras', () => {
     expect(files.length).toBe(index.chunks.length)
   })
 })
+
+describe('estruturas (açudes e barragens) e zonas de pesca no mapa', async () => {
+  const { ZONES } = await import('../../data/zones')
+  const { default: zoneWater } = await import('../../data/map/zoneWater.json')
+  const sdir = join(__dirname, '..', '..', '..', 'public', 'map', 'structures')
+  const sIndex = JSON.parse(readFileSync(join(sdir, 'index.json'), 'utf8'))
+  const sFeatures = (sIndex.chunks as { key: string }[]).flatMap((c) => JSON.parse(readFileSync(join(sdir, `${c.key}.geojson`), 'utf8')).features as F[])
+  const index = JSON.parse(readFileSync(join(dir, 'index.json'), 'utf8'))
+  const areas = (index.chunks as { key: string }[]).flatMap((c) => (read(`${c.key}.geojson`).features as F[]).filter((f) => f.properties.kind === 'area'))
+
+  it('cada estrutura tem um ponto (posição a escalas médias) e as contagens batem com o índice', () => {
+    const pts = sFeatures.filter((f) => f.properties.kind === 'spt')
+    expect(pts.length).toBe(sIndex.counts.weirs + sIndex.counts.dams)
+    const ptIds = new Set(pts.map((f) => f.properties.id))
+    expect(ptIds.size).toBe(pts.length)
+    for (const f of sFeatures.filter((f) => f.properties.kind !== 'spt')) {
+      expect(['dam', 'weir']).toContain(f.properties.kind)
+      expect(ptIds.has(f.properties.id)).toBe(true)
+    }
+  })
+  it('zonas no mapa apontam para albufeiras reais e marcam o polígono', () => {
+    const byId = new Map(areas.map((f) => [String(f.properties.id), f]))
+    for (const [zid, ws] of Object.entries(zoneWater as Record<string, { waterId: string }[]>)) {
+      expect(ZONES.some((z) => z.id === zid)).toBe(true)
+      for (const w of ws) expect(String(byId.get(w.waterId)?.properties.zone).split(',')).toContain(zid)
+    }
+  })
+  it('Venda Velha I e Coutada no mapa; Herdade da Urgueira não (barragens desconhecidas)', () => {
+    const zw = zoneWater as Record<string, { waterId: string }[]>
+    expect(zw['zpl-venda-velha'][0].waterId).toBe('osm-relation-5366185')
+    expect(zw['conc-coutada-rodao'][0].waterId).toBe('osm-way-194995899')
+    expect(zw['ref-herdade-urgueira']).toBeUndefined()
+    expect(ZONES.find((z) => z.id === 'ref-herdade-urgueira')?.evidence).toBe('noticia')
+  })
+  it('albufeira sem nome próprio recebe o nome da barragem associada só como rótulo', () => {
+    const c = areas.find((f) => f.properties.id === 'osm-way-194995899')!
+    expect(c.properties.name).toBe('')
+    expect(c.properties.dam).toBe('Barragem da Coutada')
+    expect(c.properties.short).toBe('Coutada')
+  })
+})
