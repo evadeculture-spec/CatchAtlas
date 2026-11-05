@@ -1,9 +1,10 @@
-import { Heart, List, Map as MapIcon, Search, SlidersHorizontal, X, MapPin, ArrowRight } from 'lucide-react'
-import { useMemo } from 'react'
+import { Heart, List, Map as MapIcon, Search, SlidersHorizontal, X, MapPin, ArrowRight, Crosshair } from 'lucide-react'
+import { lazy, Suspense, useEffect, useMemo, useState } from 'react'
 import { Link, useSearchParams } from 'react-router'
 import { DamCard, FavButton, SkyIcon } from '../components/cards'
 import { DamCover } from '../components/photo/DamCover'
-import { SchematicMap, type MapView } from '../components/SchematicMap'
+import type { MapView } from '../components/map/IberiaMap'
+import catalogWater from '../data/map/catalogWater.json'
 import { ExploreTabs } from '../components/ExploreTabs'
 import { ButtonLink, Chip, cx, EmptyState, Segmented, Tag } from '../components/ui'
 import { damRegion, MODALITIES, SPECIES, speciesById } from '../data/catalog'
@@ -11,6 +12,10 @@ import { DAMS, damById } from '../data/dams'
 import type { CountryId, ModalityId, SpeciesId } from '../data/types'
 import { simulateConditions } from '../lib/weather'
 import { useApp } from '../state/AppState'
+
+// O mapa real (MapLibre) só é descarregado quando é mostrado.
+const IberiaMap = lazy(() => import('../components/map/IberiaMap'))
+const WATER = catalogWater as unknown as Record<string, { areaKm2: number; name: string }>
 
 const norm = (s: string) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase()
 
@@ -45,14 +50,37 @@ export default function Explore() {
     [q, species, modality, favOnly, country, state.favorites],
   )
   const activeFilters = [species, modality, favOnly ? '1' : null, country, q].filter(Boolean).length
-  const mapView: MapView = (params.get('mapa') as MapView | null) ?? (country === 'ES' ? 'iberia' : 'pt')
-  const sel = selected && results.some((r) => r.id === selected) ? damById[selected] : results[0]
+  const mapView: MapView = (params.get('mapa') as MapView | null) ?? 'iberia'
+  const sel = selected && results.some((r) => r.id === selected) ? damById[selected] : undefined
+  const [focus, setFocus] = useState<{ damId: string; n: number } | undefined>()
+  const showOnMap = (id: string) => {
+    const next = new URLSearchParams(params)
+    next.set('sel', id)
+    next.set('vista', 'mapa')
+    setParams(next, { replace: true })
+    setFocus((f) => ({ damId: id, n: (f?.n ?? 0) + 1 }))
+  }
+  // Seleção feita no mapa: o cartão correspondente fica visível na lista (computador).
+  useEffect(() => {
+    if (!sel) return
+    document.getElementById(`dam-row-${sel.id}`)?.scrollIntoView({ block: 'nearest', behavior: 'smooth' })
+  }, [sel])
   const count = (id: string) => allCatches.filter((c) => c.damId === id && c.visibility === 'publica').length
 
   const list = (
     <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-1 2xl:grid-cols-2">
       {results.map((d) => (
-        <DamCard key={d.id} dam={d} layout="row" cond={simulateConditions(d, state.anchor)} catchCount={count(d.id)} />
+        <div key={d.id} id={`dam-row-${d.id}`} className={cx('relative rounded-[var(--radius-card)] transition-shadow', sel?.id === d.id && 'ring-2 ring-teal ring-offset-2 ring-offset-canvas')} data-selected={sel?.id === d.id || undefined}>
+          <DamCard dam={d} layout="row" cond={simulateConditions(d, state.anchor)} catchCount={count(d.id)} />
+          <button
+            type="button"
+            onClick={() => showOnMap(d.id)}
+            className="press absolute bottom-2.5 right-2.5 inline-flex h-8 items-center gap-1 rounded-full bg-mist px-2.5 text-[12px] font-bold text-ink hover:bg-teal-50 hover:text-teal-700"
+            aria-label={`Ver ${d.name} no mapa`}
+          >
+            <Crosshair className="h-3.5 w-3.5" aria-hidden /> Mapa
+          </button>
+        </div>
       ))}
     </div>
   )
@@ -141,33 +169,25 @@ export default function Explore() {
           action={<ButtonLink to="/explorar" variant="dark" size="sm">Ver todas</ButtonLink>}
         />
       ) : (
-        <div className="lg:grid lg:grid-cols-[1fr_400px] lg:gap-6">
+        <div className="lg:grid lg:grid-cols-[minmax(0,420px)_minmax(0,1fr)] lg:gap-6">
           <div className={cx(view === 'mapa' && 'hidden lg:block')}>{list}</div>
           <div className={cx(view === 'lista' && 'hidden lg:block')}>
             <div className="lg:sticky lg:top-[150px]">
-              <SchematicMap
-                dams={results}
-                selected={sel?.id}
-                onSelect={(id) => set('sel', id)}
-                favorites={state.favorites}
-                view={mapView}
-                className={mapView === 'pt' ? 'h-[min(58dvh,500px)] lg:h-[540px]' : 'aspect-[330/262] w-full'}
-                overlay={
-                  <div className="absolute bottom-3 right-3">
-                    <Segmented
-                      label="Zona do mapa"
-                      value={mapView}
-                      onChange={(v) => set('mapa', v)}
-                      options={[
-                        { id: 'pt', label: 'Portugal' },
-                        { id: 'iberia', label: 'Península' },
-                      ]}
-                      className="shadow-card"
-                    />
-                  </div>
-                }
-              />
+              <Suspense fallback={<div className="grid h-[min(78dvh,680px)] place-items-center rounded-[var(--radius-card)] bg-[#cfe2ea] text-[13px] font-bold text-muted lg:h-[calc(100dvh-190px)]">A carregar o mapa…</div>}>
+                <IberiaMap
+                  dams={results}
+                  selectedDamId={sel?.id}
+                  focus={focus}
+                  onSelectDam={(id) => set('sel', id)}
+                  view={mapView}
+                  onView={(v) => set('mapa', v === 'iberia' ? null : v)}
+                  className="h-[min(78dvh,680px)] lg:h-[calc(100dvh-190px)] lg:min-h-[480px]"
+                />
+              </Suspense>
               {sel && <MapCard id={sel.id} />}
+              <p className="mt-2 text-[11.5px] leading-relaxed text-muted">
+                O zoom decide que albufeiras se veem; os filtros decidem as barragens do catálogo. Contornos de referência do OpenStreetMap (Portugal e Espanha, albufeiras ≥ 5 ha): não indicam o nível atual da água.
+              </p>
             </div>
           </div>
         </div>
@@ -197,6 +217,7 @@ function MapCard({ id }: { id: string }) {
                 <MapPin className="h-3 w-3" aria-hidden />
                 {d.place}
               </p>
+              {WATER[d.id] && <p className="truncate text-[12px] text-muted">{WATER[d.id].name} · {WATER[d.id].areaKm2.toLocaleString('pt-PT', { maximumFractionDigits: 1 })} km² (contorno OSM)</p>}
             </div>
             <FavButton dam={d} tone="light" />
           </div>
